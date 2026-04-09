@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --brand-violet: #7b2fff;
+    --brand-cyan: #00d4ff;
+    --dark-bg: #020024;
+    --dark-surface: #0d0a3e;
+  }
+
+  /* Prevent horizontal overflow from decorative elements */
+  html {
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply bg-white text-gray-900 dark:bg-dark-900 dark:text-gray-100 transition-colors duration-300;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-code font-bold;
+  }
+
+  ::selection {
+    @apply bg-brand-violet/30 text-white;
+  }
+
+  /* Ensure images don't overflow their containers */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ─── Blog post prose mobile fixes ─── */
+.prose pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.prose pre code {
+  white-space: pre;
+  word-wrap: normal;
+  overflow-wrap: normal;
+}
+
+.prose code {
+  word-break: break-all;
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+
+.prose table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.prose p,
+.prose li,
+.prose blockquote {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.prose :where(iframe, video, embed, object) {
+  max-width: 100%;
+  border: none;
+  border-radius: 12px;
+}
+
+.prose iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  border-radius: 12px;
+  margin: 1em 0;
+}
+
+/* ─── Code Block Syntax Highlighting (One Dark) ─── */
+.prose pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  tab-size: 2;
+}
+.dark .prose pre {
+  background: #020024;
+  border-color: rgba(255,255,255,0.08);
+}
+.prose pre code {
+  background: none !important;
+  color: inherit !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: inherit;
+  word-break: normal;
+}
+
+/* Inline code */
+.prose :not(pre) > code {
+  background: rgba(123, 47, 255, 0.08);
+  color: #7b2fff;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.85em;
+}
+.dark .prose :not(pre) > code {
+  background: rgba(0, 212, 255, 0.1);
+  color: #00d4ff;
+}
+
+/* Highlight.js token colors (One Dark inspired) */
+.prose pre .hljs-keyword,
+.prose pre .hljs-selector-tag { color: #c678dd; }
+.prose pre .hljs-string,
+.prose pre .hljs-addition { color: #98c379; }
+.prose pre .hljs-number,
+.prose pre .hljs-literal { color: #d19a66; }
+.prose pre .hljs-comment,
+.prose pre .hljs-quote { color: #5c6370; font-style: italic; }
+.prose pre .hljs-function,
+.prose pre .hljs-title { color: #61afef; }
+.prose pre .hljs-variable,
+.prose pre .hljs-template-variable { color: #e06c75; }
+.prose pre .hljs-type,
+.prose pre .hljs-built_in { color: #e5c07b; }
+.prose pre .hljs-attr,
+.prose pre .hljs-attribute { color: #d19a66; }
+.prose pre .hljs-tag { color: #e06c75; }
+.prose pre .hljs-name { color: #e06c75; }
+.prose pre .hljs-selector-class,
+.prose pre .hljs-selector-id { color: #61afef; }
+.prose pre .hljs-meta { color: #56b6c2; }
+.prose pre .hljs-params { color: #abb2bf; }
+.prose pre .hljs-deletion { color: #e06c75; background: rgba(224,108,117,0.1); }
+.prose pre .hljs-regexp { color: #56b6c2; }
+.prose pre .hljs-symbol { color: #c678dd; }
+.prose pre .hljs-property { color: #e06c75; }
+.prose pre .hljs-punctuation { color: #abb2bf; }
+.prose pre .hljs-title.class_ { color: #e5c07b; }
+.prose pre .hljs-title.function_ { color: #61afef; }
+
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand-violet to-brand-cyan bg-clip-text text-transparent;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-white
+           bg-gradient-to-r from-brand-violet to-brand-cyan
+           hover:shadow-glow transform hover:-translate-y-0.5
+           transition-all duration-300 ease-out;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold
+           border-2 border-brand-violet text-brand-violet
+           hover:bg-brand-violet hover:text-white
+           dark:border-brand-cyan dark:text-brand-cyan dark:hover:bg-brand-cyan dark:hover:text-dark-900
+           transition-all duration-300 ease-out;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium
+           text-gray-600 hover:text-brand-violet hover:bg-brand-violet/10
+           dark:text-gray-400 dark:hover:text-brand-cyan dark:hover:bg-brand-cyan/10
+           transition-all duration-200;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-gray-200 bg-white
+           dark:border-dark-600 dark:bg-dark-700
+           focus:ring-2 focus:ring-brand-violet/50 focus:border-brand-violet
+           dark:focus:ring-brand-cyan/50 dark:focus:border-brand-cyan
+           outline-none transition-all duration-200
+           placeholder:text-gray-400 dark:placeholder:text-gray-500;
+  }
+
+  select.input-field {
+    @apply appearance-none cursor-pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+  }
+
+  select.input-field option {
+    @apply bg-white dark:bg-dark-700 text-gray-900 dark:text-white;
+    padding: 8px 12px;
+  }
+
+  .section-heading {
+    @apply text-3xl md:text-4xl lg:text-5xl font-code font-bold gradient-text;
+  }
+
+  .section-subheading {
+    @apply text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(123, 47, 255, 0.3) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-brand-violet/30 rounded-full;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-brand-violet/50;
+  }
+}
