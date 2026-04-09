@@ -1,0 +1,90 @@
+# =====================================================
+# Render Blueprint — Kalapak Code Team Website
+# =====================================================
+# Deploy: Go to https://render.com → New → Blueprint
+# Connect your GitHub repo and Render will auto-detect this file.
+#
+# After first deploy, update these in the Render dashboard:
+#   Backend → APP_URL = https://kalapak-backend.onrender.com
+#   Backend → FRONTEND_URL = https://kalapak-frontend.onrender.com
+#   Backend → SANCTUM_STATEFUL_DOMAINS = kalapak-frontend.onrender.com
+#   Frontend → BACKEND_URL = https://kalapak-backend.onrender.com
+# =====================================================
+
+services:
+  # -------------------------------------------------
+  # Backend — Laravel 11 API
+  # -------------------------------------------------
+  - type: web
+    name: kalapak-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - key: APP_NAME
+        value: "Kalapak Code Team"
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_URL
+        value: https://kalapak-backend.onrender.com
+      - key: FRONTEND_URL
+        value: https://kalapak-frontend.onrender.com
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: kalapak-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: kalapak-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: kalapak-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: kalapak-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: kalapak-db
+          property: password
+      - key: SANCTUM_STATEFUL_DOMAINS
+        value: kalapak-frontend.onrender.com
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_DRIVER
+        value: file
+      - key: FILESYSTEM_DISK
+        value: local
+
+  # -------------------------------------------------
+  # Frontend — Vue 3 + Nginx (production build)
+  # -------------------------------------------------
+  - type: web
+    name: kalapak-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: free
+    envVars:
+      - key: BACKEND_URL
+        value: https://kalapak-backend.onrender.com
+
+# -------------------------------------------------
+# PostgreSQL Database
+# -------------------------------------------------
+databases:
+  - name: kalapak-db
+    plan: free
+    databaseName: kalapak_db
+    user: kalapak_user

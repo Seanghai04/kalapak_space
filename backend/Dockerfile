@@ -17,20 +17,33 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy entrypoint
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# Copy composer files first (for Docker layer caching)
+COPY composer.json composer.lock* ./
+
+# Install dependencies (production only)
+RUN composer install --no-dev --no-scripts --optimize-autoloader --no-interaction
 
 # Copy application
 COPY . .
 
-# Install dependencies at build time (will be overridden by bind mount in dev)
-RUN composer install --no-dev --optimize-autoloader --no-interaction 2>/dev/null || true
+# Run post-install scripts after source is available
+RUN composer dump-autoload --optimize --no-interaction 2>/dev/null || true
+
+# Create required storage directories
+RUN mkdir -p storage/framework/cache/data \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
+RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Expose port
+# Copy entrypoint
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Expose port (Render assigns PORT dynamically)
 EXPOSE 8000
 
 # Use entrypoint script
