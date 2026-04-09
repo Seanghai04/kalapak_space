@@ -285,7 +285,7 @@
             <router-link :to="{ name: 'login' }" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-[13px] font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/80 dark:hover:bg-white/[0.05] transition-all duration-200">
               Sign In
             </router-link>
-            <router-link :to="{ name: 'register' }" class="nav-cta-btn group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-bold text-white overflow-hidden shadow-md shadow-brand-violet/20 dark:shadow-brand-cyan/20 hover:shadow-lg hover:shadow-brand-violet/30 dark:hover:shadow-brand-cyan/30 hover:-translate-y-[1px] transition-all duration-300">
+            <router-link :to="{ name: 'register' }" class="nav-cta-btn group relative hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-bold text-white overflow-hidden shadow-md shadow-brand-violet/20 dark:shadow-brand-cyan/20 hover:shadow-lg hover:shadow-brand-violet/30 dark:hover:shadow-brand-cyan/30 hover:-translate-y-[1px] transition-all duration-300">
               <span class="relative z-10">Get Started</span>
               <svg class="relative z-10 w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
               <span class="absolute inset-0 bg-gradient-to-r from-brand-violet to-brand-cyan" />
