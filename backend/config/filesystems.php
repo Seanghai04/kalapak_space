@@ -40,12 +40,13 @@ return [
             'driver' => 's3',
             'key' => env('SUPABASE_ACCESS_KEY'),
             'secret' => env('SUPABASE_SECRET_KEY'),
-            'region' => env('SUPABASE_REGION', 'ap-southeast-1'), //
-            'bucket' => env('SUPABASE_BUCKET', 'kalapak-assets'), //
-            'endpoint' => env('SUPABASE_ENDPOINT'), // https://hiucucocvvhgmszgqnxc.supabase.co/storage/v1/s3
+            'region' => env('SUPABASE_REGION', 'ap-southeast-1'),
+            'bucket' => env('SUPABASE_BUCKET', 'kalapak-assets'),
+            'endpoint' => env('SUPABASE_ENDPOINT'),
             'use_path_style_endpoint' => true,
             'visibility' => 'public',
-            'throw' => true, // ប្តូរជា true ដើម្បីឱ្យវាលោត Error ពេលមានបញ្ហា Connection
+            'scheme' => 'https',
+            'throw' => true,
             'url' => env('SUPABASE_URL') . '/storage/v1/object/public/' . env('SUPABASE_BUCKET', 'kalapak-assets'),
         ],
 
