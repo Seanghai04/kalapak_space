@@ -16,7 +16,7 @@ class ProjectResource extends JsonResource
             'slug' => $this->slug,
             'description' => $this->description,
             'long_description' => $this->long_description,
-            'cover_image' => $this->cover_image ? Storage::disk('public')->url($this->cover_image) : null,
+            'cover_image' => $this->cover_image ? Storage::disk('supabase')->url($this->cover_image) : null,
             'repo_url' => $this->repo_url,
             'demo_url' => $this->demo_url,
             'tech_stack' => $this->tech_stack,
@@ -34,7 +34,7 @@ class ProjectResource extends JsonResource
             'creator' => $this->whenLoaded('creator', fn() => [
                 'id' => $this->creator->id,
                 'name' => $this->creator->name,
-                'avatar' => $this->creator->avatar ? Storage::disk('public')->url($this->creator->avatar) : null,
+                'avatar' => $this->creator->avatar ? Storage::disk('supabase')->url($this->creator->avatar) : null,
             ]),
             'created_at' => $this->created_at?->toISOString(),
         ];

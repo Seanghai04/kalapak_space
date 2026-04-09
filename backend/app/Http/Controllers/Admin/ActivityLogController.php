@@ -47,7 +47,7 @@ class ActivityLogController extends Controller
                     'id' => $log->user->id,
                     'name' => $log->user->name,
                     'avatar' => $log->user->avatar
-                        ? \Illuminate\Support\Facades\Storage::disk('public')->url($log->user->avatar)
+                        ? \Illuminate\Support\Facades\Storage::disk('supabase')->url($log->user->avatar)
                         : null,
                 ] : null,
                 'created_at' => $log->created_at,

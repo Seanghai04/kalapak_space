@@ -15,7 +15,7 @@ class TeamMemberResource extends JsonResource
             'name' => $this->name,
             'title' => $this->title,
             'bio' => $this->bio,
-            'avatar' => $this->avatar ? Storage::disk('public')->url($this->avatar) : null,
+            'avatar' => $this->avatar ? Storage::disk('supabase')->url($this->avatar) : null,
             'github_url' => $this->github_url,
             'linkedin_url' => $this->linkedin_url,
             'telegram_url' => $this->telegram_url,

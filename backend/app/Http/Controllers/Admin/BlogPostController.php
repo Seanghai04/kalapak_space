@@ -50,7 +50,7 @@ class BlogPostController extends Controller
         $data['author_id'] = auth()->id();
 
         if ($request->hasFile('cover_image')) {
-            $data['cover_image'] = $request->file('cover_image')->store('blog', 'public');
+            $data['cover_image'] = $request->file('cover_image')->store('blog', 'supabase');
         }
 
         if ($data['status'] === 'published' && empty($data['published_at'])) {
@@ -85,9 +85,9 @@ class BlogPostController extends Controller
 
         if ($request->hasFile('cover_image')) {
             if ($post->cover_image) {
-                Storage::disk('public')->delete($post->cover_image);
+                Storage::disk('supabase')->delete($post->cover_image);
             }
-            $data['cover_image'] = $request->file('cover_image')->store('blog', 'public');
+            $data['cover_image'] = $request->file('cover_image')->store('blog', 'supabase');
         }
 
         if ($data['status'] === 'published' && !$post->published_at && empty($data['published_at'])) {

@@ -16,7 +16,7 @@ class BlogPostResource extends JsonResource
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
             'content' => $this->content,
-            'cover_image' => $this->cover_image ? Storage::disk('public')->url($this->cover_image) : null,
+            'cover_image' => $this->cover_image ? Storage::disk('supabase')->url($this->cover_image) : null,
             'status' => $this->status,
             'is_featured' => $this->is_featured,
             'views_count' => $this->views_count,
@@ -25,7 +25,7 @@ class BlogPostResource extends JsonResource
             'author' => $this->whenLoaded('author', fn() => [
                 'id' => $this->author->id,
                 'name' => $this->author->name,
-                'avatar' => $this->author->avatar ? Storage::disk('public')->url($this->author->avatar) : null,
+                'avatar' => $this->author->avatar ? Storage::disk('supabase')->url($this->author->avatar) : null,
                 'bio' => $this->author->bio,
             ]),
             'category' => $this->whenLoaded('category', fn() => [

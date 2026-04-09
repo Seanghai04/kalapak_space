@@ -44,7 +44,7 @@ class ProjectController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('cover_image')) {
-            $data['cover_image'] = $request->file('cover_image')->store('projects', 'public');
+            $data['cover_image'] = $request->file('cover_image')->store('projects', 'supabase');
         }
 
         $data['created_by'] = auth()->id();
@@ -82,9 +82,9 @@ class ProjectController extends Controller
 
         if ($request->hasFile('cover_image')) {
             if ($project->cover_image) {
-                Storage::disk('public')->delete($project->cover_image);
+                Storage::disk('supabase')->delete($project->cover_image);
             }
-            $data['cover_image'] = $request->file('cover_image')->store('projects', 'public');
+            $data['cover_image'] = $request->file('cover_image')->store('projects', 'supabase');
         }
 
         $tags = $data['tags'] ?? [];

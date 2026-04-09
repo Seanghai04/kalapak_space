@@ -39,7 +39,7 @@ class TeamMemberController extends Controller
         ]);
 
         if ($request->hasFile('avatar')) {
-            $data['avatar'] = $request->file('avatar')->store('team', 'public');
+            $data['avatar'] = $request->file('avatar')->store('team', 'supabase');
         }
 
         $member = TeamMember::create($data);
@@ -73,9 +73,9 @@ class TeamMemberController extends Controller
 
         if ($request->hasFile('avatar')) {
             if ($member->avatar) {
-                Storage::disk('public')->delete($member->avatar);
+                Storage::disk('supabase')->delete($member->avatar);
             }
-            $data['avatar'] = $request->file('avatar')->store('team', 'public');
+            $data['avatar'] = $request->file('avatar')->store('team', 'supabase');
         }
 
         $member->update($data);
@@ -94,7 +94,7 @@ class TeamMemberController extends Controller
         $member = TeamMember::findOrFail($id);
         $name = $member->name;
         if ($member->avatar) {
-            Storage::disk('public')->delete($member->avatar);
+            Storage::disk('supabase')->delete($member->avatar);
         }
         $member->delete();
 

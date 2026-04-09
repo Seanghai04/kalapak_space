@@ -79,6 +79,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
 
+    // Upload (for TipTap editor, etc.)
+    Route::post('/upload', [MediaController::class, 'upload']);
+
     // Member routes
     Route::prefix('member')->group(function () {
         Route::get('/profile', [ProfileController::class, 'show']);

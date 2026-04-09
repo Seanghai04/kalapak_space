@@ -43,7 +43,7 @@ class SearchController extends Controller
                     'title' => $u->name,
                     'subtitle' => $u->email,
                     'meta' => $u->role?->name ?? 'No role',
-                    'avatar' => $u->avatar ? Storage::disk('public')->url($u->avatar) : null,
+                    'avatar' => $u->avatar ? Storage::disk('supabase')->url($u->avatar) : null,
                     'is_active' => $u->is_active,
                 ]);
         }
@@ -58,7 +58,7 @@ class SearchController extends Controller
                     'title' => $p->title,
                     'subtitle' => $p->status,
                     'meta' => $p->created_at?->format('M d, Y'),
-                    'thumbnail' => $p->thumbnail ? Storage::disk('public')->url($p->thumbnail) : null,
+                    'thumbnail' => $p->thumbnail ? Storage::disk('supabase')->url($p->thumbnail) : null,
                 ]);
         }
 
@@ -75,7 +75,7 @@ class SearchController extends Controller
                     'title' => $p->title,
                     'subtitle' => $p->category?->name ?? 'Uncategorized',
                     'meta' => $p->status,
-                    'thumbnail' => $p->featured_image ? Storage::disk('public')->url($p->featured_image) : null,
+                    'thumbnail' => $p->featured_image ? Storage::disk('supabase')->url($p->featured_image) : null,
                 ]);
         }
 
@@ -122,7 +122,7 @@ class SearchController extends Controller
                     'id' => $t->id,
                     'title' => $t->name,
                     'subtitle' => $t->title,
-                    'avatar' => $t->avatar ? Storage::disk('public')->url($t->avatar) : null,
+                    'avatar' => $t->avatar ? Storage::disk('supabase')->url($t->avatar) : null,
                 ]);
         }
 

@@ -59,25 +59,25 @@ class MediaController extends Controller
     public function upload(Request $request): JsonResponse
     {
         $request->validate([
-            'file' => ['required', 'file', 'max:10240', 'mimes:jpg,jpeg,png,webp,gif,pdf'],
+            'file' => ['required', 'file', 'max:51200', 'mimes:jpg,jpeg,png,webp,gif,pdf,mp4,mov,avi,webm'],
         ]);
 
         $file = $request->file('file');
         $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('media', $filename, 'public');
+        $path = $file->storeAs('media', $filename, 'supabase');
 
         $media = Media::create([
             'filename' => $filename,
             'original_name' => $file->getClientOriginalName(),
             'path' => $path,
-            'disk' => 'public',
+            'disk' => 'supabase',
             'mime_type' => $file->getMimeType(),
             'size' => $file->getSize(),
             'uploaded_by' => auth()->id(),
         ]);
 
         $responseData = $media->toArray();
-        $responseData['url'] = Storage::disk('public')->url($path);
+        $responseData['url'] = Storage::disk('supabase')->url($path);
 
         return response()->json([
             'success' => true,

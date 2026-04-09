@@ -14,7 +14,7 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'avatar' => $this->avatar ? Storage::disk('public')->url($this->avatar) : null,
+            'avatar' => $this->avatar ? Storage::disk('supabase')->url($this->avatar) : null,
             'bio' => $this->bio,
             'github_url' => $this->github_url,
             'linkedin_url' => $this->linkedin_url,
