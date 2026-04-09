@@ -2,7 +2,22 @@
 
 return [
 
+    /*
+    |--------------------------------------------------------------------------
+    | Default Filesystem Disk
+    |--------------------------------------------------------------------------
+    |
+    | បងត្រូវប្រាកដថា FILESYSTEM_DISK ក្នុង .env គឺដាក់ថា "supabase"
+    |
+    */
+
     'default' => env('FILESYSTEM_DISK', 'local'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Filesystem Disks
+    |--------------------------------------------------------------------------
+    */
 
     'disks' => [
 
@@ -25,15 +40,22 @@ return [
             'driver' => 's3',
             'key' => env('SUPABASE_ACCESS_KEY'),
             'secret' => env('SUPABASE_SECRET_KEY'),
-            'region' => env('SUPABASE_REGION', 'us-east-1'),
-            'bucket' => env('SUPABASE_BUCKET', 'kalapak-assets'),
-            'endpoint' => env('SUPABASE_ENDPOINT'),
+            'region' => env('SUPABASE_REGION', 'ap-southeast-1'), //
+            'bucket' => env('SUPABASE_BUCKET', 'kalapak-assets'), //
+            'endpoint' => env('SUPABASE_ENDPOINT'), // https://hiucucocvvhgmszgqnxc.supabase.co/storage/v1/s3
             'use_path_style_endpoint' => true,
-            'throw' => false,
+            'visibility' => 'public',
+            'throw' => true, // ប្តូរជា true ដើម្បីឱ្យវាលោត Error ពេលមានបញ្ហា Connection
             'url' => env('SUPABASE_URL') . '/storage/v1/object/public/' . env('SUPABASE_BUCKET', 'kalapak-assets'),
         ],
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Symbolic Links
+    |--------------------------------------------------------------------------
+    */
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
