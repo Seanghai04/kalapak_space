@@ -273,11 +273,11 @@ onMounted(async () => {
   try {
     const { data } = await publicApi.getBlogPost(route.params.slug)
     post.value = data.data
-    addCopyButtons()
   } catch {
     post.value = null
   } finally {
     loading.value = false
+    addCopyButtons()
   }
 })
 </script>
