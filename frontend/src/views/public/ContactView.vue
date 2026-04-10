@@ -9,9 +9,9 @@
 
       <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
         <div data-aos="fade-down" data-aos-duration="800" class="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full border border-brand-violet/20 dark:border-brand-cyan/20 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm">
-          <span class="text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest">// Contact</span>
+          <span class="text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest">// Contact</span>
         </div>
-        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-code font-bold mb-4 sm:mb-6 leading-[1.1]">
+        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-sans font-bold mb-4 sm:mb-6 leading-[1.1]">
           <span class="text-gray-900 dark:text-white">Let's</span>
           <span class="gradient-text"> Connect</span>
         </h1>
@@ -32,7 +32,7 @@
               :class="info.bgClass">
               <div v-html="info.icon" />
             </div>
-            <h3 class="text-xs font-code font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-1.5">{{ info.label }}</h3>
+            <h3 class="text-xs font-sans font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-1.5">{{ info.label }}</h3>
             <a v-if="info.href" :href="info.href" target="_blank" rel="noopener noreferrer"
               class="text-sm text-gray-500 dark:text-gray-400 hover:text-brand-violet dark:hover:text-brand-cyan transition-colors break-all">
               {{ info.value }}
@@ -58,7 +58,7 @@
                   <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
                 </div>
                 <div>
-                  <h2 class="text-2xl font-code font-bold text-gray-900 dark:text-white">Send a Message</h2>
+                  <h2 class="text-2xl font-sans font-bold text-gray-900 dark:text-white">Send a Message</h2>
                   <p class="text-xs text-gray-500 dark:text-gray-400">We typically respond within 24 hours</p>
                 </div>
               </div>
@@ -73,7 +73,7 @@
                     <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
                   </div>
                 </div>
-                <h3 class="text-2xl font-code font-bold text-gray-900 dark:text-white mb-3">Message Sent!</h3>
+                <h3 class="text-2xl font-sans font-bold text-gray-900 dark:text-white mb-3">Message Sent!</h3>
                 <p class="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-6 leading-relaxed">
                   Thank you for reaching out. We'll get back to you as soon as possible.
                 </p>
@@ -139,7 +139,7 @@
             <!-- Office info -->
             <div data-aos="fade-left" data-aos-delay="100"
               class="rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm p-7">
-              <h3 class="text-xs font-code font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-5 flex items-center gap-2">
+              <h3 class="text-xs font-sans font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-5 flex items-center gap-2">
                 <svg class="w-4 h-4 text-brand-violet dark:text-brand-cyan" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
                 Our Location
               </h3>
@@ -173,7 +173,7 @@
             <!-- Social links -->
             <div data-aos="fade-left" data-aos-delay="200"
               class="rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm p-7">
-              <h3 class="text-xs font-code font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-5 flex items-center gap-2">
+              <h3 class="text-xs font-sans font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-5 flex items-center gap-2">
                 <svg class="w-4 h-4 text-brand-violet dark:text-brand-cyan" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" /></svg>
                 Follow Us
               </h3>
@@ -196,7 +196,7 @@
             <!-- Quick response -->
             <div data-aos="fade-left" data-aos-delay="300"
               class="rounded-2xl border border-gray-100 dark:border-dark-600 bg-gradient-brand p-7 text-white">
-              <h3 class="text-xs font-code font-bold uppercase tracking-wider mb-3 flex items-center gap-2">
+              <h3 class="text-xs font-sans font-bold uppercase tracking-wider mb-3 flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
                 Quick Response
               </h3>
@@ -222,7 +222,7 @@
           <div class="absolute inset-0 bg-gradient-brand opacity-90" />
           <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 24px 24px;" />
           <div class="relative z-10 px-6 py-10 sm:px-8 sm:py-14 md:px-16 text-center">
-            <h2 class="text-xl sm:text-2xl md:text-3xl font-code font-bold text-white mb-3">Want to join the team?</h2>
+            <h2 class="text-xl sm:text-2xl md:text-3xl font-sans font-bold text-white mb-3">Want to join the team?</h2>
             <p class="text-white/80 max-w-lg mx-auto mb-6 sm:mb-8 leading-relaxed text-sm px-2 sm:px-0">
               We're always looking for passionate developers to build with us. Check out our open positions.
             </p>

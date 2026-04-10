@@ -4,7 +4,7 @@
       <h1 class="section-heading mb-8" data-aos="fade-up">Settings</h1>
 
       <div class="glass-card" data-aos="fade-up">
-        <h3 class="text-lg font-code font-bold dark:text-white mb-6">Appearance</h3>
+        <h3 class="text-lg font-sans font-bold dark:text-white mb-6">Appearance</h3>
         <div class="flex items-center justify-between">
           <div>
             <p class="font-medium dark:text-white">Dark Mode</p>

@@ -22,7 +22,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-code font-bold;
+    @apply font-sans font-bold;
   }
 
   ::selection {
@@ -208,7 +208,7 @@
   }
 
   .section-heading {
-    @apply text-3xl md:text-4xl lg:text-5xl font-code font-bold gradient-text;
+    @apply text-3xl md:text-4xl lg:text-5xl font-sans font-bold gradient-text;
   }
 
   .section-subheading {

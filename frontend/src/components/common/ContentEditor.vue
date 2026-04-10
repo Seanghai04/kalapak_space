@@ -158,7 +158,7 @@
           :value="modelValue"
           @input="$emit('update:modelValue', $event.target.value)"
           rows="20"
-          class="flex-1 w-full px-4 py-3 bg-transparent text-sm font-code dark:text-gray-200 placeholder-gray-400 focus:outline-none resize-none"
+          class="flex-1 w-full px-4 py-3 bg-transparent text-sm font-sans dark:text-gray-200 placeholder-gray-400 focus:outline-none resize-none"
           :class="showPreview ? 'w-1/2' : 'w-full'"
           placeholder="Write your content in Markdown..."
           spellcheck="false"

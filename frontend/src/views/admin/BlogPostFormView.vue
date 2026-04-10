@@ -10,7 +10,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between mb-8">
       <div>
-        <h1 class="text-2xl font-code font-bold dark:text-white">{{ isEdit ? 'Edit Post' : 'Create Post' }}</h1>
+        <h1 class="text-2xl font-sans font-bold dark:text-white">{{ isEdit ? 'Edit Post' : 'Create Post' }}</h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ isEdit ? 'Update article content and settings' : 'Write a new article for your blog' }}</p>
       </div>
     </div>

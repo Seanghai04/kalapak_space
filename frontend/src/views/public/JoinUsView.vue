@@ -11,9 +11,9 @@
       <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
         <div data-aos="fade-down" data-aos-duration="800" class="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full border border-brand-violet/20 dark:border-brand-cyan/20 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm">
           <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>
-          <span class="text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest">We're Hiring</span>
+          <span class="text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest">We're Hiring</span>
         </div>
-        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-code font-bold mb-4 sm:mb-6 leading-[1.1]">
+        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-sans font-bold mb-4 sm:mb-6 leading-[1.1]">
           <span class="text-gray-900 dark:text-white">Build the</span><br />
           <span class="gradient-text">Future With Us</span>
         </h1>
@@ -33,7 +33,7 @@
     <section class="pb-14 sm:pb-20 relative z-10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-10 sm:mb-14">
-          <h2 data-aos="fade-up" class="text-2xl sm:text-3xl md:text-4xl font-code font-bold text-gray-900 dark:text-white mb-4">
+          <h2 data-aos="fade-up" class="text-2xl sm:text-3xl md:text-4xl font-sans font-bold text-gray-900 dark:text-white mb-4">
             Why <span class="gradient-text">Kalapak</span>?
           </h2>
           <p data-aos="fade-up" data-aos-delay="100" class="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
@@ -49,7 +49,7 @@
               :class="perk.bgClass">
               <div v-html="perk.icon" />
             </div>
-            <h3 class="text-base font-code font-bold text-gray-900 dark:text-white mb-2">{{ perk.title }}</h3>
+            <h3 class="text-base font-sans font-bold text-gray-900 dark:text-white mb-2">{{ perk.title }}</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{{ perk.desc }}</p>
             <div class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-brand opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-b-2xl" />
           </div>
@@ -67,7 +67,7 @@
               <div class="w-10 h-10 rounded-xl bg-brand-violet/10 dark:bg-brand-violet/20 flex items-center justify-center">
                 <svg class="w-5 h-5 text-brand-violet" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
               </div>
-              <h3 class="text-xl font-code font-bold text-gray-900 dark:text-white">What We Look For</h3>
+              <h3 class="text-xl font-sans font-bold text-gray-900 dark:text-white">What We Look For</h3>
             </div>
             <ul class="space-y-4">
               <li v-for="(item, i) in lookFor" :key="i" class="flex items-start gap-3.5">
@@ -88,7 +88,7 @@
               <div class="w-10 h-10 rounded-xl bg-brand-cyan/10 dark:bg-brand-cyan/20 flex items-center justify-center">
                 <svg class="w-5 h-5 text-brand-cyan" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
               </div>
-              <h3 class="text-xl font-code font-bold text-gray-900 dark:text-white">What You'll Get</h3>
+              <h3 class="text-xl font-sans font-bold text-gray-900 dark:text-white">What You'll Get</h3>
             </div>
             <ul class="space-y-4">
               <li v-for="(item, i) in youGet" :key="i" class="flex items-start gap-3.5">
@@ -110,7 +110,7 @@
     <section class="pb-14 sm:pb-20 relative z-10">
       <div class="max-w-5xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-8 sm:mb-12">
-          <h2 data-aos="fade-up" class="text-2xl sm:text-3xl md:text-4xl font-code font-bold text-gray-900 dark:text-white mb-4">
+          <h2 data-aos="fade-up" class="text-2xl sm:text-3xl md:text-4xl font-sans font-bold text-gray-900 dark:text-white mb-4">
             Open <span class="gradient-text">Roles</span>
           </h2>
           <p data-aos="fade-up" data-aos-delay="100" class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
@@ -130,7 +130,7 @@
               </div>
               <!-- Info -->
               <div class="flex-1 min-w-0">
-                <h3 class="text-base font-code font-bold text-gray-900 dark:text-white mb-1">{{ role.title }}</h3>
+                <h3 class="text-base font-sans font-bold text-gray-900 dark:text-white mb-1">{{ role.title }}</h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ role.desc }}</p>
               </div>
               <!-- Tags -->
@@ -153,7 +153,7 @@
     <section class="pb-16 sm:pb-24 relative z-10">
       <div class="max-w-5xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-10 sm:mb-14">
-          <h2 data-aos="fade-up" class="text-2xl sm:text-3xl md:text-4xl font-code font-bold text-gray-900 dark:text-white mb-4">
+          <h2 data-aos="fade-up" class="text-2xl sm:text-3xl md:text-4xl font-sans font-bold text-gray-900 dark:text-white mb-4">
             How It <span class="gradient-text">Works</span>
           </h2>
           <p data-aos="fade-up" data-aos-delay="100" class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
@@ -168,9 +168,9 @@
             <!-- Connector line -->
             <div v-if="i < steps.length - 1" class="hidden lg:block absolute top-8 left-[60%] w-[80%] h-[2px] bg-gradient-to-r from-gray-200 dark:from-dark-500 to-transparent z-0" />
             <div class="relative z-10 w-16 h-16 rounded-2xl bg-gradient-brand flex items-center justify-center mx-auto mb-5 shadow-lg shadow-brand-violet/20">
-              <span class="text-white font-code font-bold text-xl">{{ i + 1 }}</span>
+              <span class="text-white font-sans font-bold text-xl">{{ i + 1 }}</span>
             </div>
-            <h4 class="font-code font-bold text-gray-900 dark:text-white mb-2 text-sm">{{ step.title }}</h4>
+            <h4 class="font-sans font-bold text-gray-900 dark:text-white mb-2 text-sm">{{ step.title }}</h4>
             <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{{ step.desc }}</p>
           </div>
         </div>
@@ -189,7 +189,7 @@
                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
               </div>
               <div>
-                <h2 class="text-2xl font-code font-bold text-gray-900 dark:text-white">Apply Now</h2>
+                <h2 class="text-2xl font-sans font-bold text-gray-900 dark:text-white">Apply Now</h2>
                 <p class="text-xs text-gray-500 dark:text-gray-400">Fields marked with * are required</p>
               </div>
             </div>
@@ -204,7 +204,7 @@
                   <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
                 </div>
               </div>
-              <h3 class="text-2xl font-code font-bold text-gray-900 dark:text-white mb-3">Application Submitted!</h3>
+              <h3 class="text-2xl font-sans font-bold text-gray-900 dark:text-white mb-3">Application Submitted!</h3>
               <p class="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-6 leading-relaxed">
                 Thank you for your interest in joining Kalapak Code Team. We'll review your application and get back to you within a few days.
               </p>
@@ -346,7 +346,7 @@
     <section class="pb-24 relative z-10">
       <div class="max-w-3xl mx-auto px-4">
         <div class="text-center mb-12">
-          <h2 data-aos="fade-up" class="text-3xl md:text-4xl font-code font-bold text-gray-900 dark:text-white mb-4">
+          <h2 data-aos="fade-up" class="text-3xl md:text-4xl font-sans font-bold text-gray-900 dark:text-white mb-4">
             Frequently <span class="gradient-text">Asked</span>
           </h2>
         </div>
@@ -355,7 +355,7 @@
             data-aos="fade-up" :data-aos-delay="i * 60"
             class="rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm overflow-hidden">
             <button @click="toggleFaq(i)" class="w-full flex items-center justify-between p-5 md:p-6 text-left">
-              <h4 class="text-sm font-code font-bold text-gray-900 dark:text-white pr-4">{{ faq.q }}</h4>
+              <h4 class="text-sm font-sans font-bold text-gray-900 dark:text-white pr-4">{{ faq.q }}</h4>
               <svg class="w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-300" :class="{ 'rotate-180': openFaq === i }" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
             </button>
             <div v-show="openFaq === i" class="px-5 md:px-6 pb-5 md:pb-6 -mt-1">

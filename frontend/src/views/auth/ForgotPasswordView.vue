@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-2xl font-code font-bold gradient-text mb-2 text-center">Forgot Password</h2>
+    <h2 class="text-2xl font-sans font-bold gradient-text mb-2 text-center">Forgot Password</h2>
     <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-6">Enter your email to receive a reset link.</p>
 
     <div v-if="sent" class="text-center py-4">

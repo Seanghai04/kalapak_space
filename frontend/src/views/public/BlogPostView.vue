@@ -39,7 +39,7 @@
               Featured
             </span>
           </div>
-          <h1 data-aos="fade-up" class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-code font-bold text-white leading-tight mb-4 sm:mb-5">
+          <h1 data-aos="fade-up" class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-sans font-bold text-white leading-tight mb-4 sm:mb-5">
             {{ post.title }}
           </h1>
           <!-- Meta bar -->
@@ -86,7 +86,7 @@
               class="min-w-0 rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm p-4 sm:p-8 md:p-12 overflow-hidden">
               <div
                 class="prose prose-lg dark:prose-invert max-w-none
-                  prose-headings:font-code prose-headings:text-gray-900 dark:prose-headings:text-white
+                  prose-headings:font-sans prose-headings:text-gray-900 dark:prose-headings:text-white
                   prose-a:text-brand-violet dark:prose-a:text-brand-cyan prose-a:no-underline hover:prose-a:underline
                   prose-code:text-brand-violet dark:prose-code:text-brand-cyan prose-code:bg-brand-violet/5 dark:prose-code:bg-brand-cyan/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-[''] prose-code:after:content-['']
                   prose-pre:bg-gray-900 dark:prose-pre:bg-dark-900 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-dark-600 prose-pre:rounded-xl
@@ -108,7 +108,7 @@
                   <img v-if="post.author?.avatar" :src="post.author.avatar" :alt="post.author.name" class="w-full h-full object-cover" />
                   <div v-else class="w-full h-full bg-gradient-brand flex items-center justify-center text-white text-2xl font-bold">{{ post.author?.name?.charAt(0) }}</div>
                 </div>
-                <h3 class="font-code font-bold text-gray-900 dark:text-white truncate">{{ post.author?.name }}</h3>
+                <h3 class="font-sans font-bold text-gray-900 dark:text-white truncate">{{ post.author?.name }}</h3>
                 <p class="text-xs text-brand-violet dark:text-brand-cyan uppercase tracking-wider mb-2">Author</p>
                 <p v-if="post.author?.bio" class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3">{{ post.author.bio }}</p>
               </div>
@@ -116,7 +116,7 @@
               <!-- Article info card -->
               <div data-aos="fade-left" data-aos-delay="200"
                 class="rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm p-6 overflow-hidden">
-                <h4 class="text-xs font-code font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                <h4 class="text-xs font-sans font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
                   <svg class="w-4 h-4 text-brand-violet dark:text-brand-cyan shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
                   Article Info
                 </h4>
@@ -149,7 +149,7 @@
               <!-- Share card -->
               <div data-aos="fade-left" data-aos-delay="300"
                 class="rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm p-6 overflow-hidden">
-                <h4 class="text-xs font-code font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                <h4 class="text-xs font-sans font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
                   <svg class="w-4 h-4 text-brand-violet dark:text-brand-cyan" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"/></svg>
                   Share
                 </h4>

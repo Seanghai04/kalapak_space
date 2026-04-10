@@ -12,7 +12,7 @@
       <div class="absolute bottom-1/4 -right-32 w-[250px] sm:w-[400px] h-[250px] sm:h-[400px] rounded-full bg-brand-cyan/20 blur-[80px] sm:blur-[120px] animate-float" style="animation-delay: 3s" />
       <!-- Floating code particles -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <span v-for="(p, i) in particles" :key="i" class="absolute text-xs font-code select-none"
+        <span v-for="(p, i) in particles" :key="i" class="absolute text-xs font-sans select-none"
           :class="p.color" :style="{ left: p.x + '%', top: p.y + '%', opacity: p.opacity, animationDelay: p.delay + 's', animationDuration: p.duration + 's' }"
           style="animation: floatParticle ease-in-out infinite">{{ p.text }}</span>
       </div>
@@ -28,14 +28,14 @@
         </div>
 
         <!-- Main heading -->
-        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-code font-bold mb-4 sm:mb-6 leading-[1.1]">
+        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-sans font-bold mb-4 sm:mb-6 leading-[1.1]">
           <span class="text-gray-900 dark:text-white">We build</span><br />
           <span class="gradient-text">digital futures</span>
         </h1>
         <p data-aos="fade-up" data-aos-delay="200" class="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-3 sm:mb-4 font-sans leading-relaxed px-2 sm:px-0">
           A passionate team of developers from Cambodia, crafting modern web & mobile applications with cutting-edge technology.
         </p>
-        <p data-aos="fade-up" data-aos-delay="300" class="text-xs sm:text-sm font-code text-brand-violet/70 dark:text-brand-cyan/70 mb-8 sm:mb-10 tracking-wide">
+        <p data-aos="fade-up" data-aos-delay="300" class="text-xs sm:text-sm font-sans text-brand-violet/70 dark:text-brand-cyan/70 mb-8 sm:mb-10 tracking-wide">
           &lt;Kalapak Code Team /&gt;
         </p>
 
@@ -66,7 +66,7 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-0 bg-white/80 dark:bg-dark-800/80 backdrop-blur-xl rounded-2xl border border-gray-100 dark:border-dark-600 shadow-glass dark:shadow-glass-dark overflow-hidden" data-aos="fade-up">
           <div v-for="(stat, i) in stats" :key="i" class="group px-4 sm:px-6 py-6 sm:py-8 text-center hover:bg-brand-violet/5 dark:hover:bg-brand-cyan/5 transition-colors duration-300 border-gray-100 dark:border-dark-600"
             :class="[i >= 2 ? 'border-t md:border-t-0' : '', i % 2 !== 0 ? '' : '', i > 0 ? 'border-l md:border-l' : '']">
-            <p class="text-2xl sm:text-3xl md:text-4xl font-code font-bold gradient-text mb-1 group-hover:scale-110 transition-transform duration-300">{{ stat.value }}</p>
+            <p class="text-2xl sm:text-3xl md:text-4xl font-sans font-bold gradient-text mb-1 group-hover:scale-110 transition-transform duration-300">{{ stat.value }}</p>
             <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">{{ stat.label }}</p>
           </div>
         </div>
@@ -79,8 +79,8 @@
         <!-- Section header -->
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16" data-aos="fade-up">
           <div>
-            <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// What we do</span>
-            <h2 class="text-2xl sm:text-3xl md:text-5xl font-code font-bold text-gray-900 dark:text-white leading-tight">
+            <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// What we do</span>
+            <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
               Turning ideas into<br /><span class="gradient-text">reality</span>
             </h2>
           </div>
@@ -98,7 +98,7 @@
               :class="service.bgClass">
               <span v-html="service.icon" />
             </div>
-            <h3 class="text-lg font-code font-bold text-gray-900 dark:text-white mb-3 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors">{{ service.title }}</h3>
+            <h3 class="text-lg font-sans font-bold text-gray-900 dark:text-white mb-3 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors">{{ service.title }}</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{{ service.description }}</p>
             <!-- Hover gradient line -->
             <div class="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-brand group-hover:w-full transition-all duration-700 rounded-full" />
@@ -116,8 +116,8 @@
       <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16" data-aos="fade-up">
           <div>
-            <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our work</span>
-            <h2 class="text-2xl sm:text-3xl md:text-5xl font-code font-bold text-gray-900 dark:text-white">
+            <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our work</span>
+            <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white">
               Featured <span class="gradient-text">Projects</span>
             </h2>
           </div>
@@ -149,7 +149,7 @@
                     {{ tag.name }}
                   </span>
                 </div>
-                <h3 class="text-lg font-code font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors">
+                <h3 class="text-lg font-sans font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors">
                   {{ project.title }}
                 </h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4">{{ project.description }}</p>
@@ -175,8 +175,8 @@
         <div class="grid lg:grid-cols-2 gap-16 items-center">
           <!-- Left: Text -->
           <div data-aos="fade-right">
-            <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our team</span>
-            <h2 class="text-2xl sm:text-3xl md:text-5xl font-code font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight">
+            <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our team</span>
+            <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight">
               Meet the people<br />behind the <span class="gradient-text">code</span>
             </h2>
             <p class="text-gray-500 dark:text-gray-400 mb-8 leading-relaxed">
@@ -213,7 +213,7 @@
               <div class="w-10 h-10 rounded-xl mb-4 flex items-center justify-center" :class="val.bgClass">
                 <span class="text-lg">{{ val.icon }}</span>
               </div>
-              <h4 class="font-code font-bold text-gray-900 dark:text-white mb-1.5">{{ val.title }}</h4>
+              <h4 class="font-sans font-bold text-gray-900 dark:text-white mb-1.5">{{ val.title }}</h4>
               <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{{ val.desc }}</p>
             </div>
           </div>
@@ -227,8 +227,8 @@
       <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16" data-aos="fade-up">
           <div>
-            <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Blog</span>
-            <h2 class="text-2xl sm:text-3xl md:text-5xl font-code font-bold text-gray-900 dark:text-white">
+            <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Blog</span>
+            <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white">
               Latest <span class="gradient-text">Articles</span>
             </h2>
           </div>
@@ -253,7 +253,7 @@
                   </span>
                   <span class="text-[11px] text-gray-400">{{ formatDate(post.published_at) }}</span>
                 </div>
-                <h3 class="text-lg font-code font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors line-clamp-2">
+                <h3 class="text-lg font-sans font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors line-clamp-2">
                   {{ post.title }}
                 </h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-3 mb-4 flex-1">{{ post.excerpt }}</p>
@@ -284,8 +284,8 @@
       <div class="absolute top-1/2 right-1/4 -translate-y-1/2 w-[350px] h-[350px] rounded-full bg-brand-cyan/[0.07] blur-[120px] pointer-events-none" />
 
       <div class="max-w-7xl mx-auto px-4 text-center mb-14" data-aos="fade-up">
-        <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Technologies</span>
-        <h2 class="text-3xl md:text-5xl font-code font-bold text-gray-900 dark:text-white mb-4">
+        <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Technologies</span>
+        <h2 class="text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white mb-4">
           Our <span class="gradient-text">Tech Stack</span>
         </h2>
         <p class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto text-sm">The tools and frameworks we use to build exceptional digital products.</p>
@@ -325,7 +325,7 @@
           <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIxIiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIwLjEiLz48L3N2Zz4=')] opacity-50" />
 
           <div class="relative px-6 py-12 sm:px-8 sm:py-16 md:px-16 md:py-20 text-center">
-            <h2 class="text-2xl sm:text-3xl md:text-5xl font-code font-bold text-white mb-4 leading-tight">
+            <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-white mb-4 leading-tight">
               Ready to build<br />something amazing?
             </h2>
             <p class="text-base sm:text-lg text-white/80 mb-8 sm:mb-10 max-w-xl mx-auto">

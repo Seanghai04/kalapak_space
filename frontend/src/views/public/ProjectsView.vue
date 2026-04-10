@@ -11,9 +11,9 @@
 
       <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
         <div data-aos="fade-down" data-aos-duration="800" class="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full border border-brand-violet/20 dark:border-brand-cyan/20 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm">
-          <span class="text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest">// Portfolio</span>
+          <span class="text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest">// Portfolio</span>
         </div>
-        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-code font-bold mb-4 sm:mb-6 leading-[1.1]">
+        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-sans font-bold mb-4 sm:mb-6 leading-[1.1]">
           <span class="text-gray-900 dark:text-white">Our</span>
           <span class="gradient-text"> Projects</span>
         </h1>
@@ -28,15 +28,15 @@
       <div class="max-w-4xl mx-auto px-4 sm:px-6">
         <div class="grid grid-cols-3 gap-0 bg-white/80 dark:bg-dark-800/80 backdrop-blur-xl rounded-2xl border border-gray-100 dark:border-dark-600 shadow-glass dark:shadow-glass-dark overflow-hidden divide-x divide-gray-100 dark:divide-dark-600" data-aos="fade-up">
           <div class="group px-3 sm:px-6 py-4 sm:py-6 text-center hover:bg-brand-violet/5 dark:hover:bg-brand-cyan/5 transition-colors duration-300">
-            <p class="text-xl sm:text-2xl md:text-3xl font-code font-bold gradient-text mb-0.5 group-hover:scale-110 transition-transform duration-300">{{ totalProjects }}</p>
+            <p class="text-xl sm:text-2xl md:text-3xl font-sans font-bold gradient-text mb-0.5 group-hover:scale-110 transition-transform duration-300">{{ totalProjects }}</p>
             <p class="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Total Projects</p>
           </div>
           <div class="group px-3 sm:px-6 py-4 sm:py-6 text-center hover:bg-brand-violet/5 dark:hover:bg-brand-cyan/5 transition-colors duration-300">
-            <p class="text-xl sm:text-2xl md:text-3xl font-code font-bold gradient-text mb-0.5 group-hover:scale-110 transition-transform duration-300">{{ activeCount }}</p>
+            <p class="text-xl sm:text-2xl md:text-3xl font-sans font-bold gradient-text mb-0.5 group-hover:scale-110 transition-transform duration-300">{{ activeCount }}</p>
             <p class="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Active</p>
           </div>
           <div class="group px-3 sm:px-6 py-4 sm:py-6 text-center hover:bg-brand-violet/5 dark:hover:bg-brand-cyan/5 transition-colors duration-300">
-            <p class="text-xl sm:text-2xl md:text-3xl font-code font-bold gradient-text mb-0.5 group-hover:scale-110 transition-transform duration-300">{{ openSourceCount }}</p>
+            <p class="text-xl sm:text-2xl md:text-3xl font-sans font-bold gradient-text mb-0.5 group-hover:scale-110 transition-transform duration-300">{{ openSourceCount }}</p>
             <p class="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">Open Source</p>
           </div>
         </div>
@@ -122,7 +122,7 @@
                   Open Source
                 </span>
               </div>
-              <h2 class="text-2xl md:text-3xl font-code font-bold text-gray-900 dark:text-white mb-3 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors">
+              <h2 class="text-2xl md:text-3xl font-sans font-bold text-gray-900 dark:text-white mb-3 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors">
                 {{ featuredProject.title }}
               </h2>
               <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 line-clamp-3">{{ featuredProject.description }}</p>
@@ -225,7 +225,7 @@
               </div>
 
               <!-- Title -->
-              <h3 class="text-lg font-code font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors leading-snug">
+              <h3 class="text-lg font-sans font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors leading-snug">
                 {{ project.title }}
               </h3>
 
@@ -283,7 +283,7 @@
           <div class="absolute inset-0 bg-gradient-brand opacity-90" />
           <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 24px 24px;" />
           <div class="relative z-10 px-8 md:px-16 py-14 text-center">
-            <h2 class="text-2xl md:text-3xl font-code font-bold text-white mb-3">Have a project idea?</h2>
+            <h2 class="text-2xl md:text-3xl font-sans font-bold text-white mb-3">Have a project idea?</h2>
             <p class="text-white/80 max-w-lg mx-auto mb-8 leading-relaxed text-sm">
               We're always excited to explore new challenges. Let's build something amazing together.
             </p>

@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-2xl font-code font-bold dark:text-white">Users</h1>
+        <h1 class="text-2xl font-sans font-bold dark:text-white">Users</h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Manage all registered users and their permissions
         </p>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-2xl font-code font-bold dark:text-white mb-8">Dashboard</h1>
+    <h1 class="text-2xl font-sans font-bold dark:text-white mb-8">Dashboard</h1>
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -8,7 +8,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-gray-500 dark:text-gray-400">{{ stat.label }}</p>
-            <p class="text-2xl font-code font-bold dark:text-white mt-1">{{ stat.value }}</p>
+            <p class="text-2xl font-sans font-bold dark:text-white mt-1">{{ stat.value }}</p>
           </div>
           <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl" :class="stat.bgClass">
             {{ stat.icon }}
@@ -20,7 +20,7 @@
     <div class="grid lg:grid-cols-2 gap-8">
       <!-- Chart -->
       <div class="glass-card">
-        <h3 class="text-lg font-code font-bold dark:text-white mb-4">Overview</h3>
+        <h3 class="text-lg font-sans font-bold dark:text-white mb-4">Overview</h3>
         <div class="h-64">
           <Bar v-if="chartData" :data="chartData" :options="chartOptions" />
         </div>
@@ -28,7 +28,7 @@
 
       <!-- Recent Activity -->
       <div class="glass-card">
-        <h3 class="text-lg font-code font-bold dark:text-white mb-4">Recent Activity</h3>
+        <h3 class="text-lg font-sans font-bold dark:text-white mb-4">Recent Activity</h3>
         <div class="space-y-4 max-h-64 overflow-y-auto scrollbar-thin">
           <div v-for="activity in recentActivity" :key="activity.id" class="flex items-start gap-3 text-sm">
             <div class="w-8 h-8 rounded-full bg-brand-violet/10 dark:bg-brand-cyan/10 flex items-center justify-center text-brand-violet dark:text-brand-cyan shrink-0">

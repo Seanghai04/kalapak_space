@@ -9,9 +9,9 @@
 
       <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
         <div data-aos="fade-down" data-aos-duration="800" class="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full border border-brand-violet/20 dark:border-brand-cyan/20 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm">
-          <span class="text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest">// Blog</span>
+          <span class="text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest">// Blog</span>
         </div>
-        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-code font-bold mb-4 sm:mb-6 leading-[1.1]">
+        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-sans font-bold mb-4 sm:mb-6 leading-[1.1]">
           <span class="text-gray-900 dark:text-white">Insights &</span>
           <span class="gradient-text"> Stories</span>
         </h1>
@@ -95,7 +95,7 @@
                 <span class="text-gray-400 dark:text-gray-500">{{ formatDate(featuredPost.published_at) }}</span>
                 <span v-if="featuredPost.reading_time" class="text-gray-400 dark:text-gray-500">· {{ featuredPost.reading_time }} min read</span>
               </div>
-              <h2 class="text-2xl md:text-3xl font-code font-bold text-gray-900 dark:text-white mb-4 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors leading-snug">
+              <h2 class="text-2xl md:text-3xl font-sans font-bold text-gray-900 dark:text-white mb-4 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors leading-snug">
                 {{ featuredPost.title }}
               </h2>
               <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 line-clamp-3">{{ featuredPost.excerpt }}</p>
@@ -169,7 +169,7 @@
               </div>
 
               <!-- Title -->
-              <h3 class="text-lg font-code font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors leading-snug line-clamp-2">
+              <h3 class="text-lg font-sans font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors leading-snug line-clamp-2">
                 {{ post.title }}
               </h3>
 
@@ -220,7 +220,7 @@
           <div class="absolute inset-0 bg-gradient-brand opacity-90" />
           <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 24px 24px;" />
           <div class="relative z-10 px-8 md:px-16 py-14 text-center">
-            <h2 class="text-2xl md:text-3xl font-code font-bold text-white mb-3">Enjoyed reading?</h2>
+            <h2 class="text-2xl md:text-3xl font-sans font-bold text-white mb-3">Enjoyed reading?</h2>
             <p class="text-white/80 max-w-lg mx-auto mb-8 leading-relaxed text-sm">
               We share tutorials, project breakdowns, and team updates. Come build something with us.
             </p>

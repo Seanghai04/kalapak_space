@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-2xl font-code font-bold gradient-text mb-6 text-center">Reset Password</h2>
+    <h2 class="text-2xl font-sans font-bold gradient-text mb-6 text-center">Reset Password</h2>
     <form @submit.prevent="handleSubmit" class="space-y-5">
       <div>
         <label class="block text-sm font-medium dark:text-gray-300 mb-1">Email</label>

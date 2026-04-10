@@ -12,16 +12,16 @@
       <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
         <!-- Badge -->
         <div data-aos="fade-down" data-aos-duration="800" class="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full border border-brand-violet/20 dark:border-brand-cyan/20 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm">
-          <span class="text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest">// About us</span>
+          <span class="text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest">// About us</span>
         </div>
-        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-code font-bold mb-4 sm:mb-6 leading-[1.1]">
+        <h1 data-aos="fade-up" data-aos-duration="1000" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-sans font-bold mb-4 sm:mb-6 leading-[1.1]">
           <span class="text-gray-900 dark:text-white">Passionate about</span><br />
           <span class="gradient-text">building the future</span>
         </h1>
         <p data-aos="fade-up" data-aos-delay="200" class="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-3 sm:mb-4 font-sans leading-relaxed px-2 sm:px-0">
           We are a team of developers from Cambodia, united by a shared vision of using technology to create meaningful impact.
         </p>
-        <p data-aos="fade-up" data-aos-delay="300" class="text-sm font-code text-brand-violet/70 dark:text-brand-cyan/70 italic">
+        <p data-aos="fade-up" data-aos-delay="300" class="text-sm font-sans text-brand-violet/70 dark:text-brand-cyan/70 italic">
           "ជីវិតដែលរស់នៅដើម្បីអ្នកដទៃ ទើបជាជីវិតដែលមានតម្លៃ"
         </p>
       </div>
@@ -33,8 +33,8 @@
         <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <!-- Left: text content -->
           <div data-aos="fade-right">
-            <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our story</span>
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-code font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight">
+            <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our story</span>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-sans font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight">
               From university to<br /><span class="gradient-text">real-world impact</span>
             </h2>
             <div class="space-y-4 text-gray-600 dark:text-gray-400 leading-relaxed">
@@ -51,7 +51,7 @@
             <!-- Mini stats -->
             <div class="grid grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-10">
               <div v-for="(s, i) in miniStats" :key="i">
-                <p class="text-xl sm:text-2xl md:text-3xl font-code font-bold gradient-text">{{ s.value }}</p>
+                <p class="text-xl sm:text-2xl md:text-3xl font-sans font-bold gradient-text">{{ s.value }}</p>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 uppercase tracking-wider">{{ s.label }}</p>
               </div>
             </div>
@@ -60,7 +60,7 @@
           <div data-aos="fade-left" class="relative">
             <div class="about-visual-card relative rounded-2xl sm:rounded-3xl overflow-hidden border border-gray-100 dark:border-dark-600 bg-white/80 dark:bg-dark-800/80 backdrop-blur-sm p-5 sm:p-8 md:p-10 shadow-glass dark:shadow-glass-dark">
               <!-- Decorative code lines -->
-              <div class="font-code text-xs sm:text-sm space-y-2 sm:space-y-3 text-gray-400 dark:text-gray-500 overflow-x-auto">
+              <div class="font-sans text-xs sm:text-sm space-y-2 sm:space-y-3 text-gray-400 dark:text-gray-500 overflow-x-auto">
                 <p><span class="text-brand-violet dark:text-brand-cyan">const</span> <span class="text-gray-700 dark:text-gray-300">team</span> = {</p>
                 <p class="pl-6"><span class="text-brand-violet dark:text-brand-cyan">name</span>: <span class="text-green-600 dark:text-green-400">'Kalapak Code'</span>,</p>
                 <p class="pl-6"><span class="text-brand-violet dark:text-brand-cyan">founded</span>: <span class="text-amber-600 dark:text-amber-400">2024</span>,</p>
@@ -88,8 +88,8 @@
     <section class="py-14 sm:py-18 lg:py-24 relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-16" data-aos="fade-up">
-          <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Purpose</span>
-          <h2 class="text-2xl sm:text-3xl md:text-5xl font-code font-bold text-gray-900 dark:text-white leading-tight">
+          <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Purpose</span>
+          <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
             What drives <span class="gradient-text">us forward</span>
           </h2>
         </div>
@@ -100,7 +100,7 @@
               <svg class="w-7 h-7 mission-rocket" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" /></svg>
               <span class="mission-glow absolute inset-0 rounded-2xl" />
             </div>
-            <h3 class="text-xl font-code font-bold text-gray-900 dark:text-white mb-3">Our Mission</h3>
+            <h3 class="text-xl font-sans font-bold text-gray-900 dark:text-white mb-3">Our Mission</h3>
             <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
               To package knowledge and deliver it through code. We build practical, real-world applications that solve genuine problems while fostering growth within Cambodia's tech community.
             </p>
@@ -111,7 +111,7 @@
               <svg class="w-7 h-7 vision-eye" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               <span class="vision-glow absolute inset-0 rounded-2xl" />
             </div>
-            <h3 class="text-xl font-code font-bold text-gray-900 dark:text-white mb-3">Our Vision</h3>
+            <h3 class="text-xl font-sans font-bold text-gray-900 dark:text-white mb-3">Our Vision</h3>
             <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
               To become a leading student-driven tech team in Southeast Asia, inspiring the next generation of Cambodian developers and proving that world-class software can be built anywhere.
             </p>
@@ -155,8 +155,8 @@
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         <div class="text-center mb-10 sm:mb-16" data-aos="fade-up">
-          <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// The team</span>
-          <h2 class="text-2xl sm:text-3xl md:text-5xl font-code font-bold text-gray-900 dark:text-white leading-tight">
+          <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// The team</span>
+          <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
             Meet the <span class="gradient-text">people</span>
           </h2>
           <p class="text-gray-500 dark:text-gray-400 mt-4 max-w-lg mx-auto text-sm leading-relaxed">
@@ -189,7 +189,7 @@
                 <!-- Avatar circle -->
                 <div class="relative w-20 h-20 sm:w-28 sm:h-28 lg:w-36 lg:h-36 rounded-full overflow-hidden ring-[3px] ring-gray-200/40 dark:ring-dark-500/40 group-hover:ring-0 transition-all duration-500 z-10">
                   <img v-if="member.avatar" :src="member.avatar" :alt="member.name" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div v-else class="w-full h-full bg-gradient-brand flex items-center justify-center text-white text-3xl font-code font-bold">
+                  <div v-else class="w-full h-full bg-gradient-brand flex items-center justify-center text-white text-3xl font-sans font-bold">
                     {{ member.name.charAt(0) }}
                   </div>
                   <!-- Shine sweep on hover -->
@@ -213,7 +213,7 @@
               </div>
 
               <!-- Info -->
-              <h3 class="text-sm sm:text-base lg:text-lg font-code font-bold text-gray-900 dark:text-white mb-0.5 sm:mb-1 transition-all duration-500 group-hover:text-brand-cyan">{{ member.name }}</h3>
+              <h3 class="text-sm sm:text-base lg:text-lg font-sans font-bold text-gray-900 dark:text-white mb-0.5 sm:mb-1 transition-all duration-500 group-hover:text-brand-cyan">{{ member.name }}</h3>
               <p class="text-xs sm:text-sm text-brand-violet dark:text-brand-cyan mb-2 sm:mb-3 font-semibold transition-all duration-300">{{ member.title || member.role }}</p>
               <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3 sm:mb-5 line-clamp-2 sm:line-clamp-3 transition-all duration-500 group-hover:text-gray-400 dark:group-hover:text-gray-300">{{ member.bio || member.specialty }}</p>
 
@@ -254,8 +254,8 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16" data-aos="fade-up">
           <div>
-            <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Core values</span>
-            <h2 class="text-2xl sm:text-3xl md:text-5xl font-code font-bold text-gray-900 dark:text-white leading-tight">
+            <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Core values</span>
+            <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
               What we <span class="gradient-text">believe in</span>
             </h2>
           </div>
@@ -271,7 +271,7 @@
               :class="value.bgClass">
               <span v-html="value.icon" />
             </div>
-            <h3 class="text-lg font-code font-bold text-gray-900 dark:text-white mb-3 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors">{{ value.title }}</h3>
+            <h3 class="text-lg font-sans font-bold text-gray-900 dark:text-white mb-3 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors">{{ value.title }}</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{{ value.description }}</p>
             <!-- Hover gradient underline -->
             <div class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-brand opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-b-2xl" />
@@ -298,8 +298,8 @@
 
       <div class="max-w-4xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-10 sm:mb-16" data-aos="fade-up">
-          <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our journey</span>
-          <h2 class="text-2xl sm:text-3xl md:text-5xl font-code font-bold text-gray-900 dark:text-white leading-tight">
+          <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our journey</span>
+          <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
             How we <span class="gradient-text">got here</span>
           </h2>
         </div>
@@ -354,11 +354,11 @@
                     {{ String(i + 1).padStart(2, '0') }}
                   </div>
                   <!-- Date badge -->
-                  <span class="inline-flex items-center gap-1.5 text-xs font-code font-bold text-brand-violet dark:text-brand-cyan mb-2 px-2 py-0.5 rounded-full bg-brand-violet/5 dark:bg-brand-cyan/5 border border-brand-violet/10 dark:border-brand-cyan/10">
+                  <span class="inline-flex items-center gap-1.5 text-xs font-sans font-bold text-brand-violet dark:text-brand-cyan mb-2 px-2 py-0.5 rounded-full bg-brand-violet/5 dark:bg-brand-cyan/5 border border-brand-violet/10 dark:border-brand-cyan/10">
                     <span class="w-1.5 h-1.5 rounded-full bg-brand-violet dark:bg-brand-cyan tl-date-dot" />
                     {{ item.date }}
                   </span>
-                  <h3 class="text-base font-code font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors duration-300">{{ item.title }}</h3>
+                  <h3 class="text-base font-sans font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors duration-300">{{ item.title }}</h3>
                   <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{{ item.description }}</p>
                   <!-- Bottom progress bar on hover -->
                   <div class="absolute bottom-0 left-0 right-0 h-0.5 rounded-b-2xl overflow-hidden">
@@ -379,8 +379,8 @@
     <section class="py-14 sm:py-18 lg:py-24 relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-10 sm:mb-16" data-aos="fade-up">
-          <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Why us</span>
-          <h2 class="text-2xl sm:text-3xl md:text-5xl font-code font-bold text-gray-900 dark:text-white leading-tight">
+          <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Why us</span>
+          <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
             What makes us <span class="gradient-text">different</span>
           </h2>
         </div>
@@ -391,7 +391,7 @@
             <div class="w-16 h-16 rounded-full mx-auto mb-5 flex items-center justify-center bg-brand-violet/10 dark:bg-brand-cyan/10 text-brand-violet dark:text-brand-cyan group-hover:scale-110 transition-transform duration-500">
               <span v-html="item.icon" />
             </div>
-            <h3 class="text-base font-code font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors">{{ item.title }}</h3>
+            <h3 class="text-base font-sans font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors">{{ item.title }}</h3>
             <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{{ item.description }}</p>
           </div>
         </div>
@@ -407,7 +407,7 @@
           <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 24px 24px;" />
           <!-- Content -->
           <div class="relative z-10 px-6 py-12 sm:px-8 sm:py-14 md:px-16 md:py-16 text-center">
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-code font-bold text-white mb-4">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-sans font-bold text-white mb-4">
               Want to work with us?
             </h2>
             <p class="text-sm sm:text-base text-white/80 max-w-xl mx-auto mb-6 sm:mb-8 leading-relaxed">

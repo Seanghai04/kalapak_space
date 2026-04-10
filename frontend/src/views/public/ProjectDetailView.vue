@@ -48,7 +48,7 @@
           </div>
 
           <!-- Title -->
-          <h1 data-aos="fade-up" data-aos-delay="100" class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-code font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+          <h1 data-aos="fade-up" data-aos-delay="100" class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-sans font-bold text-gray-900 dark:text-white mb-4 leading-tight">
             {{ project.title }}
           </h1>
 
@@ -119,12 +119,12 @@
 
               <!-- Rendered content -->
               <article class="prose prose-lg dark:prose-invert max-w-none overflow-hidden
-                prose-headings:font-code prose-headings:font-bold
+                prose-headings:font-sans prose-headings:font-bold
                 prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:text-gray-900 dark:prose-h2:text-white
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
                 prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-relaxed
                 prose-a:text-brand-violet dark:prose-a:text-brand-cyan prose-a:no-underline hover:prose-a:underline
-                prose-code:text-brand-violet dark:prose-code:text-brand-cyan prose-code:bg-brand-violet/5 dark:prose-code:bg-brand-cyan/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:font-code prose-code:text-sm
+                prose-code:text-brand-violet dark:prose-code:text-brand-cyan prose-code:bg-brand-violet/5 dark:prose-code:bg-brand-cyan/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:font-sans prose-code:text-sm
                 prose-pre:bg-gray-50 dark:prose-pre:bg-dark-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-dark-600 prose-pre:rounded-xl
                 prose-img:rounded-xl prose-img:border prose-img:border-gray-100 dark:prose-img:border-dark-600
                 prose-blockquote:border-brand-violet dark:prose-blockquote:border-brand-cyan prose-blockquote:bg-brand-violet/5 dark:prose-blockquote:bg-brand-cyan/5 prose-blockquote:rounded-r-xl prose-blockquote:py-1 prose-blockquote:px-6
@@ -141,7 +141,7 @@
               <!-- Tech stack -->
               <div v-if="project.tech_stack && project.tech_stack.length"
                 class="p-6 rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm">
-                <h3 class="text-sm font-code font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Tech Stack</h3>
+                <h3 class="text-sm font-sans font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Tech Stack</h3>
                 <div class="flex flex-wrap gap-2">
                   <span v-for="(tech, i) in project.tech_stack" :key="i"
                     class="px-3 py-1.5 text-xs rounded-lg font-medium bg-gray-50 dark:bg-dark-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-dark-500">
@@ -152,7 +152,7 @@
 
               <!-- Project info -->
               <div class="p-6 rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm">
-                <h3 class="text-sm font-code font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Project Info</h3>
+                <h3 class="text-sm font-sans font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Project Info</h3>
                 <dl class="space-y-3">
                   <div class="flex justify-between">
                     <dt class="text-xs text-gray-500 dark:text-gray-400">Status</dt>
@@ -178,7 +178,7 @@
 
               <!-- Quick links -->
               <div class="p-6 rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm">
-                <h3 class="text-sm font-code font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Links</h3>
+                <h3 class="text-sm font-sans font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Links</h3>
                 <div class="space-y-2">
                   <a v-if="project.demo_url" :href="project.demo_url" target="_blank" rel="noopener noreferrer"
                     class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-brand-violet dark:hover:text-brand-cyan hover:bg-brand-violet/5 dark:hover:bg-brand-cyan/5 transition-all duration-300">

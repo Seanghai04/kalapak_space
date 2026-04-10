@@ -21,7 +21,7 @@
                   class="w-full h-full object-cover"
                   alt="Profile avatar"
                 />
-                <div v-else class="w-full h-full flex items-center justify-center text-4xl font-code font-bold text-white bg-gradient-to-br from-brand-violet/20 to-brand-cyan/20">
+                <div v-else class="w-full h-full flex items-center justify-center text-4xl font-sans font-bold text-white bg-gradient-to-br from-brand-violet/20 to-brand-cyan/20">
                   {{ authStore.user?.name?.charAt(0)?.toUpperCase() }}
                 </div>
               </div>
@@ -51,7 +51,7 @@
               <h1 class="text-2xl sm:text-3xl font-sans font-bold text-white truncate">{{ authStore.user?.name }}</h1>
               <span
                 v-if="authStore.user?.role?.name"
-                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-code font-medium tracking-wider"
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-medium tracking-wider"
                 :class="authStore.isAdmin ? 'bg-brand-violet/20 text-brand-cyan border border-brand-violet/30' : 'bg-green-500/10 text-green-400 border border-green-500/20'"
               >
                 {{ authStore.user.role.name.toUpperCase() }}

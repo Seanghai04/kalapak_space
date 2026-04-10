@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-2xl font-code font-bold dark:text-white">Team Members</h1>
+        <h1 class="text-2xl font-sans font-bold dark:text-white">Team Members</h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your team roster and member profiles</p>
       </div>
       <button @click="openAddForm" class="btn-primary flex items-center gap-2 text-sm">
