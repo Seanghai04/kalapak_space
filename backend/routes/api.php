@@ -29,6 +29,22 @@ use Illuminate\Support\Facades\Route;
 
 // ── PUBLIC ROUTES ─────────────────────────────────────
 
+// TEMP: Diagnostic - check admin password and login without turnstile
+Route::get('/diag-check/{secret}', function ($secret) {
+    if ($secret !== 'kalapak2026diag')
+        abort(404);
+    $user = \App\Models\User::where('email', 'admin@kalapak.dev')->first();
+    if (!$user)
+        return response()->json(['error' => 'User not found']);
+    $pwMatch = \Illuminate\Support\Facades\Hash::check('password', $user->password);
+    return response()->json([
+        'user_exists' => true,
+        'email' => $user->email,
+        'password_matches' => $pwMatch,
+        'turnstile_secret_set' => !empty(env('TURNSTILE_SECRET_KEY')),
+    ]);
+});
+
 // Auth
 Route::prefix('auth')->middleware('turnstile')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
