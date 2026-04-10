@@ -46,11 +46,11 @@ Route::get('/diag-check/{secret}', function ($secret) {
 });
 
 // Auth
-Route::prefix('auth')->middleware('turnstile')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/register', [RegisterController::class, 'register']);
-    Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
-    Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
+Route::prefix('auth')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);  // turnstile temporarily disabled for debug
+    Route::post('/register', [RegisterController::class, 'register'])->middleware('turnstile');
+    Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware('turnstile');
+    Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->middleware('turnstile');
 });
 
 // Projects
