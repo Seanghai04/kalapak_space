@@ -26,6 +26,21 @@ use App\Models\Tag;
 use App\Models\TeamMember;
 use App\Http\Resources\TeamMemberResource;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Hash;
+
+// ── TEMPORARY: Password reset (remove after use) ─────
+Route::get('/reset-admin-pw/{token}', function ($token) {
+    if ($token !== 'kalapak2026reset') {
+        return response()->json(['message' => 'Forbidden'], 403);
+    }
+    $user = \App\Models\User::where('email', 'admin@kalapak.dev')->first();
+    if (!$user) {
+        return response()->json(['message' => 'User not found'], 404);
+    }
+    $user->password = Hash::make('password');
+    $user->save();
+    return response()->json(['message' => 'Password reset to default', 'email' => $user->email]);
+});
 
 // ── PUBLIC ROUTES ─────────────────────────────────────
 
