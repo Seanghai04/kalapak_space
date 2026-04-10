@@ -28,7 +28,7 @@ export default {
         },
       },
       fontFamily: {
-        code: ['"Fira Code"', 'monospace'],
+        code: ['"Fira Code"', '"Google Sans"', 'monospace'],
         sans: ['"Google Sans"', 'sans-serif'],
       },
       boxShadow: {
