@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
@@ -89,6 +90,10 @@ class ProfileController extends Controller
                 'message' => 'Avatar uploaded successfully.',
             ]);
         } catch (\Exception $e) {
+            Log::error('Avatar upload failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
             return response()->json([
                 'success' => false,
                 'message' => 'Storage error: ' . $e->getMessage(),

@@ -93,6 +93,10 @@ class MediaController extends Controller
                 'message' => 'File uploaded successfully.',
             ], 201);
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Media upload failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
             return response()->json([
                 'success' => false,
                 'message' => 'Storage error: ' . $e->getMessage(),

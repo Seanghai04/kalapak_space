@@ -69,6 +69,34 @@ Route::get('/settings/public', [HomeController::class, 'settings']);
 // Contact
 Route::post('/contact', [ContactController::class, 'store']);
 
+// Storage diagnostics (remove after debugging)
+Route::get('/storage-test', function () {
+    $config = config('filesystems.disks.supabase');
+    $info = [
+        'driver' => $config['driver'] ?? 'NOT SET',
+        'endpoint' => $config['endpoint'] ?? 'NOT SET',
+        'bucket' => $config['bucket'] ?? 'NOT SET',
+        'region' => $config['region'] ?? 'NOT SET',
+        'key_set' => !empty($config['key']),
+        'secret_set' => !empty($config['secret']),
+    ];
+
+    try {
+        $disk = \Illuminate\Support\Facades\Storage::disk('supabase');
+        $testContent = 'test-' . time();
+        $disk->put('_test.txt', $testContent);
+        $exists = $disk->exists('_test.txt');
+        $disk->delete('_test.txt');
+        $info['upload_test'] = 'SUCCESS';
+        $info['file_exists_after_upload'] = $exists;
+    } catch (\Exception $e) {
+        $info['upload_test'] = 'FAILED';
+        $info['error'] = $e->getMessage();
+    }
+
+    return response()->json($info);
+});
+
 // Applications (public submit)
 Route::post('/applications', [ApplicationController::class, 'store']);
 
