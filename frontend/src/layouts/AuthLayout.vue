@@ -98,9 +98,7 @@
       <!-- Mobile top bar -->
       <div class="lg:hidden absolute top-0 left-0 right-0 p-6 z-20">
         <router-link to="/" class="inline-flex items-center gap-3 group">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-violet to-brand-cyan flex items-center justify-center shadow-lg shadow-brand-violet/25">
-            <span class="text-white font-code font-bold text-sm">&lt;/&gt;</span>
-          </div>
+          <img src="https://res.cloudinary.com/di1hdlb8k/image/upload/v1775702762/Logo_vmyexl.png" alt="Kalapak Logo" class="w-10 h-10 rounded-xl shadow-lg shadow-brand-violet/25" />
           <div>
             <h1 class="text-lg font-sans font-bold text-white">Kalapak</h1>
             <p class="text-[10px] text-gray-400 tracking-wider">CODE TEAM</p>
