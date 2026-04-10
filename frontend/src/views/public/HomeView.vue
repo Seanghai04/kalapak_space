@@ -12,7 +12,7 @@
       <div class="absolute bottom-1/4 -right-32 w-[250px] sm:w-[400px] h-[250px] sm:h-[400px] rounded-full bg-brand-cyan/20 blur-[80px] sm:blur-[120px] animate-float" style="animation-delay: 3s" />
       <!-- Floating code particles -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <span v-for="(p, i) in particles" :key="i" class="absolute text-xs font-sans select-none"
+        <span v-for="(p, i) in particles" :key="i" class="absolute text-xs font-code select-none"
           :class="p.color" :style="{ left: p.x + '%', top: p.y + '%', opacity: p.opacity, animationDelay: p.delay + 's', animationDuration: p.duration + 's' }"
           style="animation: floatParticle ease-in-out infinite">{{ p.text }}</span>
       </div>
@@ -35,7 +35,7 @@
         <p data-aos="fade-up" data-aos-delay="200" class="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-3 sm:mb-4 font-sans leading-relaxed px-2 sm:px-0">
           A passionate team of developers from Cambodia, crafting modern web & mobile applications with cutting-edge technology.
         </p>
-        <p data-aos="fade-up" data-aos-delay="300" class="text-xs sm:text-sm font-sans text-brand-violet/70 dark:text-brand-cyan/70 mb-8 sm:mb-10 tracking-wide">
+        <p data-aos="fade-up" data-aos-delay="300" class="text-xs sm:text-sm font-code text-brand-violet/70 dark:text-brand-cyan/70 mb-8 sm:mb-10 tracking-wide">
           &lt;Kalapak Code Team /&gt;
         </p>
 
@@ -79,7 +79,7 @@
         <!-- Section header -->
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16" data-aos="fade-up">
           <div>
-            <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// What we do</span>
+            <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// What we do</span>
             <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
               Turning ideas into<br /><span class="gradient-text">reality</span>
             </h2>
@@ -116,7 +116,7 @@
       <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16" data-aos="fade-up">
           <div>
-            <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our work</span>
+            <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our work</span>
             <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white">
               Featured <span class="gradient-text">Projects</span>
             </h2>
@@ -175,7 +175,7 @@
         <div class="grid lg:grid-cols-2 gap-16 items-center">
           <!-- Left: Text -->
           <div data-aos="fade-right">
-            <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our team</span>
+            <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our team</span>
             <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight">
               Meet the people<br />behind the <span class="gradient-text">code</span>
             </h2>
@@ -227,7 +227,7 @@
       <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16" data-aos="fade-up">
           <div>
-            <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Blog</span>
+            <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Blog</span>
             <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white">
               Latest <span class="gradient-text">Articles</span>
             </h2>
@@ -284,7 +284,7 @@
       <div class="absolute top-1/2 right-1/4 -translate-y-1/2 w-[350px] h-[350px] rounded-full bg-brand-cyan/[0.07] blur-[120px] pointer-events-none" />
 
       <div class="max-w-7xl mx-auto px-4 text-center mb-14" data-aos="fade-up">
-        <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Technologies</span>
+        <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Technologies</span>
         <h2 class="text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white mb-4">
           Our <span class="gradient-text">Tech Stack</span>
         </h2>

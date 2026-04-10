@@ -124,7 +124,7 @@
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
                 prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-relaxed
                 prose-a:text-brand-violet dark:prose-a:text-brand-cyan prose-a:no-underline hover:prose-a:underline
-                prose-code:text-brand-violet dark:prose-code:text-brand-cyan prose-code:bg-brand-violet/5 dark:prose-code:bg-brand-cyan/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:font-sans prose-code:text-sm
+                prose-code:text-brand-violet dark:prose-code:text-brand-cyan prose-code:bg-brand-violet/5 dark:prose-code:bg-brand-cyan/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:font-code prose-code:text-sm
                 prose-pre:bg-gray-50 dark:prose-pre:bg-dark-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-dark-600 prose-pre:rounded-xl
                 prose-img:rounded-xl prose-img:border prose-img:border-gray-100 dark:prose-img:border-dark-600
                 prose-blockquote:border-brand-violet dark:prose-blockquote:border-brand-cyan prose-blockquote:bg-brand-violet/5 dark:prose-blockquote:bg-brand-cyan/5 prose-blockquote:rounded-r-xl prose-blockquote:py-1 prose-blockquote:px-6

@@ -11,7 +11,7 @@
 
       <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
         <div data-aos="fade-down" data-aos-duration="800" class="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full border border-brand-violet/20 dark:border-brand-cyan/20 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm">
-          <span class="text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest">// Portfolio</span>
+          <span class="text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest">// Portfolio</span>
         </div>
         <h1 data-aos="fade-up" data-aos-duration="1000" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-sans font-bold mb-4 sm:mb-6 leading-[1.1]">
           <span class="text-gray-900 dark:text-white">Our</span>

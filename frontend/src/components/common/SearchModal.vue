@@ -51,7 +51,7 @@
               </button>
 
               <!-- Keyboard shortcut -->
-              <kbd class="hidden sm:inline-flex px-2 py-1 rounded-lg bg-gray-100 dark:bg-white/[0.06] text-[10px] font-sans text-gray-400 border border-gray-200/50 dark:border-white/[0.06] select-none">ESC</kbd>
+              <kbd class="hidden sm:inline-flex px-2 py-1 rounded-lg bg-gray-100 dark:bg-white/[0.06] text-[10px] font-code text-gray-400 border border-gray-200/50 dark:border-white/[0.06] select-none">ESC</kbd>
             </div>
 
             <!-- ── Category Filters ── -->

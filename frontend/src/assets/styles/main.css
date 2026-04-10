@@ -15,8 +15,13 @@
     overflow-x: hidden;
   }
 
-  * {
+  *:not(code):not(pre):not(kbd):not(samp):not(var) {
     font-family: 'Google Sans', sans-serif;
+  }
+
+  code, pre, kbd, samp, var,
+  pre *, code *, .prose pre *, .prose code * {
+    font-family: 'Fira Code', 'JetBrains Mono', monospace !important;
   }
 
   body {

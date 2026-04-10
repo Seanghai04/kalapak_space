@@ -12,7 +12,7 @@
       <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
         <!-- Badge -->
         <div data-aos="fade-down" data-aos-duration="800" class="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full border border-brand-violet/20 dark:border-brand-cyan/20 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm">
-          <span class="text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest">// About us</span>
+          <span class="text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest">// About us</span>
         </div>
         <h1 data-aos="fade-up" data-aos-duration="1000" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-sans font-bold mb-4 sm:mb-6 leading-[1.1]">
           <span class="text-gray-900 dark:text-white">Passionate about</span><br />
@@ -33,7 +33,7 @@
         <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <!-- Left: text content -->
           <div data-aos="fade-right">
-            <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our story</span>
+            <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our story</span>
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-sans font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight">
               From university to<br /><span class="gradient-text">real-world impact</span>
             </h2>
@@ -88,7 +88,7 @@
     <section class="py-14 sm:py-18 lg:py-24 relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-16" data-aos="fade-up">
-          <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Purpose</span>
+          <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Purpose</span>
           <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
             What drives <span class="gradient-text">us forward</span>
           </h2>
@@ -155,7 +155,7 @@
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         <div class="text-center mb-10 sm:mb-16" data-aos="fade-up">
-          <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// The team</span>
+          <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// The team</span>
           <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
             Meet the <span class="gradient-text">people</span>
           </h2>
@@ -254,7 +254,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16" data-aos="fade-up">
           <div>
-            <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Core values</span>
+            <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Core values</span>
             <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
               What we <span class="gradient-text">believe in</span>
             </h2>
@@ -298,7 +298,7 @@
 
       <div class="max-w-4xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-10 sm:mb-16" data-aos="fade-up">
-          <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our journey</span>
+          <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Our journey</span>
           <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
             How we <span class="gradient-text">got here</span>
           </h2>
@@ -379,7 +379,7 @@
     <section class="py-14 sm:py-18 lg:py-24 relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-10 sm:mb-16" data-aos="fade-up">
-          <span class="inline-block text-xs font-sans text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Why us</span>
+          <span class="inline-block text-xs font-code text-brand-violet dark:text-brand-cyan uppercase tracking-widest mb-3">// Why us</span>
           <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
             What makes us <span class="gradient-text">different</span>
           </h2>

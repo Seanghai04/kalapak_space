@@ -64,7 +64,7 @@
           >
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
             <span class="hidden md:inline font-medium">Search</span>
-            <kbd class="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-gray-100 dark:bg-white/[0.06] text-[10px] font-sans text-gray-400 border border-gray-200/50 dark:border-white/[0.06]">⌘K</kbd>
+            <kbd class="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-gray-100 dark:bg-white/[0.06] text-[10px] font-code text-gray-400 border border-gray-200/50 dark:border-white/[0.06]">⌘K</kbd>
           </button>
 
           <!-- Divider -->

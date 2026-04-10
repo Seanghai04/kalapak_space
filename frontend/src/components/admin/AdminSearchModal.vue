@@ -47,7 +47,7 @@
                 </svg>
               </button>
 
-              <kbd class="hidden sm:inline-flex px-2 py-1 rounded-lg bg-gray-100 dark:bg-white/[0.06] text-[10px] font-sans text-gray-400 border border-gray-200/50 dark:border-white/[0.06] select-none">ESC</kbd>
+              <kbd class="hidden sm:inline-flex px-2 py-1 rounded-lg bg-gray-100 dark:bg-white/[0.06] text-[10px] font-code text-gray-400 border border-gray-200/50 dark:border-white/[0.06] select-none">ESC</kbd>
             </div>
 
             <!-- Filters -->
@@ -343,15 +343,15 @@
             <div class="flex items-center justify-between px-5 sm:px-6 py-3 border-t border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.015]">
               <div class="flex items-center gap-4 text-[11px] text-gray-400 dark:text-gray-500">
                 <span class="inline-flex items-center gap-1.5">
-                  <kbd class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded bg-gray-200/80 dark:bg-white/[0.08] text-[10px] font-sans text-gray-500 dark:text-gray-400 border border-gray-300/50 dark:border-white/[0.06]">↑↓</kbd>
+                  <kbd class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded bg-gray-200/80 dark:bg-white/[0.08] text-[10px] font-code text-gray-500 dark:text-gray-400 border border-gray-300/50 dark:border-white/[0.06]">↑↓</kbd>
                   <span class="hidden sm:inline">Navigate</span>
                 </span>
                 <span class="inline-flex items-center gap-1.5">
-                  <kbd class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded bg-gray-200/80 dark:bg-white/[0.08] text-[10px] font-sans text-gray-500 dark:text-gray-400 border border-gray-300/50 dark:border-white/[0.06]">↵</kbd>
+                  <kbd class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded bg-gray-200/80 dark:bg-white/[0.08] text-[10px] font-code text-gray-500 dark:text-gray-400 border border-gray-300/50 dark:border-white/[0.06]">↵</kbd>
                   <span class="hidden sm:inline">Open</span>
                 </span>
                 <span class="inline-flex items-center gap-1.5">
-                  <kbd class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded bg-gray-200/80 dark:bg-white/[0.08] text-[10px] font-sans text-gray-500 dark:text-gray-400 border border-gray-300/50 dark:border-white/[0.06]">Esc</kbd>
+                  <kbd class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded bg-gray-200/80 dark:bg-white/[0.08] text-[10px] font-code text-gray-500 dark:text-gray-400 border border-gray-300/50 dark:border-white/[0.06]">Esc</kbd>
                   <span class="hidden sm:inline">Close</span>
                 </span>
               </div>
