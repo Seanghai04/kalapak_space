@@ -29,7 +29,7 @@ export default {
       },
       fontFamily: {
         code: ['"Fira Code"', '"Google Sans"', 'monospace'],
-        sans: ['"Google Sans"', 'sans-serif'],
+        sans: ['"Google Sans"', '"Noto Sans Khmer"', 'sans-serif'],
       },
       boxShadow: {
         glow: '0 0 20px rgba(123, 47, 255, 0.3)',
