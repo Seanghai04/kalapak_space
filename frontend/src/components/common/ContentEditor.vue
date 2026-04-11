@@ -287,6 +287,7 @@ const blockquoteTypes = [
   { label: 'Note', value: 'note', icon: '📝' },
   { label: 'Important', value: 'important', icon: '🔥' },
   { label: 'Quote', value: 'quote', icon: '💬' },
+  { label: 'Curly Quote', value: 'curly', icon: '{  }' },
 ]
 
 // Wrap standalone YouTube iframes with data-youtube-video div for TipTap recognition
@@ -312,7 +313,7 @@ function processBlockquoteKeywords(html) {
   div.querySelectorAll('blockquote').forEach(bq => {
     const firstP = bq.querySelector('p') || bq
     const text = firstP.innerHTML
-    const match = text.match(/^\[(tip|info|warning|danger|success|note|important|quote)\]\s*/)
+    const match = text.match(/^\[(tip|info|warning|danger|success|note|important|quote|curly)\]\s*/)
     if (match) {
       bq.setAttribute('data-bq-type', match[1])
       firstP.innerHTML = text.substring(match[0].length)
@@ -788,6 +789,52 @@ const ToolBtn = defineComponent({
   color: #d1fae5;
 }
 .dark .tiptap-content .tiptap blockquote[data-bq-type="quote"]::before { color: #34d399; }
+
+/* Blockquote: Curly Quote (decorative braces) */
+.tiptap-content .tiptap blockquote[data-bq-type="curly"] {
+  border-left: none;
+  background: #1a1033;
+  padding: 2rem 3.5rem;
+  border-radius: 12px;
+  text-align: center;
+  font-style: italic;
+  color: #e0d6f2;
+  line-height: 1.8;
+  position: relative;
+}
+.tiptap-content .tiptap blockquote[data-bq-type="curly"]::before {
+  content: '{';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #7b2fff;
+  font-family: Georgia, serif;
+  font-style: normal;
+  line-height: 1;
+  opacity: 1;
+}
+.tiptap-content .tiptap blockquote[data-bq-type="curly"]::after {
+  content: '}';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #7b2fff;
+  font-family: Georgia, serif;
+  font-style: normal;
+  line-height: 1;
+}
+.dark .tiptap-content .tiptap blockquote[data-bq-type="curly"] {
+  background: #0d0a1a;
+  color: #e0d6f2;
+}
+.dark .tiptap-content .tiptap blockquote[data-bq-type="curly"]::before,
+.dark .tiptap-content .tiptap blockquote[data-bq-type="curly"]::after { color: #00d4ff; }
 
 /* Horizontal Rule */
 .tiptap-content .tiptap hr {

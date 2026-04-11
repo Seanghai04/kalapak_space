@@ -189,6 +189,72 @@
 .dark .prose blockquote.bq-quote::before { color: #34d399; }
 .dark .prose blockquote.bq-quote p:last-child { color: #d1fae5; }
 
+/* ─── Blockquote: Curly Quote (decorative braces) ─── */
+.prose blockquote.bq-curly {
+  border-left: none;
+  background: #1a1033;
+  padding: 2rem 3.5rem;
+  border-radius: 12px;
+  text-align: center;
+  font-style: italic;
+  color: #e0d6f2;
+  line-height: 1.8;
+  position: relative;
+}
+.prose blockquote.bq-curly::before {
+  content: '{';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #7b2fff;
+  font-family: Georgia, serif;
+  font-style: normal;
+  line-height: 1;
+}
+.prose blockquote.bq-curly::after {
+  content: '}';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #7b2fff;
+  font-family: Georgia, serif;
+  font-style: normal;
+  line-height: 1;
+}
+.prose blockquote.bq-curly p {
+  margin: 0;
+}
+.prose blockquote.bq-curly p:first-child {
+  font-style: normal;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #7b2fff;
+  font-size: 0.85em;
+  margin-bottom: 0.5rem;
+}
+.prose blockquote.bq-curly p:last-child {
+  font-style: normal;
+  font-weight: 600;
+  color: #c4b5fd;
+  margin-top: 0.75rem;
+  font-size: 0.85em;
+}
+.dark .prose blockquote.bq-curly {
+  background: #0d0a1a;
+  color: #e0d6f2;
+}
+.dark .prose blockquote.bq-curly::before,
+.dark .prose blockquote.bq-curly::after { color: #00d4ff; }
+.dark .prose blockquote.bq-curly p:first-child { color: #00d4ff; }
+.dark .prose blockquote.bq-curly p:last-child { color: #a5b4fc; }
+
 /* Keyword label inside blockquote */
 .prose blockquote .bq-label {
   display: inline-block;
