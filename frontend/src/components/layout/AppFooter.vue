@@ -72,5 +72,6 @@ const resourceLinks = [
   { to: '/blog', label: 'Blog' },
   { to: '/join', label: 'Join Our Team' },
   { to: '/privacy', label: 'Privacy Policy' },
+  { to: '/terms', label: 'Terms of Service' },
 ]
 </script>

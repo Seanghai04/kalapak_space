@@ -24,6 +24,7 @@ class SitemapController extends Controller
             ['loc' => '/join', 'priority' => '0.7', 'changefreq' => 'monthly'],
             ['loc' => '/contact', 'priority' => '0.7', 'changefreq' => 'monthly'],
             ['loc' => '/privacy', 'priority' => '0.5', 'changefreq' => 'yearly'],
+            ['loc' => '/terms', 'priority' => '0.5', 'changefreq' => 'yearly'],
         ];
 
         foreach ($staticPages as $page) {

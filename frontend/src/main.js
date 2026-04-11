@@ -21,3 +21,7 @@ AOS.init({
 })
 
 app.mount('#app')
+
+// Hide static HTML footer once Vue has mounted (it exists for Google's crawler)
+const staticFooter = document.getElementById('static-footer')
+if (staticFooter) staticFooter.style.display = 'none'

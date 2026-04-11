@@ -16,6 +16,7 @@ const routes = [
       { path: 'join', name: 'join', component: () => import('@/views/public/JoinUsView.vue'), meta: { title: 'Join Us – Kalapak Code Team' } },
       { path: 'contact', name: 'contact', component: () => import('@/views/public/ContactView.vue'), meta: { title: 'Contact – Kalapak Code Team' } },
       { path: 'privacy', name: 'privacy', component: () => import('@/views/public/PrivacyPolicyView.vue'), meta: { title: 'Privacy Policy – Kalapak Code Team' } },
+      { path: 'terms', name: 'terms', component: () => import('@/views/public/TermsOfServiceView.vue'), meta: { title: 'Terms of Service – Kalapak Code Team' } },
     ],
   },
   // Auth
