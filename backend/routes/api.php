@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PublicApi\BlogController;
 use App\Http\Controllers\PublicApi\ContactController;
 use App\Http\Controllers\PublicApi\HomeController;
+use App\Http\Controllers\PublicApi\OgMetaController;
 use App\Http\Controllers\PublicApi\ProjectController;
 use App\Http\Controllers\Member\ApplicationController;
 use App\Http\Controllers\Member\NotificationController;
@@ -61,6 +62,9 @@ Route::get('/projects/{slug}', [ProjectController::class, 'show']);
 Route::get('/blog/posts', [BlogController::class, 'index']);
 Route::get('/blog/posts/{slug}', [BlogController::class, 'show']);
 Route::get('/blog/categories', [BlogController::class, 'categories']);
+
+// OG Meta: Dynamic Open Graph tags for social media crawlers
+Route::get('/og/blog/{slug}', [OgMetaController::class, 'blogPost']);
 
 // Team
 Route::get('/team', function () {
