@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BlogPostRequest extends FormRequest
 {
@@ -25,10 +26,12 @@ class BlogPostRequest extends FormRequest
             'published_at' => ['nullable', 'date'],
         ];
 
+        $slugRule = Rule::unique('blog_posts', 'slug')->whereNull('deleted_at');
+
         if ($this->isMethod('POST')) {
-            $rules['slug'] = ['required', 'string', 'unique:blog_posts,slug'];
+            $rules['slug'] = ['required', 'string', $slugRule];
         } else {
-            $rules['slug'] = ['required', 'string', 'unique:blog_posts,slug,' . $this->route('id')];
+            $rules['slug'] = ['required', 'string', $slugRule->ignore($this->route('id'))];
         }
 
         return $rules;
