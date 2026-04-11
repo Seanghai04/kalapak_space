@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PublicApi;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
+use App\Services\SupabaseStorage;
 use Illuminate\Http\Response;
 
 class OgMetaController extends Controller
@@ -23,7 +24,9 @@ class OgMetaController extends Controller
 
         $title = e($post->title);
         $description = e($post->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($post->content), 200));
-        $image = $post->cover_image ?: 'https://res.cloudinary.com/di1hdlb8k/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png';
+        $image = $post->cover_image
+            ? app(SupabaseStorage::class)->url($post->cover_image)
+            : 'https://res.cloudinary.com/di1hdlb8k/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png';
         $url = $baseUrl . '/blog/' . $post->slug;
         $authorName = $post->author ? e($post->author->name) : 'Kalapak Code Team';
         $publishedAt = $post->published_at ? $post->published_at->toIso8601String() : '';
