@@ -49,7 +49,16 @@
         <!-- Lists -->
         <ToolBtn icon="ul" :active="editor.isActive('bulletList')" @click="editor.chain().focus().toggleBulletList().run()" title="Bullet List" />
         <ToolBtn icon="ol" :active="editor.isActive('orderedList')" @click="editor.chain().focus().toggleOrderedList().run()" title="Ordered List" />
-        <ToolBtn icon="blockquote" :active="editor.isActive('blockquote')" @click="editor.chain().focus().toggleBlockquote().run()" title="Blockquote" />
+        <div class="relative">
+          <ToolBtn icon="blockquote" :active="editor.isActive('blockquote')" @click="showBqMenu = !showBqMenu" title="Blockquote" />
+          <div v-if="showBqMenu" class="absolute top-full left-0 mt-1 z-50 w-48 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-600 rounded-xl shadow-xl py-1">
+            <button v-for="bq in blockquoteTypes" :key="bq.value" type="button"
+              @click="insertBlockquote(bq.value)"
+              class="w-full text-left px-3 py-1.5 text-xs flex items-center gap-2 hover:bg-brand-violet/10 dark:hover:bg-brand-cyan/10 text-gray-700 dark:text-gray-300 hover:text-brand-violet dark:hover:text-brand-cyan transition-colors">
+              <span>{{ bq.icon }}</span><span>{{ bq.label }}</span>
+            </button>
+          </div>
+        </div>
         <ToolBtn icon="hr" @click="editor.chain().focus().setHorizontalRule().run()" title="Horizontal Rule" />
 
         <div class="w-px h-5 bg-gray-300 dark:bg-dark-500 mx-1" />
@@ -221,6 +230,7 @@ const showPreview = ref(false)
 const mdTextarea = ref(null)
 const showLangMenu = ref(false)
 const showMdLangMenu = ref(false)
+const showBqMenu = ref(false)
 const imageInput = ref(null)
 const uploading = ref(false)
 let updatingFromProp = false
@@ -248,6 +258,17 @@ const languages = [
   { label: 'Bash / Shell', value: 'bash' },
   { label: 'Docker', value: 'dockerfile' },
   { label: 'Markdown', value: 'markdown' },
+]
+
+const blockquoteTypes = [
+  { label: 'Default', value: '', icon: '\u201C' },
+  { label: 'Tip', value: 'tip', icon: '💡' },
+  { label: 'Info', value: 'info', icon: 'ℹ️' },
+  { label: 'Warning', value: 'warning', icon: '⚠️' },
+  { label: 'Danger', value: 'danger', icon: '🚫' },
+  { label: 'Success', value: 'success', icon: '✅' },
+  { label: 'Note', value: 'note', icon: '📝' },
+  { label: 'Important', value: 'important', icon: '🔥' },
 ]
 
 // Wrap standalone YouTube iframes with data-youtube-video div for TipTap recognition
@@ -297,6 +318,7 @@ const editor = useEditor({
     const html = ed.getHTML()
     const md = htmlToMarkdown(html)
     emit('update:modelValue', md)
+    nextTick(() => styleEditorBlockquotes())
   },
 })
 
@@ -308,9 +330,10 @@ const renderedPreview = computed(() => {
 
 // Close lang menu on click outside
 function closeLangMenus(e) {
-  if (showLangMenu.value || showMdLangMenu.value) {
+  if (showLangMenu.value || showMdLangMenu.value || showBqMenu.value) {
     showLangMenu.value = false
     showMdLangMenu.value = false
+    showBqMenu.value = false
   }
 }
 
@@ -423,6 +446,56 @@ function convertNode(node) {
 function insertCodeBlock(lang) {
   showLangMenu.value = false
   editor.value?.chain().focus().setCodeBlock({ language: lang }).run()
+}
+
+function insertBlockquote(type) {
+  showBqMenu.value = false
+  const ed = editor.value
+  if (!ed) return
+  if (ed.isActive('blockquote')) {
+    // Already in a blockquote — just update the keyword prefix
+    const { from } = ed.state.selection
+    const resolved = ed.state.doc.resolve(from)
+    // Find the blockquote node
+    for (let d = resolved.depth; d > 0; d--) {
+      if (resolved.node(d).type.name === 'blockquote') {
+        const bqStart = resolved.start(d)
+        const bqNode = resolved.node(d)
+        const textContent = bqNode.textContent
+        // Remove existing keyword prefix
+        const cleaned = textContent.replace(/^\[(tip|info|warning|danger|success|note|important)\]\s*/, '')
+        const prefix = type ? `[${type}] ` : ''
+        // Replace blockquote content
+        ed.chain().focus()
+          .deleteRange({ from: bqStart, to: bqStart + bqNode.nodeSize - 2 })
+          .insertContent(prefix + cleaned)
+          .run()
+        break
+      }
+    }
+  } else {
+    const prefix = type ? `[${type}] ` : ''
+    ed.chain().focus().toggleBlockquote().insertContent(prefix).run()
+  }
+  nextTick(() => styleEditorBlockquotes())
+}
+
+function styleEditorBlockquotes() {
+  const editorEl = document.querySelector('.tiptap-content .tiptap')
+  if (!editorEl) return
+  const bqs = editorEl.querySelectorAll('blockquote')
+  const types = ['tip', 'info', 'warning', 'danger', 'success', 'note', 'important']
+  bqs.forEach(bq => {
+    // Remove old classes
+    bq.classList.remove('bq-default', ...types.map(t => 'bq-' + t))
+    const text = bq.textContent || ''
+    const match = text.match(/^\[(tip|info|warning|danger|success|note|important)\]/)
+    if (match) {
+      bq.classList.add('bq-' + match[1])
+    } else {
+      bq.classList.add('bq-default')
+    }
+  })
 }
 
 function setLink() {
@@ -622,14 +695,61 @@ const ToolBtn = defineComponent({
 .tiptap-content .tiptap blockquote {
   border-left: 4px solid #7b2fff;
   background: rgba(123, 47, 255, 0.05);
-  padding: 8px 16px;
+  padding: 8px 16px 8px 40px;
   margin: 1em 0;
   border-radius: 0 12px 12px 0;
+  position: relative;
+}
+.tiptap-content .tiptap blockquote::before {
+  position: absolute;
+  left: 12px;
+  top: 8px;
+  font-size: 1.1rem;
+  line-height: 1;
 }
 .dark .tiptap-content .tiptap blockquote {
   border-color: #00d4ff;
   background: rgba(0, 212, 255, 0.05);
 }
+
+/* Blockquote: Default */
+.tiptap-content .tiptap blockquote.bq-default::before { content: '\201C'; font-size: 1.8rem; top: 2px; color: #7b2fff; opacity: 0.5; }
+.dark .tiptap-content .tiptap blockquote.bq-default::before { color: #00d4ff; }
+
+/* Blockquote: Tip (green) */
+.tiptap-content .tiptap blockquote.bq-tip { border-left-color: #10b981; background: rgba(16, 185, 129, 0.08); }
+.tiptap-content .tiptap blockquote.bq-tip::before { content: '💡'; }
+.dark .tiptap-content .tiptap blockquote.bq-tip { border-left-color: #34d399; background: rgba(16, 185, 129, 0.12); }
+
+/* Blockquote: Info (blue) */
+.tiptap-content .tiptap blockquote.bq-info { border-left-color: #3b82f6; background: rgba(59, 130, 246, 0.08); }
+.tiptap-content .tiptap blockquote.bq-info::before { content: 'ℹ️'; }
+.dark .tiptap-content .tiptap blockquote.bq-info { border-left-color: #60a5fa; background: rgba(59, 130, 246, 0.12); }
+
+/* Blockquote: Warning (amber) */
+.tiptap-content .tiptap blockquote.bq-warning { border-left-color: #f59e0b; background: rgba(245, 158, 11, 0.08); }
+.tiptap-content .tiptap blockquote.bq-warning::before { content: '⚠️'; }
+.dark .tiptap-content .tiptap blockquote.bq-warning { border-left-color: #fbbf24; background: rgba(245, 158, 11, 0.12); }
+
+/* Blockquote: Danger (red) */
+.tiptap-content .tiptap blockquote.bq-danger { border-left-color: #ef4444; background: rgba(239, 68, 68, 0.08); }
+.tiptap-content .tiptap blockquote.bq-danger::before { content: '🚫'; }
+.dark .tiptap-content .tiptap blockquote.bq-danger { border-left-color: #f87171; background: rgba(239, 68, 68, 0.12); }
+
+/* Blockquote: Success (emerald) */
+.tiptap-content .tiptap blockquote.bq-success { border-left-color: #22c55e; background: rgba(34, 197, 94, 0.08); }
+.tiptap-content .tiptap blockquote.bq-success::before { content: '✅'; }
+.dark .tiptap-content .tiptap blockquote.bq-success { border-left-color: #4ade80; background: rgba(34, 197, 94, 0.12); }
+
+/* Blockquote: Note (purple) */
+.tiptap-content .tiptap blockquote.bq-note { border-left-color: #a855f7; background: rgba(168, 85, 247, 0.08); }
+.tiptap-content .tiptap blockquote.bq-note::before { content: '📝'; }
+.dark .tiptap-content .tiptap blockquote.bq-note { border-left-color: #c084fc; background: rgba(168, 85, 247, 0.12); }
+
+/* Blockquote: Important (rose) */
+.tiptap-content .tiptap blockquote.bq-important { border-left-color: #e11d48; background: rgba(225, 29, 72, 0.08); }
+.tiptap-content .tiptap blockquote.bq-important::before { content: '🔥'; }
+.dark .tiptap-content .tiptap blockquote.bq-important { border-left-color: #fb7185; background: rgba(225, 29, 72, 0.12); }
 
 /* Horizontal Rule */
 .tiptap-content .tiptap hr {
