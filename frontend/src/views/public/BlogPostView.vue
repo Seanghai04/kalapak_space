@@ -315,6 +315,20 @@ function styleBlockquotes() {
   })
 }
 
+function wrapTables() {
+  nextTick(() => {
+    const container = document.querySelector('.prose')
+    if (!container) return
+    container.querySelectorAll('table').forEach((table) => {
+      if (table.parentElement?.classList.contains('table-wrapper')) return
+      const wrapper = document.createElement('div')
+      wrapper.className = 'table-wrapper'
+      table.parentNode.insertBefore(wrapper, table)
+      wrapper.appendChild(table)
+    })
+  })
+}
+
 onMounted(async () => {
   try {
     const { data } = await publicApi.getBlogPost(route.params.slug)
@@ -325,6 +339,7 @@ onMounted(async () => {
     loading.value = false
     addCopyButtons()
     styleBlockquotes()
+    wrapTables()
   }
 })
 </script>
