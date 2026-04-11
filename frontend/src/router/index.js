@@ -15,6 +15,7 @@ const routes = [
       { path: 'blog/:slug', name: 'blog-post', component: () => import('@/views/public/BlogPostView.vue'), meta: { title: 'Blog – Kalapak Code Team' } },
       { path: 'join', name: 'join', component: () => import('@/views/public/JoinUsView.vue'), meta: { title: 'Join Us – Kalapak Code Team' } },
       { path: 'contact', name: 'contact', component: () => import('@/views/public/ContactView.vue'), meta: { title: 'Contact – Kalapak Code Team' } },
+      { path: 'privacy', name: 'privacy', component: () => import('@/views/public/PrivacyPolicyView.vue'), meta: { title: 'Privacy Policy – Kalapak Code Team' } },
     ],
   },
   // Auth

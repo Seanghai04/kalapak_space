@@ -23,6 +23,7 @@ class SitemapController extends Controller
             ['loc' => '/blog', 'priority' => '0.9', 'changefreq' => 'daily'],
             ['loc' => '/join', 'priority' => '0.7', 'changefreq' => 'monthly'],
             ['loc' => '/contact', 'priority' => '0.7', 'changefreq' => 'monthly'],
+            ['loc' => '/privacy', 'priority' => '0.5', 'changefreq' => 'yearly'],
         ];
 
         foreach ($staticPages as $page) {
