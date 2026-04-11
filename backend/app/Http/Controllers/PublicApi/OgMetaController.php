@@ -9,6 +9,8 @@ use Illuminate\Http\Response;
 
 class OgMetaController extends Controller
 {
+    private const FALLBACK_IMAGE = 'https://res.cloudinary.com/di1hdlb8k/image/upload/c_pad,w_1200,h_630,b_rgb:111827,g_center/q_auto/f_png/v1775860922/Logo_kalapak_om1ygl.png';
+
     public function blogPost(string $slug): Response
     {
         $baseUrl = rtrim(env('SITE_URL', 'https://kalapak-team.space'), '/');
@@ -26,7 +28,7 @@ class OgMetaController extends Controller
         $description = e($post->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($post->content), 200));
         $image = $post->cover_image
             ? app(SupabaseStorage::class)->url($post->cover_image)
-            : 'https://res.cloudinary.com/di1hdlb8k/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png';
+            : self::FALLBACK_IMAGE;
         $url = $baseUrl . '/blog/' . $post->slug;
         $authorName = $post->author ? e($post->author->name) : 'Kalapak Code Team';
         $publishedAt = $post->published_at ? $post->published_at->toIso8601String() : '';
@@ -45,6 +47,8 @@ class OgMetaController extends Controller
     <meta property="og:title" content="{$title}" />
     <meta property="og:description" content="{$description}" />
     <meta property="og:image" content="{$image}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="Kalapak Code Team" />
     <meta property="article:author" content="{$authorName}" />
     <meta property="article:published_time" content="{$publishedAt}" />
@@ -70,6 +74,7 @@ HTML;
 
     private function fallbackHtml(string $baseUrl): Response
     {
+        $image = self::FALLBACK_IMAGE;
         $html = <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -80,7 +85,9 @@ HTML;
     <meta property="og:url" content="{$baseUrl}" />
     <meta property="og:title" content="Kalapak Code Team | Modern Tech Solutions from Cambodia" />
     <meta property="og:description" content="A passionate collective of full-stack developers from Cambodia, crafting modern web & mobile applications with cutting-edge technology." />
-    <meta property="og:image" content="https://res.cloudinary.com/di1hdlb8k/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" />
+    <meta property="og:image" content="{$image}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta http-equiv="refresh" content="0;url={$baseUrl}" />
 </head>
 <body>
