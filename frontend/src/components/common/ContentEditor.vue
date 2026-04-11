@@ -208,6 +208,23 @@ import HorizontalRule from '@tiptap/extension-horizontal-rule'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
 import Youtube from '@tiptap/extension-youtube'
+import Blockquote from '@tiptap/extension-blockquote'
+
+// Custom Blockquote with bqType attribute
+const CustomBlockquote = Blockquote.extend({
+  addAttributes() {
+    return {
+      bqType: {
+        default: null,
+        parseHTML: el => el.getAttribute('data-bq-type'),
+        renderHTML: attrs => {
+          if (!attrs.bqType) return {}
+          return { 'data-bq-type': attrs.bqType }
+        },
+      },
+    }
+  },
+})
 import { common, createLowlight } from 'lowlight'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
@@ -217,7 +234,7 @@ const lowlight = createLowlight(common)
 
 const purifyConfig = {
   ADD_TAGS: ['iframe'],
-  ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'src', 'style', 'data-youtube-video'],
+  ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'src', 'style', 'data-youtube-video', 'data-bq-type'],
 }
 
 const props = defineProps({
@@ -281,15 +298,34 @@ function wrapYoutubeIframes(html) {
 
 function sanitizeHtml(md) {
   const raw = typeof md === 'string' ? marked(md) : ''
-  const clean = DOMPurify.sanitize(raw, purifyConfig)
-  return wrapYoutubeIframes(clean)
+  let clean = DOMPurify.sanitize(raw, purifyConfig)
+  clean = wrapYoutubeIframes(clean)
+  clean = processBlockquoteKeywords(clean)
+  return clean
+}
+
+// Detect [keyword] at the start of blockquote text and move it to data-bq-type attribute
+function processBlockquoteKeywords(html) {
+  const div = document.createElement('div')
+  div.innerHTML = html
+  div.querySelectorAll('blockquote').forEach(bq => {
+    const firstP = bq.querySelector('p') || bq
+    const text = firstP.innerHTML
+    const match = text.match(/^\[(tip|info|warning|danger|success|note|important)\]\s*/)
+    if (match) {
+      bq.setAttribute('data-bq-type', match[1])
+      firstP.innerHTML = text.substring(match[0].length)
+    }
+  })
+  return div.innerHTML
 }
 
 // ─── Tiptap Editor ───
 const editor = useEditor({
   content: props.modelValue ? sanitizeHtml(props.modelValue) : '',
   extensions: [
-    StarterKit.configure({ codeBlock: false, horizontalRule: false }),
+    StarterKit.configure({ codeBlock: false, horizontalRule: false, blockquote: false }),
+    CustomBlockquote,
     CodeBlockLowlight.configure({ lowlight, defaultLanguage: 'plaintext' }),
     Image.configure({ inline: false, allowBase64: true }),
     Link.configure({ openOnClick: false, autolink: true }),
@@ -318,7 +354,6 @@ const editor = useEditor({
     const html = ed.getHTML()
     const md = htmlToMarkdown(html)
     emit('update:modelValue', md)
-    nextTick(() => styleEditorBlockquotes())
   },
 })
 
@@ -392,7 +427,16 @@ function convertNode(node) {
           }
           break
         }
-        case 'blockquote': result += inner.split('\n').filter(l => l.trim()).map(l => `> ${l}`).join('\n') + '\n\n'; break
+        case 'blockquote': {
+          const bqType = child.getAttribute('data-bq-type')
+          const prefix = bqType ? `[${bqType}] ` : ''
+          const lines = inner.split('\n').filter(l => l.trim())
+          if (lines.length > 0) {
+            lines[0] = prefix + lines[0]
+          }
+          result += lines.map(l => `> ${l}`).join('\n') + '\n\n'
+          break
+        }
         case 'hr': result += '---\n\n'; break
         case 'pre': {
           const code = child.querySelector('code')
@@ -453,49 +497,11 @@ function insertBlockquote(type) {
   const ed = editor.value
   if (!ed) return
   if (ed.isActive('blockquote')) {
-    // Already in a blockquote — just update the keyword prefix
-    const { from } = ed.state.selection
-    const resolved = ed.state.doc.resolve(from)
-    // Find the blockquote node
-    for (let d = resolved.depth; d > 0; d--) {
-      if (resolved.node(d).type.name === 'blockquote') {
-        const bqStart = resolved.start(d)
-        const bqNode = resolved.node(d)
-        const textContent = bqNode.textContent
-        // Remove existing keyword prefix
-        const cleaned = textContent.replace(/^\[(tip|info|warning|danger|success|note|important)\]\s*/, '')
-        const prefix = type ? `[${type}] ` : ''
-        // Replace blockquote content
-        ed.chain().focus()
-          .deleteRange({ from: bqStart, to: bqStart + bqNode.nodeSize - 2 })
-          .insertContent(prefix + cleaned)
-          .run()
-        break
-      }
-    }
+    // Already in a blockquote — update the type attribute
+    ed.chain().focus().updateAttributes('blockquote', { bqType: type || null }).run()
   } else {
-    const prefix = type ? `[${type}] ` : ''
-    ed.chain().focus().toggleBlockquote().insertContent(prefix).run()
+    ed.chain().focus().toggleBlockquote().updateAttributes('blockquote', { bqType: type || null }).run()
   }
-  nextTick(() => styleEditorBlockquotes())
-}
-
-function styleEditorBlockquotes() {
-  const editorEl = document.querySelector('.tiptap-content .tiptap')
-  if (!editorEl) return
-  const bqs = editorEl.querySelectorAll('blockquote')
-  const types = ['tip', 'info', 'warning', 'danger', 'success', 'note', 'important']
-  bqs.forEach(bq => {
-    // Remove old classes
-    bq.classList.remove('bq-default', ...types.map(t => 'bq-' + t))
-    const text = bq.textContent || ''
-    const match = text.match(/^\[(tip|info|warning|danger|success|note|important)\]/)
-    if (match) {
-      bq.classList.add('bq-' + match[1])
-    } else {
-      bq.classList.add('bq-default')
-    }
-  })
 }
 
 function setLink() {
@@ -706,50 +712,52 @@ const ToolBtn = defineComponent({
   top: 8px;
   font-size: 1.1rem;
   line-height: 1;
+  content: '\201C';
+  font-size: 1.8rem;
+  top: 2px;
+  color: #7b2fff;
+  opacity: 0.5;
 }
 .dark .tiptap-content .tiptap blockquote {
   border-color: #00d4ff;
   background: rgba(0, 212, 255, 0.05);
 }
-
-/* Blockquote: Default */
-.tiptap-content .tiptap blockquote.bq-default::before { content: '\201C'; font-size: 1.8rem; top: 2px; color: #7b2fff; opacity: 0.5; }
-.dark .tiptap-content .tiptap blockquote.bq-default::before { color: #00d4ff; }
+.dark .tiptap-content .tiptap blockquote::before { color: #00d4ff; }
 
 /* Blockquote: Tip (green) */
-.tiptap-content .tiptap blockquote.bq-tip { border-left-color: #10b981; background: rgba(16, 185, 129, 0.08); }
-.tiptap-content .tiptap blockquote.bq-tip::before { content: '💡'; }
-.dark .tiptap-content .tiptap blockquote.bq-tip { border-left-color: #34d399; background: rgba(16, 185, 129, 0.12); }
+.tiptap-content .tiptap blockquote[data-bq-type="tip"] { border-left-color: #10b981; background: rgba(16, 185, 129, 0.08); }
+.tiptap-content .tiptap blockquote[data-bq-type="tip"]::before { content: '💡'; font-size: 1.1rem; top: 8px; opacity: 1; }
+.dark .tiptap-content .tiptap blockquote[data-bq-type="tip"] { border-left-color: #34d399; background: rgba(16, 185, 129, 0.12); }
 
 /* Blockquote: Info (blue) */
-.tiptap-content .tiptap blockquote.bq-info { border-left-color: #3b82f6; background: rgba(59, 130, 246, 0.08); }
-.tiptap-content .tiptap blockquote.bq-info::before { content: 'ℹ️'; }
-.dark .tiptap-content .tiptap blockquote.bq-info { border-left-color: #60a5fa; background: rgba(59, 130, 246, 0.12); }
+.tiptap-content .tiptap blockquote[data-bq-type="info"] { border-left-color: #3b82f6; background: rgba(59, 130, 246, 0.08); }
+.tiptap-content .tiptap blockquote[data-bq-type="info"]::before { content: 'ℹ️'; font-size: 1.1rem; top: 8px; opacity: 1; }
+.dark .tiptap-content .tiptap blockquote[data-bq-type="info"] { border-left-color: #60a5fa; background: rgba(59, 130, 246, 0.12); }
 
 /* Blockquote: Warning (amber) */
-.tiptap-content .tiptap blockquote.bq-warning { border-left-color: #f59e0b; background: rgba(245, 158, 11, 0.08); }
-.tiptap-content .tiptap blockquote.bq-warning::before { content: '⚠️'; }
-.dark .tiptap-content .tiptap blockquote.bq-warning { border-left-color: #fbbf24; background: rgba(245, 158, 11, 0.12); }
+.tiptap-content .tiptap blockquote[data-bq-type="warning"] { border-left-color: #f59e0b; background: rgba(245, 158, 11, 0.08); }
+.tiptap-content .tiptap blockquote[data-bq-type="warning"]::before { content: '⚠️'; font-size: 1.1rem; top: 8px; opacity: 1; }
+.dark .tiptap-content .tiptap blockquote[data-bq-type="warning"] { border-left-color: #fbbf24; background: rgba(245, 158, 11, 0.12); }
 
 /* Blockquote: Danger (red) */
-.tiptap-content .tiptap blockquote.bq-danger { border-left-color: #ef4444; background: rgba(239, 68, 68, 0.08); }
-.tiptap-content .tiptap blockquote.bq-danger::before { content: '🚫'; }
-.dark .tiptap-content .tiptap blockquote.bq-danger { border-left-color: #f87171; background: rgba(239, 68, 68, 0.12); }
+.tiptap-content .tiptap blockquote[data-bq-type="danger"] { border-left-color: #ef4444; background: rgba(239, 68, 68, 0.08); }
+.tiptap-content .tiptap blockquote[data-bq-type="danger"]::before { content: '🚫'; font-size: 1.1rem; top: 8px; opacity: 1; }
+.dark .tiptap-content .tiptap blockquote[data-bq-type="danger"] { border-left-color: #f87171; background: rgba(239, 68, 68, 0.12); }
 
 /* Blockquote: Success (emerald) */
-.tiptap-content .tiptap blockquote.bq-success { border-left-color: #22c55e; background: rgba(34, 197, 94, 0.08); }
-.tiptap-content .tiptap blockquote.bq-success::before { content: '✅'; }
-.dark .tiptap-content .tiptap blockquote.bq-success { border-left-color: #4ade80; background: rgba(34, 197, 94, 0.12); }
+.tiptap-content .tiptap blockquote[data-bq-type="success"] { border-left-color: #22c55e; background: rgba(34, 197, 94, 0.08); }
+.tiptap-content .tiptap blockquote[data-bq-type="success"]::before { content: '✅'; font-size: 1.1rem; top: 8px; opacity: 1; }
+.dark .tiptap-content .tiptap blockquote[data-bq-type="success"] { border-left-color: #4ade80; background: rgba(34, 197, 94, 0.12); }
 
 /* Blockquote: Note (purple) */
-.tiptap-content .tiptap blockquote.bq-note { border-left-color: #a855f7; background: rgba(168, 85, 247, 0.08); }
-.tiptap-content .tiptap blockquote.bq-note::before { content: '📝'; }
-.dark .tiptap-content .tiptap blockquote.bq-note { border-left-color: #c084fc; background: rgba(168, 85, 247, 0.12); }
+.tiptap-content .tiptap blockquote[data-bq-type="note"] { border-left-color: #a855f7; background: rgba(168, 85, 247, 0.08); }
+.tiptap-content .tiptap blockquote[data-bq-type="note"]::before { content: '📝'; font-size: 1.1rem; top: 8px; opacity: 1; }
+.dark .tiptap-content .tiptap blockquote[data-bq-type="note"] { border-left-color: #c084fc; background: rgba(168, 85, 247, 0.12); }
 
 /* Blockquote: Important (rose) */
-.tiptap-content .tiptap blockquote.bq-important { border-left-color: #e11d48; background: rgba(225, 29, 72, 0.08); }
-.tiptap-content .tiptap blockquote.bq-important::before { content: '🔥'; }
-.dark .tiptap-content .tiptap blockquote.bq-important { border-left-color: #fb7185; background: rgba(225, 29, 72, 0.12); }
+.tiptap-content .tiptap blockquote[data-bq-type="important"] { border-left-color: #e11d48; background: rgba(225, 29, 72, 0.08); }
+.tiptap-content .tiptap blockquote[data-bq-type="important"]::before { content: '🔥'; font-size: 1.1rem; top: 8px; opacity: 1; }
+.dark .tiptap-content .tiptap blockquote[data-bq-type="important"] { border-left-color: #fb7185; background: rgba(225, 29, 72, 0.12); }
 
 /* Horizontal Rule */
 .tiptap-content .tiptap hr {
