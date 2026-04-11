@@ -248,8 +248,11 @@ function addCopyButtons() {
     const container = document.querySelector('.prose')
     if (!container) return
     container.querySelectorAll('pre').forEach((pre) => {
-      if (pre.querySelector('.copy-code-btn')) return
-      pre.style.position = 'relative'
+      if (pre.parentElement?.classList.contains('code-block-wrapper')) return
+      const wrapper = document.createElement('div')
+      wrapper.className = 'code-block-wrapper'
+      pre.parentNode.insertBefore(wrapper, pre)
+      wrapper.appendChild(pre)
       const btn = document.createElement('button')
       btn.className = 'copy-code-btn'
       btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><span>Copy</span>'
@@ -264,7 +267,7 @@ function addCopyButtons() {
           btn.classList.remove('copied')
         }, 2000)
       })
-      pre.appendChild(btn)
+      wrapper.appendChild(btn)
     })
   })
 }

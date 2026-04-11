@@ -115,6 +115,11 @@
   position: relative;
 }
 
+/* ─── Code Block Wrapper ─── */
+.code-block-wrapper {
+  position: relative;
+}
+
 /* ─── Copy Code Button ─── */
 .copy-code-btn {
   position: absolute;
@@ -137,7 +142,7 @@
   z-index: 10;
   backdrop-filter: blur(8px);
 }
-.prose pre:hover .copy-code-btn {
+.code-block-wrapper:hover .copy-code-btn {
   opacity: 1;
 }
 .copy-code-btn:hover {
