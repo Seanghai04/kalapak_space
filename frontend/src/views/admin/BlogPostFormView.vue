@@ -27,7 +27,17 @@
             </h2>
             <div>
               <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">Title <span class="text-red-400">*</span></label>
-              <input v-model="form.title" type="text" required class="input-field" placeholder="Your amazing article title" />
+              <input v-model="form.title" @input="autoSlug" type="text" required class="input-field" placeholder="Your amazing article title" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">
+                URL Slug <span class="text-red-400">*</span>
+                <span class="text-gray-400 font-normal">(auto-generated from title)</span>
+              </label>
+              <div class="flex items-center">
+                <span class="inline-flex items-center px-3 h-[38px] text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-dark-600 border border-r-0 border-gray-200 dark:border-dark-500 rounded-l-lg">/blog/</span>
+                <input v-model="form.slug" @input="slugManuallyEdited = true" type="text" required class="input-field !rounded-l-none" placeholder="your-post-slug" />
+              </div>
             </div>
             <div>
               <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">
@@ -120,7 +130,7 @@
             </h2>
             <div class="bg-white dark:bg-dark-700 rounded-lg p-3 border border-gray-200 dark:border-dark-600">
               <p class="text-sm text-blue-600 dark:text-blue-400 font-medium truncate">{{ form.title || 'Post title' }}</p>
-              <p class="text-[10px] text-green-600 dark:text-green-500 truncate mt-0.5">kalapak.dev/blog/{{ slugify(form.title || 'post-title') }}</p>
+              <p class="text-[10px] text-green-600 dark:text-green-500 truncate mt-0.5">kalapak-team.space/blog/{{ form.slug || slugify(form.title || 'post-title') }}</p>
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">{{ form.excerpt || 'Add an excerpt to see the preview here...' }}</p>
             </div>
           </div>
@@ -167,6 +177,14 @@ const editorReady = ref(false)
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_]+/g, '-').replace(/^-+|-+$/g, '') || 'post'
+}
+
+const slugManuallyEdited = ref(false)
+
+function autoSlug() {
+  if (!isEdit.value && !slugManuallyEdited.value) {
+    form.value.slug = slugify(form.value.title)
+  }
 }
 
 function onFileChange(e) {
