@@ -29,14 +29,31 @@
               <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">Title <span class="text-red-400">*</span></label>
               <input v-model="form.title" @input="autoSlug" type="text" required class="input-field" placeholder="Your amazing article title" />
             </div>
+
+            <!-- Slug: WordPress-style Hybrid -->
             <div>
-              <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">
-                URL Slug <span class="text-red-400">*</span>
-                <span class="text-gray-400 font-normal">(auto-generated from title)</span>
-              </label>
-              <div class="flex items-center">
-                <span class="inline-flex items-center px-3 h-[38px] text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-dark-600 border border-r-0 border-gray-200 dark:border-dark-500 rounded-l-lg">/blog/</span>
-                <input v-model="form.slug" @input="slugManuallyEdited = true" type="text" required class="input-field !rounded-l-none" placeholder="your-post-slug" />
+              <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">Permalink</label>
+              <!-- Collapsed: show URL preview with Edit button -->
+              <div v-if="!slugEditing" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-dark-700/40 border border-gray-200 dark:border-dark-600 rounded-lg">
+                <svg class="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                <span class="text-xs text-gray-500 dark:text-gray-400 truncate">kalapak-team.space/blog/<span class="text-brand-violet dark:text-brand-cyan font-medium">{{ form.slug || slugify(form.title || 'post-title') }}</span></span>
+                <button type="button" @click="slugEditing = true" class="ml-auto shrink-0 text-[10px] font-semibold text-brand-violet dark:text-brand-cyan hover:underline">Edit</button>
+              </div>
+              <!-- Expanded: editable slug input -->
+              <div v-else class="space-y-2">
+                <div class="flex items-center">
+                  <span class="inline-flex items-center px-3 h-[38px] text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-dark-600 border border-r-0 border-gray-200 dark:border-dark-500 rounded-l-lg">/blog/</span>
+                  <input v-model="form.slug" @input="slugManuallyEdited = true" ref="slugInput" type="text" required class="input-field !rounded-l-none" placeholder="your-post-slug" />
+                </div>
+                <div class="flex items-center gap-2">
+                  <button type="button" @click="slugEditing = false" class="text-[10px] font-semibold text-brand-violet dark:text-brand-cyan hover:underline">Done</button>
+                  <span class="text-gray-300 dark:text-dark-500">|</span>
+                  <button type="button" @click="resetSlug" class="text-[10px] font-semibold text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:underline">Reset from title</button>
+                  <span v-if="slugManuallyEdited" class="ml-auto text-[10px] text-amber-500 dark:text-amber-400 flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                    Manually edited
+                  </span>
+                </div>
               </div>
             </div>
             <div>
@@ -154,7 +171,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { adminApi } from '@/services/api'
 import { useUiStore } from '@/stores/ui'
@@ -180,12 +197,23 @@ function slugify(text) {
 }
 
 const slugManuallyEdited = ref(false)
+const slugEditing = ref(false)
+const slugInput = ref(null)
 
 function autoSlug() {
   if (!isEdit.value && !slugManuallyEdited.value) {
     form.value.slug = slugify(form.value.title)
   }
 }
+
+function resetSlug() {
+  form.value.slug = slugify(form.value.title)
+  slugManuallyEdited.value = false
+}
+
+watch(slugEditing, (val) => {
+  if (val) nextTick(() => slugInput.value?.focus())
+})
 
 function onFileChange(e) {
   const file = e.target.files[0]
