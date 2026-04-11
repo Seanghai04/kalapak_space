@@ -279,12 +279,12 @@ function styleBlockquotes() {
     const keywords = {
       '[tip]': 'bq-tip', '[info]': 'bq-info', '[warning]': 'bq-warning',
       '[danger]': 'bq-danger', '[success]': 'bq-success', '[note]': 'bq-note',
-      '[important]': 'bq-important'
+      '[important]': 'bq-important', '[quote]': 'bq-quote'
     }
     const labels = {
       '[tip]': 'Tip', '[info]': 'Info', '[warning]': 'Warning',
       '[danger]': 'Danger', '[success]': 'Success', '[note]': 'Note',
-      '[important]': 'Important'
+      '[important]': 'Important', '[quote]': null
     }
     container.querySelectorAll('blockquote').forEach((bq) => {
       if (bq.classList.contains('bq-styled')) return
@@ -295,11 +295,13 @@ function styleBlockquotes() {
       for (const [keyword, cls] of Object.entries(keywords)) {
         if (text.startsWith(keyword)) {
           bq.classList.add(cls)
-          const label = document.createElement('span')
-          label.className = 'bq-label'
-          label.textContent = labels[keyword]
           firstP.innerHTML = firstP.innerHTML.replace(new RegExp('\\[' + keyword.slice(1, -1) + '\\]\\s*', 'i'), '')
-          bq.insertBefore(label, bq.firstChild)
+          if (labels[keyword]) {
+            const label = document.createElement('span')
+            label.className = 'bq-label'
+            label.textContent = labels[keyword]
+            bq.insertBefore(label, bq.firstChild)
+          }
           matched = true
           break
         }

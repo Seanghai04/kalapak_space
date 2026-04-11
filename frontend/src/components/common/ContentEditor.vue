@@ -286,6 +286,7 @@ const blockquoteTypes = [
   { label: 'Success', value: 'success', icon: '✅' },
   { label: 'Note', value: 'note', icon: '📝' },
   { label: 'Important', value: 'important', icon: '🔥' },
+  { label: 'Quote', value: 'quote', icon: '💬' },
 ]
 
 // Wrap standalone YouTube iframes with data-youtube-video div for TipTap recognition
@@ -311,7 +312,7 @@ function processBlockquoteKeywords(html) {
   div.querySelectorAll('blockquote').forEach(bq => {
     const firstP = bq.querySelector('p') || bq
     const text = firstP.innerHTML
-    const match = text.match(/^\[(tip|info|warning|danger|success|note|important)\]\s*/)
+    const match = text.match(/^\[(tip|info|warning|danger|success|note|important|quote)\]\s*/)
     if (match) {
       bq.setAttribute('data-bq-type', match[1])
       firstP.innerHTML = text.substring(match[0].length)
@@ -758,6 +759,35 @@ const ToolBtn = defineComponent({
 .tiptap-content .tiptap blockquote[data-bq-type="important"] { border-left-color: #e11d48; background: rgba(225, 29, 72, 0.08); }
 .tiptap-content .tiptap blockquote[data-bq-type="important"]::before { content: '🔥'; font-size: 1.1rem; top: 8px; opacity: 1; }
 .dark .tiptap-content .tiptap blockquote[data-bq-type="important"] { border-left-color: #fb7185; background: rgba(225, 29, 72, 0.12); }
+
+/* Blockquote: Quote (testimonial/citation style) */
+.tiptap-content .tiptap blockquote[data-bq-type="quote"] {
+  border-left: 4px solid #6ee7b7;
+  background: #f0fdf4;
+  padding: 1.5rem 1.5rem 1.5rem 3.5rem;
+  border-radius: 0 12px 12px 0;
+  font-style: italic;
+  color: #374151;
+  line-height: 1.8;
+}
+.tiptap-content .tiptap blockquote[data-bq-type="quote"]::before {
+  content: '\201C\201C';
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #6ee7b7;
+  top: 8px;
+  left: 8px;
+  opacity: 1;
+  font-style: normal;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+.dark .tiptap-content .tiptap blockquote[data-bq-type="quote"] {
+  border-left-color: #34d399;
+  background: rgba(16, 185, 129, 0.08);
+  color: #d1fae5;
+}
+.dark .tiptap-content .tiptap blockquote[data-bq-type="quote"]::before { color: #34d399; }
 
 /* Horizontal Rule */
 .tiptap-content .tiptap hr {

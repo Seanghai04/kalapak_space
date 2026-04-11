@@ -153,6 +153,42 @@
 .prose blockquote.bq-important::before { content: '🔥'; }
 .dark .prose blockquote.bq-important { border-left-color: #fb7185; background: rgba(225, 29, 72, 0.12); color: #ffe4e6; }
 
+/* ─── Blockquote: Quote (testimonial/citation style) ─── */
+.prose blockquote.bq-quote {
+  border-left: 4px solid #6ee7b7;
+  background: #f0fdf4;
+  padding: 1.5rem 1.5rem 1.5rem 3.5rem;
+  border-radius: 0 12px 12px 0;
+  font-style: italic;
+  color: #374151;
+  line-height: 1.8;
+}
+.prose blockquote.bq-quote::before {
+  content: '\201C\201C';
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #6ee7b7;
+  top: 8px;
+  left: 8px;
+  font-style: normal;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+.prose blockquote.bq-quote p:last-child {
+  font-style: normal;
+  font-weight: 600;
+  color: #374151;
+  margin-top: 0.75rem;
+  font-size: 0.9em;
+}
+.dark .prose blockquote.bq-quote {
+  border-left-color: #34d399;
+  background: rgba(16, 185, 129, 0.08);
+  color: #d1fae5;
+}
+.dark .prose blockquote.bq-quote::before { color: #34d399; }
+.dark .prose blockquote.bq-quote p:last-child { color: #d1fae5; }
+
 /* Keyword label inside blockquote */
 .prose blockquote .bq-label {
   display: inline-block;
