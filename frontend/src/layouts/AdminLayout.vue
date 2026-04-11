@@ -445,6 +445,7 @@ import {
   ShieldCheckIcon,
   InboxStackIcon,
   TagIcon,
+  RectangleStackIcon,
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -470,6 +471,7 @@ const mainNavItems = [
 const contentNavItems = [
   { label: 'Projects', to: '/admin/projects', routeName: 'admin-projects', icon: FolderIcon },
   { label: 'Blog Posts', to: '/admin/blog', routeName: 'admin-blog', icon: DocumentTextIcon },
+  { label: 'Categories', to: '/admin/categories', routeName: 'admin-categories', icon: RectangleStackIcon },
   { label: 'Media', to: '/admin/media', routeName: 'admin-media', icon: PhotoIcon },
   { label: 'Tags', to: '/admin/tags', routeName: 'admin-tags', icon: TagIcon },
   { label: 'Messages', to: '/admin/messages', routeName: 'admin-messages', icon: EnvelopeIcon, badge: null, badgeColor: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400' },

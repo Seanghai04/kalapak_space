@@ -58,6 +58,7 @@ const routes = [
       { path: 'blog', name: 'admin-blog', component: () => import('@/views/admin/BlogPostsView.vue') },
       { path: 'blog/create', name: 'admin-blog-create', component: () => import('@/views/admin/BlogPostFormView.vue') },
       { path: 'blog/:id/edit', name: 'admin-blog-edit', component: () => import('@/views/admin/BlogPostFormView.vue') },
+      { path: 'categories', name: 'admin-categories', component: () => import('@/views/admin/CategoriesView.vue') },
       { path: 'applications', name: 'admin-applications', component: () => import('@/views/admin/ApplicationsView.vue') },
       { path: 'messages', name: 'admin-messages', component: () => import('@/views/admin/MessagesView.vue') },
       { path: 'team', name: 'admin-team', component: () => import('@/views/admin/TeamView.vue') },

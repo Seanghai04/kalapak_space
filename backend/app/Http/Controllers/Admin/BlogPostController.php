@@ -123,7 +123,7 @@ class BlogPostController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => BlogCategory::all(),
+            'data' => BlogCategory::withCount('posts')->get(),
         ]);
     }
 
