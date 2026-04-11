@@ -117,6 +117,42 @@
   word-break: break-word;
 }
 
+/* ─── Gemini-style generous spacing ─── */
+.prose p {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  line-height: 1.9;
+}
+.prose ol,
+.prose ul {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+.prose li {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+  line-height: 1.85;
+}
+.prose li p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.prose h1 {
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+.prose h2 {
+  margin-top: 1.75em;
+  margin-bottom: 0.85em;
+}
+.prose h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+
 /* ─── Blockquote Base ─── */
 .prose blockquote {
   position: relative;
