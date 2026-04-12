@@ -9,7 +9,7 @@ use App\Models\ActivityLog;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
 use App\Services\SupabaseStorage;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Cloudinary\Cloudinary;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -185,14 +185,19 @@ class BlogPostController extends Controller
 
     // ─── Storage Helpers ─────────────────────────────────────
 
+    private function cloudinary(): Cloudinary
+    {
+        return new Cloudinary(config('cloudinary.cloud_url'));
+    }
+
     private function uploadCoverImage($file, string $provider): string
     {
         if ($provider === 'cloudinary') {
-            $result = Cloudinary::upload($file->getRealPath(), [
+            $result = $this->cloudinary()->uploadApi()->upload($file->getRealPath(), [
                 'folder' => 'kalapak/blog',
                 'resource_type' => 'image',
             ]);
-            return $result->getSecurePath();
+            return $result['secure_url'];
         }
 
         // Default: Supabase
@@ -208,7 +213,7 @@ class BlogPostController extends Controller
             if ($provider === 'cloudinary') {
                 // Extract public ID from Cloudinary URL
                 if (preg_match('/upload\/(?:v\d+\/)?(.+)\.\w+$/', $url, $m)) {
-                    Cloudinary::destroy($m[1]);
+                    $this->cloudinary()->uploadApi()->destroy($m[1]);
                 }
             } else {
                 app(SupabaseStorage::class)->delete($url);
