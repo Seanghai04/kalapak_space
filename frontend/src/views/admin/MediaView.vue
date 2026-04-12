@@ -320,7 +320,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { adminApi } from '@/services/api'
 import { useUiStore } from '@/stores/ui'
 import Pagination from '@/components/common/Pagination.vue'
@@ -338,7 +338,8 @@ const deleteTarget = ref(null)
 const uploading = ref(false)
 const uploadProgress = ref({ current: 0, total: 0 })
 const isDragging = ref(false)
-const storageProvider = ref('supabase')
+const storageProvider = ref(localStorage.getItem('media_storage_provider') || 'supabase')
+watch(storageProvider, (v) => localStorage.setItem('media_storage_provider', v))
 const meta = ref({ current_page: 1, last_page: 1, total: 0 })
 
 let debounceTimer = null
