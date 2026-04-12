@@ -48,11 +48,11 @@ Route::get('/diag-check/{secret}', function ($secret) {
 });
 
 // Auth
-Route::prefix('auth')->withoutMiddleware('throttle:api')->group(function () {
-    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
-    Route::post('/register', [RegisterController::class, 'register'])->middleware('throttle:login');
-    Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware(['throttle:login', 'turnstile']);
-    Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->middleware(['throttle:login', 'turnstile']);
+Route::prefix('auth')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [RegisterController::class, 'register']);
+    Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware('turnstile');
+    Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->middleware('turnstile');
 });
 
 // Projects
@@ -88,7 +88,7 @@ Route::get('/tags', function () {
 Route::get('/settings/public', [HomeController::class, 'settings']);
 
 // Contact
-Route::post('/contact', [ContactController::class, 'store'])->withoutMiddleware('throttle:api')->middleware(['throttle:contact', 'turnstile']);
+Route::post('/contact', [ContactController::class, 'store'])->middleware('turnstile');
 
 // Storage diagnostics (remove after debugging)
 Route::get('/storage-test', function () {
@@ -97,7 +97,7 @@ Route::get('/storage-test', function () {
 });
 
 // Applications (public submit)
-Route::post('/applications', [ApplicationController::class, 'store'])->withoutMiddleware('throttle:api')->middleware(['throttle:contact', 'turnstile']);
+Route::post('/applications', [ApplicationController::class, 'store'])->middleware('turnstile');
 
 // ── AUTHENTICATED ROUTES ──────────────────────────────
 
@@ -107,7 +107,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
 
     // Upload (for TipTap editor, etc.)
-    Route::post('/upload', [MediaController::class, 'upload'])->middleware('throttle:uploads');
+    Route::post('/upload', [MediaController::class, 'upload']);
 
     // Member routes
     Route::prefix('member')->group(function () {
@@ -210,7 +210,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         // Media
         Route::get('/media', [MediaController::class, 'index']);
-        Route::post('/media/upload', [MediaController::class, 'upload'])->middleware('throttle:uploads');
+        Route::post('/media/upload', [MediaController::class, 'upload']);
         Route::delete('/media/{id}', [MediaController::class, 'destroy']);
 
         // Settings
