@@ -16,6 +16,7 @@ class BlogPost extends Model
         'excerpt',
         'content',
         'cover_image',
+        'storage_provider',
         'author_id',
         'category_id',
         'status',

@@ -87,6 +87,28 @@
               <svg class="w-4 h-4 text-brand-violet dark:text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
               Cover Image
             </h2>
+            <!-- Storage Provider Selector -->
+            <div>
+              <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">Upload to</label>
+              <div class="flex gap-2">
+                <button type="button" @click="form.storage_provider = 'supabase'"
+                  :class="form.storage_provider === 'supabase'
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/30 ring-1 ring-emerald-200 dark:ring-emerald-500/20'
+                    : 'bg-white dark:bg-dark-700 text-gray-500 border-gray-200 dark:border-dark-600 hover:border-gray-300'"
+                  class="flex-1 px-3 py-2 rounded-lg border text-xs font-medium transition-all text-center flex items-center justify-center gap-1.5">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 109 113" fill="currentColor"><path d="M63.7 110.3c-2.6 3.1-7.8 3.1-10.4 0L2.5 49.2c-3.5-4.2-.3-10.4 5.2-10.4h100.6c5.5 0 8.7 6.2 5.2 10.4l-49.8 61.1z"/></svg>
+                  Supabase
+                </button>
+                <button type="button" @click="form.storage_provider = 'cloudinary'"
+                  :class="form.storage_provider === 'cloudinary'
+                    ? 'bg-blue-50 text-blue-700 border-blue-300 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/30 ring-1 ring-blue-200 dark:ring-blue-500/20'
+                    : 'bg-white dark:bg-dark-700 text-gray-500 border-gray-200 dark:border-dark-600 hover:border-gray-300'"
+                  class="flex-1 px-3 py-2 rounded-lg border text-xs font-medium transition-all text-center flex items-center justify-center gap-1.5">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  Cloudinary
+                </button>
+              </div>
+            </div>
             <div class="relative">
               <div v-if="imagePreview || existingImage" class="relative rounded-xl overflow-hidden group">
                 <img :src="imagePreview || existingImage" alt="Cover preview" class="w-full h-40 object-cover" />
@@ -183,7 +205,7 @@ const router = useRouter()
 const uiStore = useUiStore()
 
 const isEdit = computed(() => !!route.params.id)
-const form = ref({ title: '', slug: '', excerpt: '', content: '', category_id: '', status: 'draft', is_featured: false })
+const form = ref({ title: '', slug: '', excerpt: '', content: '', category_id: '', status: 'draft', is_featured: false, storage_provider: 'supabase' })
 const categories = ref([])
 const coverImage = ref(null)
 const imagePreview = ref(null)
@@ -238,6 +260,7 @@ onMounted(async () => {
       form.value = {
         title: p.title, slug: p.slug || '', excerpt: p.excerpt || '', content: p.content || '',
         category_id: p.category?.id || '', status: p.status, is_featured: p.is_featured,
+        storage_provider: p.storage_provider || 'supabase',
       }
       if (p.cover_image) existingImage.value = p.cover_image
     } catch {}

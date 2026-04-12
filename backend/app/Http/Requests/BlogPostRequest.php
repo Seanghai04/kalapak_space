@@ -19,6 +19,7 @@ class BlogPostRequest extends FormRequest
             'excerpt' => ['required', 'string'],
             'content' => ['required', 'string'],
             'cover_image' => ['nullable', 'image', 'max:10240'],
+            'storage_provider' => ['nullable', 'in:supabase,cloudinary'],
             'category_id' => ['required', 'exists:blog_categories,id'],
             'status' => ['required', 'in:draft,published,archived'],
             'is_featured' => ['boolean'],

@@ -9,6 +9,7 @@ use App\Models\ActivityLog;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
 use App\Services\SupabaseStorage;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -50,7 +51,9 @@ class BlogPostController extends Controller
         $data['author_id'] = auth()->id();
 
         if ($request->hasFile('cover_image')) {
-            $data['cover_image'] = app(SupabaseStorage::class)->upload($request->file('cover_image'), 'blog');
+            $provider = $request->input('storage_provider', 'supabase');
+            $data['cover_image'] = $this->uploadCoverImage($request->file('cover_image'), $provider);
+            $data['storage_provider'] = $provider;
         }
 
         if ($data['status'] === 'published' && empty($data['published_at'])) {
@@ -84,10 +87,12 @@ class BlogPostController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('cover_image')) {
-            if ($post->cover_image) {
-                app(SupabaseStorage::class)->delete($post->cover_image);
-            }
-            $data['cover_image'] = app(SupabaseStorage::class)->upload($request->file('cover_image'), 'blog');
+            // Delete old image from its original provider
+            $this->deleteCoverImage($post->cover_image, $post->storage_provider);
+
+            $provider = $request->input('storage_provider', 'supabase');
+            $data['cover_image'] = $this->uploadCoverImage($request->file('cover_image'), $provider);
+            $data['storage_provider'] = $provider;
         }
 
         if ($data['status'] === 'published' && !$post->published_at && empty($data['published_at'])) {
@@ -109,6 +114,9 @@ class BlogPostController extends Controller
     {
         $post = BlogPost::findOrFail($id);
         $title = $post->title;
+
+        $this->deleteCoverImage($post->cover_image, $post->storage_provider);
+
         $post->delete();
 
         ActivityLog::log('deleted', "Deleted blog post: {$title}");
@@ -173,5 +181,41 @@ class BlogPostController extends Controller
             'success' => true,
             'message' => 'Category deleted successfully.',
         ]);
+    }
+
+    // ─── Storage Helpers ─────────────────────────────────────
+
+    private function uploadCoverImage($file, string $provider): string
+    {
+        if ($provider === 'cloudinary') {
+            $result = Cloudinary::upload($file->getRealPath(), [
+                'folder' => 'kalapak/blog',
+                'resource_type' => 'image',
+            ]);
+            return $result->getSecurePath();
+        }
+
+        // Default: Supabase
+        return app(SupabaseStorage::class)->upload($file, 'blog');
+    }
+
+    private function deleteCoverImage(?string $url, ?string $provider): void
+    {
+        if (!$url)
+            return;
+
+        try {
+            if ($provider === 'cloudinary') {
+                // Extract public ID from Cloudinary URL
+                if (preg_match('/upload\/(?:v\d+\/)?(.+)\.\w+$/', $url, $m)) {
+                    Cloudinary::destroy($m[1]);
+                }
+            } else {
+                app(SupabaseStorage::class)->delete($url);
+            }
+        } catch (\Throwable $e) {
+            // Log but don't fail the request
+            \Log::warning("Failed to delete cover image: {$e->getMessage()}");
+        }
     }
 }

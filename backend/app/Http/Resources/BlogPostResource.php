@@ -16,7 +16,8 @@ class BlogPostResource extends JsonResource
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
             'content' => $this->content,
-            'cover_image' => $this->cover_image ? app(SupabaseStorage::class)->url($this->cover_image) : null,
+            'cover_image' => $this->coverImageUrl(),
+            'storage_provider' => $this->storage_provider ?? 'supabase',
             'status' => $this->status,
             'is_featured' => $this->is_featured,
             'views_count' => $this->views_count,
@@ -37,5 +38,19 @@ class BlogPostResource extends JsonResource
             'comments_count' => $this->whenCounted('approvedComments'),
             'created_at' => $this->created_at?->toISOString(),
         ];
+    }
+
+    private function coverImageUrl(): ?string
+    {
+        if (!$this->cover_image) {
+            return null;
+        }
+
+        // Cloudinary URLs are already absolute
+        if (($this->storage_provider ?? 'supabase') === 'cloudinary') {
+            return $this->cover_image;
+        }
+
+        return app(SupabaseStorage::class)->url($this->cover_image);
     }
 }
