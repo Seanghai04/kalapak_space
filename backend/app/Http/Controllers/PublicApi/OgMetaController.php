@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 
 class OgMetaController extends Controller
 {
-    private const FALLBACK_IMAGE = 'https://res.cloudinary.com/di1hdlb8k/image/upload/c_pad,w_1200,h_630,b_rgb:111827,g_center/q_auto/f_png/v1775860922/Logo_kalapak_om1ygl.png';
+    private const FALLBACK_IMAGE = 'https://res.cloudinary.com/kalapak/image/upload/c_pad,w_1200,h_630,b_rgb:111827,g_center/q_auto/f_png/v1775860922/Logo_kalapak_om1ygl.png';
 
     public function blogPost(string $slug): Response
     {

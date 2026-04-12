@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://res.cloudinary.com/di1hdlb8k/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" alt="Kalapak Logo" width="120" />
+<img src="https://res.cloudinary.com/kalapak/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" alt="Kalapak Logo" width="120" />
 
 # Kalapak Code Team Website
 

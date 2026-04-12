@@ -33,7 +33,7 @@
       <!-- Top — Logo -->
       <div class="relative z-10">
         <router-link to="/" class="inline-flex items-center gap-3 group">
-          <img src="https://res.cloudinary.com/di1hdlb8k/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" alt="Kalapak Logo" class="w-12 h-12 rounded-xl object-contain shadow-lg shadow-brand-violet/25 group-hover:shadow-brand-violet/40 transition-shadow" />
+          <img src="https://res.cloudinary.com/kalapak/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" alt="Kalapak Logo" class="w-12 h-12 rounded-xl object-contain shadow-lg shadow-brand-violet/25 group-hover:shadow-brand-violet/40 transition-shadow" />
           <div>
             <h1 class="text-xl font-sans font-bold text-white">Kalapak</h1>
             <p class="text-xs text-gray-400 tracking-wider">CODE TEAM</p>
@@ -98,7 +98,7 @@
       <!-- Mobile top bar -->
       <div class="lg:hidden absolute top-0 left-0 right-0 p-6 z-20">
         <router-link to="/" class="inline-flex items-center gap-3 group">
-          <img src="https://res.cloudinary.com/di1hdlb8k/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" alt="Kalapak Logo" class="w-10 h-10 rounded-xl shadow-lg shadow-brand-violet/25" />
+          <img src="https://res.cloudinary.com/kalapak/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" alt="Kalapak Logo" class="w-10 h-10 rounded-xl shadow-lg shadow-brand-violet/25" />
           <div>
             <h1 class="text-lg font-sans font-bold text-white">Kalapak</h1>
             <p class="text-[10px] text-gray-400 tracking-wider">CODE TEAM</p>

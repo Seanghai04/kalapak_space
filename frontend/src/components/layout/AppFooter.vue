@@ -4,7 +4,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         <!-- Brand -->
         <div class="md:col-span-1">
-          <img src="https://res.cloudinary.com/di1hdlb8k/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" alt="Kalapak Logo" class="w-10 h-10 rounded-xl object-contain mb-3" />
+          <img src="https://res.cloudinary.com/kalapak/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" alt="Kalapak Logo" class="w-10 h-10 rounded-xl object-contain mb-3" />
           <p class="text-sm text-gray-600 dark:text-gray-400">
             Crafting Digital Futures from Cambodia to the World.
           </p>

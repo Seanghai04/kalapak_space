@@ -14,7 +14,7 @@
       <!-- ── Brand Header ── -->
       <div class="flex items-center h-16 px-4 border-b border-gray-200/80 dark:border-white/[0.06] flex-shrink-0">
         <router-link to="/" class="flex items-center gap-2.5 min-w-0 group">
-          <img src="https://res.cloudinary.com/di1hdlb8k/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" alt="Kalapak Logo" class="w-9 h-9 rounded-xl object-contain shadow-md shadow-brand-violet/20 dark:shadow-brand-cyan/20 flex-shrink-0 group-hover:shadow-lg transition-shadow duration-300" />
+          <img src="https://res.cloudinary.com/kalapak/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" alt="Kalapak Logo" class="w-9 h-9 rounded-xl object-contain shadow-md shadow-brand-violet/20 dark:shadow-brand-cyan/20 flex-shrink-0 group-hover:shadow-lg transition-shadow duration-300" />
           <transition
             enter-active-class="transition duration-200 ease-out delay-75"
             enter-from-class="opacity-0 -translate-x-2"

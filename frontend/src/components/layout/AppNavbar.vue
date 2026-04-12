@@ -15,7 +15,7 @@
 
         <!-- ── Logo ── -->
         <router-link to="/" class="nav-logo group flex items-center gap-2.5 relative">
-          <img src="https://res.cloudinary.com/di1hdlb8k/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" alt="Kalapak Logo" class="w-9 h-9 rounded-xl object-contain shadow-md shadow-brand-violet/20 dark:shadow-brand-cyan/20 group-hover:shadow-lg group-hover:shadow-brand-violet/30 dark:group-hover:shadow-brand-cyan/30 transition-all duration-300 group-hover:scale-105" />
+          <img src="https://res.cloudinary.com/kalapak/image/upload/q_auto/f_auto/v1775860922/Logo_kalapak_om1ygl.png" alt="Kalapak Logo" class="w-9 h-9 rounded-xl object-contain shadow-md shadow-brand-violet/20 dark:shadow-brand-cyan/20 group-hover:shadow-lg group-hover:shadow-brand-violet/30 dark:group-hover:shadow-brand-cyan/30 transition-all duration-300 group-hover:scale-105" />
           <div class="flex flex-col leading-none">
             <span class="text-[15px] font-sans font-bold tracking-tight text-gray-900 dark:text-white group-hover:text-brand-violet dark:group-hover:text-brand-cyan transition-colors duration-300">Kalapak</span>
             <span class="text-[9px] font-medium uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">Code Team</span>
