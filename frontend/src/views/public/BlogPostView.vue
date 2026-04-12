@@ -236,7 +236,14 @@ const currentUrl = computed(() => window.location.href)
 
 const renderedContent = computed(() => {
   if (!post.value?.content) return ''
-  return DOMPurify.sanitize(marked.parse(post.value.content), purifyConfig)
+  const bqKeywords = ['tip', 'info', 'warning', 'danger', 'success', 'note', 'important', 'quote', 'curly', 'qbox', 'qline', 'qround', 'qdash', 'qbold', 'qbubble', 'conclusion']
+  let md = post.value.content
+  // Replace > [keyword] with a hidden data span so marked doesn't mangle brackets
+  for (const kw of bqKeywords) {
+    md = md.replace(new RegExp('^(>\\s*)\\[' + kw + '\\]\\s*', 'gim'), `$1<span data-bq-marker="${kw}" hidden></span>`)
+  }
+  let html = marked.parse(md)
+  return DOMPurify.sanitize(html, { ...purifyConfig, ADD_TAGS: [...(purifyConfig.ADD_TAGS || []), 'span'], ADD_ATTR: [...(purifyConfig.ADD_ATTR || []), 'data-bq-marker', 'hidden'] })
 })
 
 function formatDate(date) {
@@ -282,43 +289,56 @@ function styleBlockquotes() {
   nextTick(() => {
     const container = document.querySelector('.prose')
     if (!container) return
-    const keywords = {
-      '[tip]': 'bq-tip', '[info]': 'bq-info', '[warning]': 'bq-warning',
-      '[danger]': 'bq-danger', '[success]': 'bq-success', '[note]': 'bq-note',
-      '[important]': 'bq-important', '[quote]': 'bq-quote', '[curly]': 'bq-curly',
-      '[qbox]': 'bq-qbox', '[qline]': 'bq-qline', '[qround]': 'bq-qround',
-      '[qdash]': 'bq-qdash', '[qbold]': 'bq-qbold', '[qbubble]': 'bq-qbubble',
-      '[conclusion]': 'bq-conclusion'
+    const classMap = {
+      tip: 'bq-tip', info: 'bq-info', warning: 'bq-warning',
+      danger: 'bq-danger', success: 'bq-success', note: 'bq-note',
+      important: 'bq-important', quote: 'bq-quote', curly: 'bq-curly',
+      qbox: 'bq-qbox', qline: 'bq-qline', qround: 'bq-qround',
+      qdash: 'bq-qdash', qbold: 'bq-qbold', qbubble: 'bq-qbubble',
+      conclusion: 'bq-conclusion'
     }
-    const labels = {
-      '[tip]': 'Tip', '[info]': 'Info', '[warning]': 'Warning',
-      '[danger]': 'Danger', '[success]': 'Success', '[note]': 'Note',
-      '[important]': 'Important', '[quote]': null, '[curly]': null,
-      '[qbox]': null, '[qline]': null, '[qround]': null,
-      '[qdash]': null, '[qbold]': null, '[qbubble]': null,
-      '[conclusion]': null
+    const labelMap = {
+      tip: 'Tip', info: 'Info', warning: 'Warning',
+      danger: 'Danger', success: 'Success', note: 'Note',
+      important: 'Important'
     }
     container.querySelectorAll('blockquote').forEach((bq) => {
       if (bq.classList.contains('bq-styled')) return
       bq.classList.add('bq-styled')
-      const firstP = bq.querySelector('p') || bq
-      const text = firstP.textContent.trim().toLowerCase()
-      let matched = false
-      for (const [keyword, cls] of Object.entries(keywords)) {
-        if (text.startsWith(keyword)) {
-          bq.classList.add(cls)
-          firstP.innerHTML = firstP.innerHTML.replace(new RegExp('\\[' + keyword.slice(1, -1) + '\\]\\s*', 'i'), '')
-          if (labels[keyword]) {
-            const label = document.createElement('span')
-            label.className = 'bq-label'
-            label.textContent = labels[keyword]
-            bq.insertBefore(label, bq.firstChild)
-          }
-          matched = true
-          break
+      // Check for hidden marker span
+      const marker = bq.querySelector('[data-bq-marker]')
+      if (marker) {
+        const type = marker.getAttribute('data-bq-marker')
+        if (classMap[type]) bq.classList.add(classMap[type])
+        if (labelMap[type]) {
+          const label = document.createElement('span')
+          label.className = 'bq-label'
+          label.textContent = labelMap[type]
+          bq.insertBefore(label, bq.firstChild)
         }
+        marker.remove()
+      } else {
+        // Fallback: check text for [keyword] pattern (legacy content)
+        const firstP = bq.querySelector('p') || bq
+        const text = firstP.textContent.trim().toLowerCase()
+        let matched = false
+        for (const [type, cls] of Object.entries(classMap)) {
+          const keyword = `[${type}]`
+          if (text.startsWith(keyword)) {
+            bq.classList.add(cls)
+            firstP.innerHTML = firstP.innerHTML.replace(new RegExp('\\[' + type + '\\]\\s*', 'i'), '')
+            if (labelMap[type]) {
+              const label = document.createElement('span')
+              label.className = 'bq-label'
+              label.textContent = labelMap[type]
+              bq.insertBefore(label, bq.firstChild)
+            }
+            matched = true
+            break
+          }
+        }
+        if (!matched) bq.classList.add('bq-default')
       }
-      if (!matched) bq.classList.add('bq-default')
     })
   })
 }
