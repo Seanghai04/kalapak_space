@@ -18,7 +18,7 @@ class BlogPostRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'excerpt' => ['required', 'string'],
             'content' => ['required', 'string'],
-            'cover_image' => ['nullable', 'image', 'max:2048'],
+            'cover_image' => ['nullable', 'image', 'max:10240'],
             'category_id' => ['required', 'exists:blog_categories,id'],
             'status' => ['required', 'in:draft,published,archived'],
             'is_featured' => ['boolean'],

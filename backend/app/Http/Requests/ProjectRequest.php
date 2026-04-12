@@ -27,7 +27,7 @@ class ProjectRequest extends FormRequest
             'title' => [$isUpdate ? 'sometimes' : 'required', 'string', 'max:255'],
             'description' => [$isUpdate ? 'sometimes' : 'required', 'string'],
             'long_description' => ['nullable', 'string'],
-            'cover_image' => ['nullable', 'image', 'max:2048'],
+            'cover_image' => ['nullable', 'image', 'max:10240'],
             'repo_url' => ['nullable', 'url'],
             'demo_url' => ['nullable', 'url'],
             'tech_stack' => ['nullable', 'array'],
