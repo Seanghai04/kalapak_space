@@ -11,6 +11,10 @@
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
           Delete {{ selectedIds.length }}
         </button>
+        <select v-model="storageProvider" class="input-field !py-2 !px-3 text-sm min-w-[140px]">
+          <option value="supabase">☁️ Supabase</option>
+          <option value="cloudinary">🌐 Cloudinary</option>
+        </select>
         <label class="btn-primary cursor-pointer flex items-center gap-2 text-sm">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
           Upload Files
@@ -334,6 +338,7 @@ const deleteTarget = ref(null)
 const uploading = ref(false)
 const uploadProgress = ref({ current: 0, total: 0 })
 const isDragging = ref(false)
+const storageProvider = ref('supabase')
 const meta = ref({ current_page: 1, last_page: 1, total: 0 })
 
 let debounceTimer = null
@@ -430,6 +435,7 @@ async function uploadFiles(e) {
   for (const file of files) {
     const fd = new FormData()
     fd.append('file', file)
+    fd.append('storage_provider', storageProvider.value)
     try {
       await adminApi.uploadMedia(fd)
     } catch (err) {
