@@ -931,27 +931,62 @@ const ToolBtn = defineComponent({
 .tiptap-content .tiptap blockquote[data-bq-type="qbubble"] { border: 2px solid #7b2fff; border-radius: 16px; background: rgba(123,47,255,0.03); }
 .dark .tiptap-content .tiptap blockquote[data-bq-type="qbubble"] { border-color: #00d4ff; background: rgba(0,212,255,0.05); }
 
-/* Conclusion: Dark navy card */
+/* Conclusion: Modern dark card with quote marks */
 .tiptap-content .tiptap blockquote[data-bq-type="conclusion"] {
   border-left: none;
-  background: #0d0a3e;
-  padding: 2rem 2.5rem;
-  border-radius: 12px;
-  color: #cbd5e1;
+  background: linear-gradient(145deg, #0c0833 0%, #120e45 50%, #0a0730 100%);
+  padding: 2.5rem 3rem 2.5rem 3.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(123, 47, 255, 0.2);
+  box-shadow: 0 4px 24px rgba(123, 47, 255, 0.08), inset 0 1px 0 rgba(255,255,255,0.03);
+  color: #c8ceda;
   line-height: 1.85;
+  position: relative;
+  overflow: hidden;
 }
-.tiptap-content .tiptap blockquote[data-bq-type="conclusion"]::before { content: none; }
+.tiptap-content .tiptap blockquote[data-bq-type="conclusion"]::before {
+  content: '\201C';
+  position: absolute;
+  top: -0.15rem;
+  left: 1rem;
+  font-size: 5rem;
+  font-weight: 900;
+  color: rgba(123, 47, 255, 0.25);
+  font-family: Georgia, serif;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 1;
+}
+.tiptap-content .tiptap blockquote[data-bq-type="conclusion"]::after {
+  content: '\201D';
+  position: absolute;
+  bottom: -1.5rem;
+  right: 1.5rem;
+  font-size: 5rem;
+  font-weight: 900;
+  color: rgba(123, 47, 255, 0.25);
+  font-family: Georgia, serif;
+  line-height: 1;
+  pointer-events: none;
+}
 .tiptap-content .tiptap blockquote[data-bq-type="conclusion"] p:first-child {
   font-weight: 800;
-  font-size: 1.25em;
-  color: #f1f5f9;
+  font-size: 1.2em;
+  color: #e8ecf4;
   margin-bottom: 0.5rem;
 }
+.tiptap-content .tiptap blockquote[data-bq-type="conclusion"] p { margin: 0.4em 0; }
 .dark .tiptap-content .tiptap blockquote[data-bq-type="conclusion"] {
-  background: #020024;
-  color: #cbd5e1;
+  background: linear-gradient(145deg, #050320 0%, #0a073a 50%, #040218 100%);
+  border-color: rgba(0, 212, 255, 0.15);
+  box-shadow: 0 4px 24px rgba(0, 212, 255, 0.06), inset 0 1px 0 rgba(255,255,255,0.02);
+  color: #c8ceda;
 }
-.dark .tiptap-content .tiptap blockquote[data-bq-type="conclusion"] p:first-child { color: #f1f5f9; }
+.dark .tiptap-content .tiptap blockquote[data-bq-type="conclusion"]::before,
+.dark .tiptap-content .tiptap blockquote[data-bq-type="conclusion"]::after {
+  color: rgba(0, 212, 255, 0.2);
+}
+.dark .tiptap-content .tiptap blockquote[data-bq-type="conclusion"] p:first-child { color: #e8ecf4; }
 
 /* Horizontal Rule */
 .tiptap-content .tiptap hr {
