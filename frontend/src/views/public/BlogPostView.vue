@@ -236,14 +236,8 @@ const currentUrl = computed(() => window.location.href)
 
 const renderedContent = computed(() => {
   if (!post.value?.content) return ''
-  const bqKeywords = ['tip', 'info', 'warning', 'danger', 'success', 'note', 'important', 'quote', 'curly', 'qbox', 'qline', 'qround', 'qdash', 'qbold', 'qbubble', 'conclusion', 'condark', 'conmin', 'conbold', 'confresh']
-  let md = post.value.content
-  // Replace > [keyword] with a hidden data span so marked doesn't mangle brackets
-  for (const kw of bqKeywords) {
-    md = md.replace(new RegExp('^(>\\s*)\\[' + kw + '\\]\\s*', 'gim'), `$1<span data-bq-marker="${kw}" hidden></span>`)
-  }
-  let html = marked.parse(md)
-  return DOMPurify.sanitize(html, { ...purifyConfig, ADD_TAGS: [...(purifyConfig.ADD_TAGS || []), 'span'], ADD_ATTR: [...(purifyConfig.ADD_ATTR || []), 'data-bq-marker', 'hidden'] })
+  let html = marked.parse(post.value.content)
+  return DOMPurify.sanitize(html, purifyConfig)
 })
 
 function formatDate(date) {
@@ -308,40 +302,35 @@ function styleBlockquotes() {
     container.querySelectorAll('blockquote').forEach((bq) => {
       if (bq.classList.contains('bq-styled')) return
       bq.classList.add('bq-styled')
-      // Check for hidden marker span
-      const marker = bq.querySelector('[data-bq-marker]')
-      if (marker) {
-        const type = marker.getAttribute('data-bq-marker')
-        if (classMap[type]) bq.classList.add(classMap[type])
-        if (labelMap[type]) {
-          const label = document.createElement('span')
-          label.className = 'bq-label'
-          label.textContent = labelMap[type]
-          bq.insertBefore(label, bq.firstChild)
-        }
-        marker.remove()
-      } else {
-        // Fallback: check text for [keyword] pattern (legacy content)
-        const firstP = bq.querySelector('p') || bq
-        const text = firstP.textContent.trim().toLowerCase()
-        let matched = false
-        for (const [type, cls] of Object.entries(classMap)) {
-          const keyword = `[${type}]`
-          if (text.startsWith(keyword)) {
-            bq.classList.add(cls)
-            firstP.innerHTML = firstP.innerHTML.replace(new RegExp('\\[' + type + '\\]\\s*', 'i'), '')
-            if (labelMap[type]) {
-              const label = document.createElement('span')
-              label.className = 'bq-label'
-              label.textContent = labelMap[type]
-              bq.insertBefore(label, bq.firstChild)
+      const firstP = bq.querySelector('p') || bq
+      const text = firstP.textContent.trim().toLowerCase()
+      let matched = false
+      for (const [type, cls] of Object.entries(classMap)) {
+        if (text.startsWith(`[${type}]`)) {
+          bq.classList.add(cls)
+          // Strip keyword via DOM text node walking
+          const walker = document.createTreeWalker(firstP, NodeFilter.SHOW_TEXT)
+          let node
+          while (node = walker.nextNode()) {
+            const re = new RegExp('\\[' + type + '\\]\\s*', 'i')
+            if (re.test(node.textContent)) {
+              node.textContent = node.textContent.replace(re, '')
+              break
             }
-            matched = true
-            break
           }
+          // Remove empty first paragraph
+          if (!firstP.textContent.trim() && firstP !== bq) firstP.remove()
+          if (labelMap[type]) {
+            const label = document.createElement('span')
+            label.className = 'bq-label'
+            label.textContent = labelMap[type]
+            bq.insertBefore(label, bq.firstChild)
+          }
+          matched = true
+          break
         }
-        if (!matched) bq.classList.add('bq-default')
       }
+      if (!matched) bq.classList.add('bq-default')
     })
   })
 }
