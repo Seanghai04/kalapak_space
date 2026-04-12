@@ -101,7 +101,7 @@ Route::post('/applications', [ApplicationController::class, 'store'])->middlewar
 
 // ── AUTHENTICATED ROUTES ──────────────────────────────
 
-Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     // Auth
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);

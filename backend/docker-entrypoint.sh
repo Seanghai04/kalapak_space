@@ -19,8 +19,9 @@ if [ -z "$APP_KEY" ]; then
     php artisan key:generate --force --no-interaction 2>/dev/null || true
 fi
 
-# Clear config cache
+# Clear config and route cache
 php artisan config:clear 2>/dev/null || true
+php artisan route:clear 2>/dev/null || true
 
 # ============================================================
 # DATABASE: Run pending migrations (preserves existing data)
