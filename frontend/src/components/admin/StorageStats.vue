@@ -29,7 +29,7 @@
           </div>
           <div>
             <p class="font-semibold dark:text-white">Cloudinary</p>
-            <p class="text-xs text-gray-400">Media & Image CDN</p>
+            <p class="text-xs text-gray-400">{{ cloudinary.plan || 'Media & Image CDN' }}</p>
           </div>
         </div>
 

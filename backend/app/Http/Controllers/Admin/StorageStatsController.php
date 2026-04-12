@@ -45,17 +45,23 @@ class StorageStatsController extends Controller
             $cloudinary = new Cloudinary($cloudUrl);
             $usage = $cloudinary->adminApi()->usage();
 
+            // Cloudinary API may return 'limit' or 'allowed' or neither
+            // Free plan defaults: 25 GB storage, 25 GB bandwidth, 25,000 transformations
+            $freeStorageLimit = 25 * 1024 * 1024 * 1024;   // 25 GB
+            $freeBandwidthLimit = 25 * 1024 * 1024 * 1024; // 25 GB
+            $freeTransformLimit = 25000;
+
             $storageUsed = $usage['storage']['usage'] ?? 0;
-            $storageLimit = $usage['storage']['limit'] ?? 0;
+            $storageLimit = $usage['storage']['limit'] ?? $usage['storage']['allowed'] ?? $freeStorageLimit;
             $bandwidthUsed = $usage['bandwidth']['usage'] ?? 0;
-            $bandwidthLimit = $usage['bandwidth']['limit'] ?? 0;
+            $bandwidthLimit = $usage['bandwidth']['limit'] ?? $usage['bandwidth']['allowed'] ?? $freeBandwidthLimit;
             $transformations = $usage['transformations']['usage'] ?? 0;
-            $transformationsLimit = $usage['transformations']['limit'] ?? 0;
+            $transformationsLimit = $usage['transformations']['limit'] ?? $usage['transformations']['allowed'] ?? $freeTransformLimit;
             $resources = $usage['resources'] ?? 0;
-            $resourcesLimit = $usage['derived_resources'] ?? 0;
 
             return [
                 'configured' => true,
+                'plan' => $usage['plan'] ?? 'Free',
                 'storage' => [
                     'used' => $storageUsed,
                     'limit' => $storageLimit,
