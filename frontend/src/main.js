@@ -2,7 +2,6 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
-import VueGtag from 'vue-gtag'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import './assets/styles/animations.css'
@@ -13,9 +12,6 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-app.use(VueGtag, {
-  config: { id: 'G-VFELHG5NHT' },
-}, router)
 
 AOS.init({
   duration: 800,
