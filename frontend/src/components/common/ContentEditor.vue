@@ -923,33 +923,27 @@ const ToolBtn = defineComponent({
 .tiptap-content .tiptap blockquote[data-bq-type="qbubble"] { border: 2px solid #7b2fff; border-radius: 16px; background: rgba(123,47,255,0.03); }
 .dark .tiptap-content .tiptap blockquote[data-bq-type="qbubble"] { border-color: #00d4ff; background: rgba(0,212,255,0.05); }
 
-/* Conclusion: Modern mint card */
+/* Conclusion: Premium summary card */
 .tiptap-content .tiptap blockquote[data-bq-type="conclusion"] {
-  border-left: 4px solid transparent;
-  border-image: linear-gradient(180deg, #7b2fff, #00d4ff) 1;
-  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 50%, #ecfeff 100%);
+  border-left: none;
+  border-top: 3px solid;
+  border-image: linear-gradient(90deg, #7b2fff, #06b6d4, #00d4ff) 1;
+  background: linear-gradient(135deg, #faf5ff 0%, #f0f9ff 50%, #ecfeff 100%);
   padding: 1.75rem 2rem;
-  border-radius: 0 14px 14px 0;
+  border-radius: 0 0 14px 14px;
   color: #334155;
-  line-height: 1.8;
+  line-height: 1.85;
   position: relative;
-  box-shadow: 0 2px 12px rgba(0, 212, 255, 0.06);
+  box-shadow: 0 4px 20px rgba(123, 47, 255, 0.06), 0 1px 6px rgba(0, 212, 255, 0.04);
 }
 .tiptap-content .tiptap blockquote[data-bq-type="conclusion"]::before { content: none; opacity: 0; }
 .tiptap-content .tiptap blockquote[data-bq-type="conclusion"]::after { content: none; }
-.tiptap-content .tiptap blockquote[data-bq-type="conclusion"] p:first-child {
-  font-weight: 800;
-  font-size: 1.15em;
-  color: #0f172a;
-  margin-bottom: 0.5rem;
-}
-.tiptap-content .tiptap blockquote[data-bq-type="conclusion"] p { margin: 0.35em 0; }
+.tiptap-content .tiptap blockquote[data-bq-type="conclusion"] p { margin: 0.4em 0; }
 .dark .tiptap-content .tiptap blockquote[data-bq-type="conclusion"] {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.06) 50%, rgba(0, 212, 255, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(123, 47, 255, 0.06) 0%, rgba(6, 182, 212, 0.05) 50%, rgba(0, 212, 255, 0.04) 100%);
   color: #cbd5e1;
-  box-shadow: 0 2px 12px rgba(0, 212, 255, 0.04);
+  box-shadow: 0 4px 20px rgba(123, 47, 255, 0.08), 0 1px 6px rgba(0, 212, 255, 0.04);
 }
-.dark .tiptap-content .tiptap blockquote[data-bq-type="conclusion"] p:first-child { color: #f1f5f9; }
 
 /* Horizontal Rule */
 .tiptap-content .tiptap hr {

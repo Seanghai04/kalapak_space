@@ -300,7 +300,7 @@ function styleBlockquotes() {
     const labelMap = {
       tip: 'Tip', info: 'Info', warning: 'Warning',
       danger: 'Danger', success: 'Success', note: 'Note',
-      important: 'Important'
+      important: 'Important', conclusion: 'Conclusion'
     }
     container.querySelectorAll('blockquote').forEach((bq) => {
       if (bq.classList.contains('bq-styled')) return
