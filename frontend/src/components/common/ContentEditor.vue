@@ -321,7 +321,7 @@ function processBlockquoteKeywords(html) {
   div.querySelectorAll('blockquote').forEach(bq => {
     const firstP = bq.querySelector('p') || bq
     const text = firstP.innerHTML
-    const match = text.match(/^\[(tip|info|warning|danger|success|note|important|quote|curly|qbox|qline|qround|qdash|qbold|qbubble)\]\s*/)
+    const match = text.match(/^\[(tip|info|warning|danger|success|note|important|quote|curly|qbox|qline|qround|qdash|qbold|qbubble|conclusion)\]\s*/)
     if (match) {
       bq.setAttribute('data-bq-type', match[1])
       firstP.innerHTML = text.substring(match[0].length)
