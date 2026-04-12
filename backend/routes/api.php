@@ -48,7 +48,7 @@ Route::get('/diag-check/{secret}', function ($secret) {
 });
 
 // Auth
-Route::prefix('auth')->group(function () {
+Route::prefix('auth')->middleware('throttle:login')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);  // turnstile temporarily disabled for debug
     Route::post('/register', [RegisterController::class, 'register']);  // turnstile temporarily disabled - add domain to Cloudflare widget then re-enable
     Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware('turnstile');
@@ -88,7 +88,7 @@ Route::get('/tags', function () {
 Route::get('/settings/public', [HomeController::class, 'settings']);
 
 // Contact
-Route::post('/contact', [ContactController::class, 'store'])->middleware('turnstile');
+Route::post('/contact', [ContactController::class, 'store'])->middleware(['throttle:contact', 'turnstile']);
 
 // Storage diagnostics (remove after debugging)
 Route::get('/storage-test', function () {
@@ -97,17 +97,17 @@ Route::get('/storage-test', function () {
 });
 
 // Applications (public submit)
-Route::post('/applications', [ApplicationController::class, 'store'])->middleware('turnstile');
+Route::post('/applications', [ApplicationController::class, 'store'])->middleware(['throttle:contact', 'turnstile']);
 
 // ── AUTHENTICATED ROUTES ──────────────────────────────
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
     // Auth
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
 
     // Upload (for TipTap editor, etc.)
-    Route::post('/upload', [MediaController::class, 'upload']);
+    Route::post('/upload', [MediaController::class, 'upload'])->middleware('throttle:uploads');
 
     // Member routes
     Route::prefix('member')->group(function () {
@@ -210,7 +210,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Media
         Route::get('/media', [MediaController::class, 'index']);
-        Route::post('/media/upload', [MediaController::class, 'upload']);
+        Route::post('/media/upload', [MediaController::class, 'upload'])->middleware('throttle:uploads');
         Route::delete('/media/{id}', [MediaController::class, 'destroy']);
 
         // Settings

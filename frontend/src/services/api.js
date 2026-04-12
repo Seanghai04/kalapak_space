@@ -27,6 +27,10 @@ api.interceptors.response.use(
       authStore.logout()
       router.push({ name: 'login' })
     }
+    if (error.response?.status === 429) {
+      const retryAfter = error.response.headers['retry-after'] || 60
+      error.message = `Too many requests. Please wait ${retryAfter} seconds and try again.`
+    }
     return Promise.reject(error)
   }
 )
