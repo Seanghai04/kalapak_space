@@ -80,7 +80,7 @@ services:
     plan: free
     envVars:
       - key: BACKEND_URL
-        value: https://kalapak-backend.onrender.com
+        value: https://kalapakspace-backend.onrender.com
 
 # -------------------------------------------------
 # PostgreSQL Database
