@@ -296,6 +296,10 @@ const blockquoteTypes = [
   { label: 'Bold Frame', value: 'qbold', icon: '█❝' },
   { label: 'Bubble', value: 'qbubble', icon: '💭' },
   { label: 'Conclusion', value: 'conclusion', icon: '🏁' },
+  { label: 'Conclusion Dark', value: 'condark', icon: '🌙' },
+  { label: 'Conclusion Minimal', value: 'conmin', icon: '✦' },
+  { label: 'Conclusion Bold', value: 'conbold', icon: '🟣' },
+  { label: 'Conclusion Fresh', value: 'confresh', icon: '🌿' },
 ]
 
 // Wrap standalone YouTube iframes with data-youtube-video div for TipTap recognition
@@ -321,7 +325,7 @@ function processBlockquoteKeywords(html) {
   div.querySelectorAll('blockquote').forEach(bq => {
     const firstP = bq.querySelector('p') || bq
     const text = firstP.innerHTML
-    const match = text.match(/^\[(tip|info|warning|danger|success|note|important|quote|curly|qbox|qline|qround|qdash|qbold|qbubble|conclusion)\]\s*/)
+    const match = text.match(/^\[(tip|info|warning|danger|success|note|important|quote|curly|qbox|qline|qround|qdash|qbold|qbubble|conclusion|condark|conmin|conbold|confresh)\]\s*/)
     if (match) {
       bq.setAttribute('data-bq-type', match[1])
       firstP.innerHTML = text.substring(match[0].length)
@@ -943,6 +947,85 @@ const ToolBtn = defineComponent({
   background: linear-gradient(135deg, rgba(123, 47, 255, 0.06) 0%, rgba(6, 182, 212, 0.05) 50%, rgba(0, 212, 255, 0.04) 100%);
   color: #cbd5e1;
   box-shadow: 0 4px 20px rgba(123, 47, 255, 0.08), 0 1px 6px rgba(0, 212, 255, 0.04);
+}
+
+/* Conclusion Dark: elegant navy + gold */
+.tiptap-content .tiptap blockquote[data-bq-type="condark"] {
+  border-left: 4px solid #d4a017;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  padding: 1.75rem 2rem;
+  border-radius: 0 12px 12px 0;
+  color: #e2e8f0;
+  line-height: 1.85;
+  position: relative;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(212, 160, 23, 0.1);
+}
+.tiptap-content .tiptap blockquote[data-bq-type="condark"]::before { content: none; opacity: 0; }
+.tiptap-content .tiptap blockquote[data-bq-type="condark"]::after { content: none; }
+.tiptap-content .tiptap blockquote[data-bq-type="condark"] p { margin: 0.4em 0; color: #e2e8f0; }
+.dark .tiptap-content .tiptap blockquote[data-bq-type="condark"] {
+  background: linear-gradient(135deg, #0c1222 0%, #162032 100%);
+  border-left-color: #eab308;
+}
+
+/* Conclusion Minimal: clean + subtle */
+.tiptap-content .tiptap blockquote[data-bq-type="conmin"] {
+  border-left: none;
+  border-bottom: 2px solid;
+  border-image: linear-gradient(90deg, #94a3b8, #cbd5e1, transparent) 1;
+  background: #fafafa;
+  padding: 1.5rem 2rem;
+  border-radius: 12px 12px 0 0;
+  color: #334155;
+  line-height: 1.85;
+  position: relative;
+  box-shadow: none;
+}
+.tiptap-content .tiptap blockquote[data-bq-type="conmin"]::before { content: none; opacity: 0; }
+.tiptap-content .tiptap blockquote[data-bq-type="conmin"]::after { content: none; }
+.tiptap-content .tiptap blockquote[data-bq-type="conmin"] p { margin: 0.4em 0; }
+.dark .tiptap-content .tiptap blockquote[data-bq-type="conmin"] {
+  background: rgba(30, 41, 59, 0.5);
+  border-image: linear-gradient(90deg, #475569, #334155, transparent) 1;
+  color: #cbd5e1;
+}
+
+/* Conclusion Bold: gradient purple */
+.tiptap-content .tiptap blockquote[data-bq-type="conbold"] {
+  border-left: none;
+  background: linear-gradient(135deg, #7b2fff 0%, #4f46e5 50%, #2563eb 100%);
+  padding: 1.75rem 2rem;
+  border-radius: 14px;
+  color: #ffffff;
+  line-height: 1.85;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(123, 47, 255, 0.2), 0 2px 8px rgba(79, 70, 229, 0.15);
+}
+.tiptap-content .tiptap blockquote[data-bq-type="conbold"]::before { content: none; opacity: 0; }
+.tiptap-content .tiptap blockquote[data-bq-type="conbold"]::after { content: none; }
+.tiptap-content .tiptap blockquote[data-bq-type="conbold"] p { margin: 0.4em 0; color: #ffffff; }
+.dark .tiptap-content .tiptap blockquote[data-bq-type="conbold"] {
+  background: linear-gradient(135deg, #6d28d9 0%, #4338ca 50%, #1d4ed8 100%);
+}
+
+/* Conclusion Fresh: nature / teal-green */
+.tiptap-content .tiptap blockquote[data-bq-type="confresh"] {
+  border-left: 4px solid;
+  border-image: linear-gradient(180deg, #059669, #0d9488, #06b6d4) 1;
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 50%, #f0f9ff 100%);
+  padding: 1.75rem 2rem;
+  border-radius: 0 14px 14px 0;
+  color: #1e3a3a;
+  line-height: 1.85;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.06), 0 1px 4px rgba(13, 148, 136, 0.04);
+}
+.tiptap-content .tiptap blockquote[data-bq-type="confresh"]::before { content: none; opacity: 0; }
+.tiptap-content .tiptap blockquote[data-bq-type="confresh"]::after { content: none; }
+.tiptap-content .tiptap blockquote[data-bq-type="confresh"] p { margin: 0.4em 0; }
+.dark .tiptap-content .tiptap blockquote[data-bq-type="confresh"] {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.08) 0%, rgba(13, 148, 136, 0.06) 50%, rgba(6, 182, 212, 0.05) 100%);
+  color: #cbd5e1;
 }
 
 /* Horizontal Rule */

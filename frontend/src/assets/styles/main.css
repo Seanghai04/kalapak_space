@@ -525,6 +525,88 @@
   box-shadow: 0 4px 20px rgba(123, 47, 255, 0.08), 0 1px 6px rgba(0, 212, 255, 0.04);
 }
 
+/* ─── Blockquote: Conclusion Dark (elegant navy + gold) ─── */
+.prose blockquote.bq-condark {
+  border-left: 4px solid #d4a017;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  padding: 1.75rem 2rem;
+  border-radius: 0 12px 12px 0;
+  color: #e2e8f0;
+  line-height: 1.85;
+  position: relative;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(212, 160, 23, 0.1);
+}
+.prose blockquote.bq-condark::before { content: none; }
+.prose blockquote.bq-condark::after { content: none; }
+.prose blockquote.bq-condark p { margin: 0.4em 0; color: #e2e8f0; }
+.dark .prose blockquote.bq-condark {
+  background: linear-gradient(135deg, #0c1222 0%, #162032 100%);
+  border-left-color: #eab308;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(234, 179, 8, 0.12);
+}
+
+/* ─── Blockquote: Conclusion Minimal (clean + subtle) ─── */
+.prose blockquote.bq-conmin {
+  border-left: none;
+  border-bottom: 2px solid;
+  border-image: linear-gradient(90deg, #94a3b8, #cbd5e1, transparent) 1;
+  background: #fafafa;
+  padding: 1.5rem 2rem;
+  border-radius: 12px 12px 0 0;
+  color: #334155;
+  line-height: 1.85;
+  position: relative;
+  box-shadow: none;
+}
+.prose blockquote.bq-conmin::before { content: none; }
+.prose blockquote.bq-conmin::after { content: none; }
+.prose blockquote.bq-conmin p { margin: 0.4em 0; }
+.dark .prose blockquote.bq-conmin {
+  background: rgba(30, 41, 59, 0.5);
+  border-image: linear-gradient(90deg, #475569, #334155, transparent) 1;
+  color: #cbd5e1;
+}
+
+/* ─── Blockquote: Conclusion Bold (gradient purple) ─── */
+.prose blockquote.bq-conbold {
+  border-left: none;
+  background: linear-gradient(135deg, #7b2fff 0%, #4f46e5 50%, #2563eb 100%);
+  padding: 1.75rem 2rem;
+  border-radius: 14px;
+  color: #ffffff;
+  line-height: 1.85;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(123, 47, 255, 0.2), 0 2px 8px rgba(79, 70, 229, 0.15);
+}
+.prose blockquote.bq-conbold::before { content: none; }
+.prose blockquote.bq-conbold::after { content: none; }
+.prose blockquote.bq-conbold p { margin: 0.4em 0; color: #ffffff; }
+.dark .prose blockquote.bq-conbold {
+  background: linear-gradient(135deg, #6d28d9 0%, #4338ca 50%, #1d4ed8 100%);
+  box-shadow: 0 8px 32px rgba(109, 40, 217, 0.25), 0 2px 8px rgba(67, 56, 202, 0.2);
+}
+
+/* ─── Blockquote: Conclusion Fresh (nature / teal-green) ─── */
+.prose blockquote.bq-confresh {
+  border-left: 4px solid;
+  border-image: linear-gradient(180deg, #059669, #0d9488, #06b6d4) 1;
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 50%, #f0f9ff 100%);
+  padding: 1.75rem 2rem;
+  border-radius: 0 14px 14px 0;
+  color: #1e3a3a;
+  line-height: 1.85;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.06), 0 1px 4px rgba(13, 148, 136, 0.04);
+}
+.prose blockquote.bq-confresh::before { content: none; }
+.prose blockquote.bq-confresh::after { content: none; }
+.prose blockquote.bq-confresh p { margin: 0.4em 0; }
+.dark .prose blockquote.bq-confresh {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.08) 0%, rgba(13, 148, 136, 0.06) 50%, rgba(6, 182, 212, 0.05) 100%);
+  color: #cbd5e1;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.08);
+}
+
 /* Keyword label inside blockquote */
 .prose blockquote .bq-label {
   display: inline-block;
@@ -553,6 +635,14 @@
 .dark .bq-important .bq-label { color: #fb7185; }
 .bq-conclusion .bq-label { background: linear-gradient(135deg, rgba(123,47,255,0.12), rgba(6,182,212,0.12)); color: #7b2fff; font-size: 0.78rem; letter-spacing: 0.05em; }
 .dark .bq-conclusion .bq-label { color: #a78bfa; }
+.bq-condark .bq-label { background: rgba(212,160,23,0.2); color: #d4a017; }
+.dark .bq-condark .bq-label { color: #fbbf24; }
+.bq-conmin .bq-label { background: rgba(100,116,139,0.12); color: #64748b; }
+.dark .bq-conmin .bq-label { color: #94a3b8; }
+.bq-conbold .bq-label { background: rgba(255,255,255,0.2); color: #ffffff; }
+.dark .bq-conbold .bq-label { color: #e0e7ff; }
+.bq-confresh .bq-label { background: rgba(5,150,105,0.12); color: #059669; }
+.dark .bq-confresh .bq-label { color: #34d399; }
 
 .prose :where(iframe, video, embed, object) {
   max-width: 100%;

@@ -236,7 +236,7 @@ const currentUrl = computed(() => window.location.href)
 
 const renderedContent = computed(() => {
   if (!post.value?.content) return ''
-  const bqKeywords = ['tip', 'info', 'warning', 'danger', 'success', 'note', 'important', 'quote', 'curly', 'qbox', 'qline', 'qround', 'qdash', 'qbold', 'qbubble', 'conclusion']
+  const bqKeywords = ['tip', 'info', 'warning', 'danger', 'success', 'note', 'important', 'quote', 'curly', 'qbox', 'qline', 'qround', 'qdash', 'qbold', 'qbubble', 'conclusion', 'condark', 'conmin', 'conbold', 'confresh']
   let md = post.value.content
   // Replace > [keyword] with a hidden data span so marked doesn't mangle brackets
   for (const kw of bqKeywords) {
@@ -295,12 +295,15 @@ function styleBlockquotes() {
       important: 'bq-important', quote: 'bq-quote', curly: 'bq-curly',
       qbox: 'bq-qbox', qline: 'bq-qline', qround: 'bq-qround',
       qdash: 'bq-qdash', qbold: 'bq-qbold', qbubble: 'bq-qbubble',
-      conclusion: 'bq-conclusion'
+      conclusion: 'bq-conclusion', condark: 'bq-condark',
+      conmin: 'bq-conmin', conbold: 'bq-conbold', confresh: 'bq-confresh'
     }
     const labelMap = {
       tip: 'Tip', info: 'Info', warning: 'Warning',
       danger: 'Danger', success: 'Success', note: 'Note',
-      important: 'Important', conclusion: 'Conclusion'
+      important: 'Important', conclusion: 'Conclusion',
+      condark: 'Conclusion', conmin: 'Conclusion',
+      conbold: 'Conclusion', confresh: 'Conclusion'
     }
     container.querySelectorAll('blockquote').forEach((bq) => {
       if (bq.classList.contains('bq-styled')) return
