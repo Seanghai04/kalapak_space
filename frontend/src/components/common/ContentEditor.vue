@@ -718,28 +718,20 @@ const ToolBtn = defineComponent({
 .tiptap-content .tiptap blockquote {
   border-left: 4px solid #7b2fff;
   background: rgba(123, 47, 255, 0.05);
-  padding: 8px 16px 8px 40px;
+  padding: 8px 16px 8px 16px;
   margin: 1em 0;
   border-radius: 0 12px 12px 0;
   position: relative;
+  quotes: none;
 }
-.tiptap-content .tiptap blockquote::before {
-  position: absolute;
-  left: 12px;
-  top: 8px;
-  font-size: 1.1rem;
-  line-height: 1;
-  content: '\201C';
-  font-size: 1.8rem;
-  top: 2px;
-  color: #7b2fff;
-  opacity: 0.5;
-}
+.tiptap-content .tiptap blockquote::before { content: none; }
+.tiptap-content .tiptap blockquote::after { content: none; }
+.tiptap-content .tiptap blockquote p:first-of-type::before { content: none; }
+.tiptap-content .tiptap blockquote p:last-of-type::after { content: none; }
 .dark .tiptap-content .tiptap blockquote {
   border-color: #00d4ff;
   background: rgba(0, 212, 255, 0.05);
 }
-.dark .tiptap-content .tiptap blockquote::before { color: #00d4ff; }
 
 /* Blockquote: Tip (green) */
 .tiptap-content .tiptap blockquote[data-bq-type="tip"] { border-left-color: #10b981; background: rgba(16, 185, 129, 0.08); }
