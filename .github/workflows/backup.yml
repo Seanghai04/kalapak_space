@@ -25,7 +25,7 @@ jobs:
       - name: Create Database Backup
         run: |
           filename="backup-$(date +'%Y-%m-%d-%H%M').sql"
-          pg_dump "${{ secrets.DB_URL }}" > "$filename"
+          /usr/lib/postgresql/17/bin/pg_dump "${{ secrets.DB_URL }}" > "$filename"
           echo "BACKUP_FILE=$filename" >> $GITHUB_ENV
 
       - name: Push to Backup Repository
