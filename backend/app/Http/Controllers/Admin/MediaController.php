@@ -17,6 +17,12 @@ class MediaController extends Controller
         $query = Media::with('uploader')
             ->orderByDesc('created_at');
 
+        // Regular admins only see their own uploads; superadmins see all
+        $user = $request->user();
+        if ($user && $user->isAdmin() && !$user->isSuperAdmin()) {
+            $query->where('uploaded_by', $user->id);
+        }
+
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where('original_name', 'ilike', "%{$search}%");
