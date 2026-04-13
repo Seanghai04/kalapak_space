@@ -284,60 +284,62 @@
               </span>
             </button>
 
+            <!-- Notification Backdrop (mobile only) -->
+            <div v-if="notifOpen" class="fixed inset-0 bg-black/30 z-40 sm:hidden" @click="notifOpen = false" />
             <!-- Notification Dropdown -->
             <transition
               enter-active-class="transition duration-200 ease-out"
-              enter-from-class="opacity-0 scale-95 -translate-y-1"
-              enter-to-class="opacity-100 scale-100 translate-y-0"
+              enter-from-class="opacity-0 scale-95"
+              enter-to-class="opacity-100 scale-100"
               leave-active-class="transition duration-150 ease-in"
-              leave-from-class="opacity-100 scale-100 translate-y-0"
-              leave-to-class="opacity-0 scale-95 -translate-y-1"
+              leave-from-class="opacity-100 scale-100"
+              leave-to-class="opacity-0 scale-95"
             >
-              <div v-if="notifOpen" class="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-96 max-w-sm rounded-xl bg-white dark:bg-dark-800 shadow-xl shadow-black/8 dark:shadow-black/30 ring-1 ring-gray-200/80 dark:ring-white/[0.08] z-50 overflow-hidden">
-                <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-white/[0.06]">
-                  <h3 class="text-sm font-bold text-gray-900 dark:text-white">Notifications</h3>
-                  <button
-                    v-if="notifStore.unreadCount > 0"
-                    @click="notifStore.markAllRead()"
-                    class="text-[11px] font-semibold text-brand-violet dark:text-brand-cyan hover:underline"
-                  >Mark all read</button>
-                </div>
-                <div class="max-h-80 overflow-y-auto">
-                  <div v-if="notifStore.loading && notifStore.notifications.length === 0" class="flex items-center justify-center py-8">
-                    <svg class="w-5 h-5 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+              <div v-if="notifOpen" class="fixed left-4 right-4 top-20 z-50 sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-96 rounded-xl bg-white dark:bg-dark-800 shadow-xl shadow-black/8 dark:shadow-black/30 ring-1 ring-gray-200/80 dark:ring-white/[0.08] overflow-hidden">
+                  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-white/[0.06]">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Notifications</h3>
+                    <button
+                      v-if="notifStore.unreadCount > 0"
+                      @click="notifStore.markAllRead()"
+                      class="text-[11px] font-semibold text-brand-violet dark:text-brand-cyan hover:underline"
+                    >Mark all read</button>
                   </div>
-                  <div v-else-if="notifStore.notifications.length === 0" class="flex flex-col items-center justify-center py-10 px-4">
-                    <svg class="w-10 h-10 text-gray-300 dark:text-gray-600 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
-                    <p class="text-sm text-gray-400 dark:text-gray-500">No notifications yet</p>
-                  </div>
-                  <div v-else>
-                    <div
-                      v-for="notif in notifStore.notifications"
-                      :key="notif.id"
-                      class="group relative flex gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-white/[0.03] transition-colors cursor-pointer border-b border-gray-50 dark:border-white/[0.03] last:border-0"
-                      :class="{ 'bg-brand-violet/[0.03] dark:bg-brand-cyan/[0.03]': !notif.read_at }"
-                      @click="handleNotifClick(notif)"
-                    >
-                      <div class="flex-shrink-0 mt-0.5">
-                        <div class="w-8 h-8 rounded-lg flex items-center justify-center" :class="notifIconClass(notif.data?.icon)">
-                          <svg v-if="notif.data?.icon === 'success'" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-                          <svg v-else-if="notif.data?.icon === 'warning'" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
-                          <svg v-else-if="notif.data?.icon === 'error'" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
-                          <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
+                  <div class="max-h-80 overflow-y-auto">
+                    <div v-if="notifStore.loading && notifStore.notifications.length === 0" class="flex items-center justify-center py-8">
+                      <svg class="w-5 h-5 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                    </div>
+                    <div v-else-if="notifStore.notifications.length === 0" class="flex flex-col items-center justify-center py-10 px-4">
+                      <svg class="w-10 h-10 text-gray-300 dark:text-gray-600 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+                      <p class="text-sm text-gray-400 dark:text-gray-500">No notifications yet</p>
+                    </div>
+                    <div v-else>
+                      <div
+                        v-for="notif in notifStore.notifications"
+                        :key="notif.id"
+                        class="group relative flex gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-white/[0.03] transition-colors cursor-pointer border-b border-gray-50 dark:border-white/[0.03] last:border-0"
+                        :class="{ 'bg-brand-violet/[0.03] dark:bg-brand-cyan/[0.03]': !notif.read_at }"
+                        @click="handleNotifClick(notif)"
+                      >
+                        <div class="flex-shrink-0 mt-0.5">
+                          <div class="w-8 h-8 rounded-lg flex items-center justify-center" :class="notifIconClass(notif.data?.icon)">
+                            <svg v-if="notif.data?.icon === 'success'" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+                            <svg v-else-if="notif.data?.icon === 'warning'" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+                            <svg v-else-if="notif.data?.icon === 'error'" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+                            <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
+                          </div>
                         </div>
+                        <div class="flex-1 min-w-0">
+                          <p class="text-[13px] font-semibold text-gray-900 dark:text-white truncate">{{ notif.data?.title || 'Notification' }}</p>
+                          <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mt-0.5">{{ notif.data?.message }}</p>
+                          <p class="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{{ formatTime(notif.created_at) }}</p>
+                        </div>
+                        <div v-if="!notif.read_at" class="flex-shrink-0 mt-2"><span class="w-2 h-2 rounded-full bg-brand-violet dark:bg-brand-cyan block" /></div>
+                        <button @click.stop="notifStore.deleteNotification(notif.id)" class="absolute top-2 right-2 p-1 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 opacity-0 group-hover:opacity-100 transition-all">
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
                       </div>
-                      <div class="flex-1 min-w-0">
-                        <p class="text-[13px] font-semibold text-gray-900 dark:text-white truncate">{{ notif.data?.title || 'Notification' }}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mt-0.5">{{ notif.data?.message }}</p>
-                        <p class="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{{ formatTime(notif.created_at) }}</p>
-                      </div>
-                      <div v-if="!notif.read_at" class="flex-shrink-0 mt-2"><span class="w-2 h-2 rounded-full bg-brand-violet dark:bg-brand-cyan block" /></div>
-                      <button @click.stop="notifStore.deleteNotification(notif.id)" class="absolute top-2 right-2 p-1 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 opacity-0 group-hover:opacity-100 transition-all">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                      </button>
                     </div>
                   </div>
-                </div>
               </div>
             </transition>
           </div>
