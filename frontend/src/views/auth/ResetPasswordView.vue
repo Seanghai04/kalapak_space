@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { authApi } from '@/services/api'
 
@@ -36,6 +36,13 @@ const form = ref({ email: '', password: '', password_confirmation: '' })
 const loading = ref(false)
 const error = ref('')
 const success = ref('')
+
+onMounted(() => {
+  // Pre-fill email from the reset link query param
+  if (route.query.email) {
+    form.value.email = route.query.email
+  }
+})
 
 async function handleSubmit() {
   loading.value = true

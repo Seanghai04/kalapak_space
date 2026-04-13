@@ -54,7 +54,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [RegisterController::class, 'register']);
     Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware('turnstile');
-    Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->middleware('turnstile');
+    Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
 });
 
 // Projects

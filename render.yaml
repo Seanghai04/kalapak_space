@@ -67,7 +67,25 @@ services:
       - key: FILESYSTEM_DISK
         value: local
       - key: TURNSTILE_SECRET_KEY
-        sync: false # Set manually in Render dashboard
+        sync: false # Set manually: get from Cloudflare Dashboard → Turnstile → your site → Secret Key
+      # ── Mail (required for Forgot Password emails) ──
+      # Use Resend (resend.com), Mailgun, or any SMTP provider
+      - key: MAIL_MAILER
+        sync: false # e.g. smtp
+      - key: MAIL_HOST
+        sync: false # e.g. smtp.resend.com  or smtp.mailgun.org
+      - key: MAIL_PORT
+        sync: false # e.g. 587
+      - key: MAIL_USERNAME
+        sync: false # e.g. resend (for Resend) or your Mailgun username
+      - key: MAIL_PASSWORD
+        sync: false # your SMTP API key / password
+      - key: MAIL_ENCRYPTION
+        sync: false # tls
+      - key: MAIL_FROM_ADDRESS
+        sync: false # e.g. noreply@yourdomain.com
+      - key: MAIL_FROM_NAME
+        value: "Kalapak Code Team"
       - key: CLOUDINARY_URL
         sync: false # Set manually in Render dashboard
       - key: CLOUDINARY_CLOUD_NAME

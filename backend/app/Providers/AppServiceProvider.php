@@ -15,6 +15,7 @@ use App\Observers\ProjectObserver;
 use App\Observers\TagObserver;
 use App\Observers\TeamMemberObserver;
 use App\Services\SupabaseStorage;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -35,6 +36,12 @@ class AppServiceProvider extends ServiceProvider
         TeamMember::observe(TeamMemberObserver::class);
         BlogPost::observe(BlogPostObserver::class);
         Media::observe(MediaObserver::class);
+
+        // Override password reset URL to point to frontend
+        ResetPassword::createUrlUsing(function ($notifiable, string $token) {
+            $frontendUrl = rtrim(env('FRONTEND_URL', 'http://localhost:3000'), '/');
+            return $frontendUrl . '/auth/reset-password/' . $token . '?email=' . urlencode($notifiable->getEmailForPasswordReset());
+        });
 
         // General API: 60 requests per minute per IP
         RateLimiter::for('api', function (Request $request) {

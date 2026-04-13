@@ -26,11 +26,17 @@ class VerifyTurnstile
             ], 422);
         }
 
-        $response = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
-            'secret' => $secret,
-            'response' => $token,
-            'remoteip' => $request->ip(),
-        ]);
+        $response = null;
+        try {
+            $response = Http::timeout(5)->asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+                'secret' => $secret,
+                'response' => $token,
+                'remoteip' => $request->ip(),
+            ]);
+        } catch (\Exception $e) {
+            // Cloudflare unreachable — fail open to not block users
+            return $next($request);
+        }
 
         if (!$response->json('success')) {
             return response()->json([

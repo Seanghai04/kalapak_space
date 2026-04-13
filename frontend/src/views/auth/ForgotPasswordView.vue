@@ -55,6 +55,8 @@ async function handleSubmit() {
     sent.value = true
   } catch (e) {
     error.value = e.response?.data?.message || 'Failed to send reset link'
+    // Reset the CAPTCHA so the user can re-verify
+    turnstileToken.value = ''
   } finally {
     loading.value = false
   }
