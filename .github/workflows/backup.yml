@@ -21,9 +21,10 @@ jobs:
       - name: Create Database Backup
         env:
           PGPASSWORD: ${{ secrets.DB_PASS }}
+          PGSSLMODE: require
         run: |
           filename="backup-$(date +'%Y-%m-%d-%H%M').sql"
-          pg_dump -h ${{ secrets.DB_HOST }} -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME }} --no-password > "$filename"
+          pg_dump -h "${{ secrets.DB_HOST }}" -p 5432 -U "${{ secrets.DB_USER }}" -d "${{ secrets.DB_NAME }}" > "$filename"
           echo "BACKUP_FILE=$filename" >> $GITHUB_ENV
 
       - name: Push to Backup Repository
