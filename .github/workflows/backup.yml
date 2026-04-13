@@ -41,8 +41,10 @@ jobs:
 
       - name: Send Report and File to Telegram
         run: |
-          curl -F document=@"${{ env.BACKUP_FILE }}" \
+          RESPONSE=$(curl -s \
+               -F document=@"${{ env.BACKUP_FILE }}" \
                -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-               -F caption="✅ *Kalapak DB Backup Success\!*%0A📅 Date: $(date +'%Y-%m-%d %H:%M')%0A📦 File: ${{ env.BACKUP_FILE }}" \
-               -F parse_mode="MarkdownV2" \
-               "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument"
+               -F caption="✅ Kalapak DB Backup Success! Date: $(date +'%Y-%m-%d %H:%M') | File: ${{ env.BACKUP_FILE }}" \
+               "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument")
+          echo "Telegram response: $RESPONSE"
+          echo "$RESPONSE" | grep -q '"ok":true' || (echo "Telegram API error!" && exit 1)
