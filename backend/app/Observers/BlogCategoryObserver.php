@@ -8,4 +8,6 @@ use App\Observers\Concerns\InterceptsAdminActions;
 class BlogCategoryObserver
 {
     use InterceptsAdminActions;
+
+    protected string $resource = 'categories';
 }

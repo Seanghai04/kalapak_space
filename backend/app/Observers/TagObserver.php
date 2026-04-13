@@ -8,4 +8,6 @@ use App\Observers\Concerns\InterceptsAdminActions;
 class TagObserver
 {
     use InterceptsAdminActions;
+
+    protected string $resource = 'tags';
 }

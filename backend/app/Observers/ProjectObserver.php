@@ -8,4 +8,6 @@ use App\Observers\Concerns\InterceptsAdminActions;
 class ProjectObserver
 {
     use InterceptsAdminActions;
+
+    protected string $resource = 'projects';
 }

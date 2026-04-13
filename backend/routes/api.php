@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ApprovalRequestController;
+use App\Http\Controllers\Admin\UserPermissionController;
 use App\Http\Controllers\Admin\SearchController;
 use App\Http\Controllers\Admin\StorageStatsController;
 use App\Models\Tag;
@@ -234,6 +235,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/approval-requests', [ApprovalRequestController::class, 'index']);
             Route::post('/approval-requests/{id}/approve', [ApprovalRequestController::class, 'approve']);
             Route::post('/approval-requests/{id}/reject', [ApprovalRequestController::class, 'reject']);
+
+            // User Permissions
+            Route::get('/users/{id}/permissions', [UserPermissionController::class, 'show']);
+            Route::put('/users/{id}/permissions', [UserPermissionController::class, 'update']);
         }); // end superadmin
     }); // end admin
 }); // end auth:sanctum

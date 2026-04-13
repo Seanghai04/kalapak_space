@@ -3,21 +3,25 @@
 namespace App\Observers\Concerns;
 
 use App\Models\ApprovalRequest;
-use App\Models\Setting;
+use App\Models\UserPermission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 /**
  * Used by observers on Project, Tag, and BlogCategory.
- * When 'admin_direct_action' is disabled and the current user is a regular admin
- * (not superadmin), write mutations are intercepted and queued for approval.
+ * When an admin lacks the per-resource permission, the mutation is intercepted
+ * and queued as a pending approval request for Super Admin review.
+ *
+ * Each concrete observer must declare:
+ *   protected string $resource = 'projects'; // or 'categories' or 'tags'
  */
 trait InterceptsAdminActions
 {
     /**
      * Returns true if the action should be intercepted (queued for approval).
+     * $action: 'create' | 'update' | 'delete'
      */
-    private function shouldIntercept(): bool
+    private function shouldIntercept(string $action): bool
     {
         $user = Auth::user();
 
@@ -29,17 +33,20 @@ trait InterceptsAdminActions
             return false;
         }
 
-        // Intercept only when the direct-action setting is disabled
-        return !Setting::getValue('admin_direct_action', true);
+        $permission = UserPermission::where('user_id', $user->id)
+            ->where('resource', $this->resource)
+            ->first();
+
+        $column = 'can_' . $action; // can_create | can_update | can_delete
+        return !($permission?->$column ?? false);
     }
 
     /**
      * Queue a create approval request and abort the actual save.
-     * We hook into `creating` and throw an exception to cancel the insert.
      */
     public function creating(Model $model): bool
     {
-        if (!$this->shouldIntercept()) {
+        if (!$this->shouldIntercept('create')) {
             return true;
         }
 
@@ -52,7 +59,6 @@ trait InterceptsAdminActions
             'status' => 'pending',
         ]);
 
-        // Returning false from an Eloquent observer's creating() cancels the save
         return false;
     }
 
@@ -61,7 +67,7 @@ trait InterceptsAdminActions
      */
     public function updating(Model $model): bool
     {
-        if (!$this->shouldIntercept()) {
+        if (!$this->shouldIntercept('update')) {
             return true;
         }
 
@@ -82,7 +88,7 @@ trait InterceptsAdminActions
      */
     public function deleting(Model $model): bool
     {
-        if (!$this->shouldIntercept()) {
+        if (!$this->shouldIntercept('delete')) {
             return true;
         }
 
@@ -98,3 +104,4 @@ trait InterceptsAdminActions
         return false;
     }
 }
+

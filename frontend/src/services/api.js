@@ -156,6 +156,9 @@ export const adminApi = {
   approveRequest: (id, data) => api.post(`/admin/approval-requests/${id}/approve`, data),
   rejectRequest: (id, data) => api.post(`/admin/approval-requests/${id}/reject`, data),
 
+  getUserPermissions: (userId) => api.get(`/admin/users/${userId}/permissions`),
+  updateUserPermissions: (userId, data) => api.put(`/admin/users/${userId}/permissions`, data),
+
   getActivityLogs: (params) => api.get('/admin/activity-logs', { params }),
 
   getTags: () => api.get('/admin/tags'),

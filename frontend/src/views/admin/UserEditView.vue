@@ -85,8 +85,7 @@
 
       <!-- Edit Form -->
       <div class="lg:col-span-2 space-y-6">
-        <form @submit.prevent="handleSubmit" class="glass-card !p-6">
-          <h3 class="text-lg font-bold dark:text-white mb-5 flex items-center gap-2">
+        <form @submit.prevent="handleSubmit" class="glass-card !p-6">          <h3 class="text-lg font-bold dark:text-white mb-5 flex items-center gap-2">
             <svg class="w-5 h-5 text-brand-violet dark:text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
             User Information
           </h3>
@@ -118,6 +117,72 @@
           </div>
           <p v-if="error" class="text-sm text-red-500 mt-3">{{ error }}</p>
         </form>
+
+        <!-- Permissions Panel (superadmin only, for admin users) -->
+        <div v-if="authStore.isSuperAdmin && isAdminUser" class="glass-card !p-6">
+          <h3 class="text-lg font-bold dark:text-white mb-1 flex items-center gap-2">
+            <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            Resource Permissions
+          </h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">
+            Control what <strong>{{ user.name }}</strong> can do directly. Unpermitted actions will be queued for your approval.
+          </p>
+
+          <div v-if="permissionsLoading" class="flex justify-center py-8">
+            <div class="w-8 h-8 border-4 border-brand-violet/30 border-t-brand-violet rounded-full animate-spin" />
+          </div>
+
+          <div v-else>
+            <!-- Permission Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-gray-200 dark:border-dark-600">
+                    <th class="text-left pb-3 pr-4 font-semibold text-gray-600 dark:text-gray-400">Resource</th>
+                    <th class="pb-3 px-4 font-semibold text-gray-600 dark:text-gray-400 text-center">Create</th>
+                    <th class="pb-3 px-4 font-semibold text-gray-600 dark:text-gray-400 text-center">Edit</th>
+                    <th class="pb-3 px-4 font-semibold text-gray-600 dark:text-gray-400 text-center">Delete</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 dark:divide-dark-700">
+                  <tr v-for="res in permissionResources" :key="res.key">
+                    <td class="py-3 pr-4">
+                      <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center" :class="res.bg">
+                          <component :is="res.icon" class="w-4 h-4" :class="res.iconColor" />
+                        </div>
+                        <span class="font-medium text-gray-800 dark:text-gray-200">{{ res.label }}</span>
+                      </div>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                      <button type="button" @click="togglePerm(res.key, 'can_create')" class="inline-flex items-center justify-center w-9 h-5 rounded-full transition-colors duration-200 focus:outline-none" :class="permissions[res.key]?.can_create ? 'bg-brand-violet dark:bg-brand-cyan' : 'bg-gray-300 dark:bg-dark-500'">
+                        <span class="w-4 h-4 rounded-full bg-white shadow transform transition-transform duration-200" :class="permissions[res.key]?.can_create ? 'translate-x-2' : '-translate-x-2'" />
+                      </button>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                      <button type="button" @click="togglePerm(res.key, 'can_update')" class="inline-flex items-center justify-center w-9 h-5 rounded-full transition-colors duration-200 focus:outline-none" :class="permissions[res.key]?.can_update ? 'bg-brand-violet dark:bg-brand-cyan' : 'bg-gray-300 dark:bg-dark-500'">
+                        <span class="w-4 h-4 rounded-full bg-white shadow transform transition-transform duration-200" :class="permissions[res.key]?.can_update ? 'translate-x-2' : '-translate-x-2'" />
+                      </button>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                      <button type="button" @click="togglePerm(res.key, 'can_delete')" class="inline-flex items-center justify-center w-9 h-5 rounded-full transition-colors duration-200 focus:outline-none" :class="permissions[res.key]?.can_delete ? 'bg-red-500' : 'bg-gray-300 dark:bg-dark-500'">
+                        <span class="w-4 h-4 rounded-full bg-white shadow transform transition-transform duration-200" :class="permissions[res.key]?.can_delete ? 'translate-x-2' : '-translate-x-2'" />
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-gray-100 dark:border-dark-700">
+              <button type="button" @click="savePermissions" :disabled="permissionsSaving" class="btn-primary text-sm flex items-center gap-2">
+                <svg v-if="!permissionsSaving" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <div v-else class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                {{ permissionsSaving ? 'Saving...' : 'Save Permissions' }}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -155,15 +220,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { adminApi } from '@/services/api'
 import { useUiStore } from '@/stores/ui'
+import { useAuthStore } from '@/stores/auth'
+import { FolderIcon, RectangleStackIcon, TagIcon } from '@heroicons/vue/24/outline'
 import CustomSelect from '@/components/common/CustomSelect.vue'
 
 const route = useRoute()
 const router = useRouter()
 const uiStore = useUiStore()
+const authStore = useAuthStore()
 
 const user = ref({})
 const form = ref(null)
@@ -173,6 +241,56 @@ const saving = ref(false)
 const error = ref('')
 const showDeleteModal = ref(false)
 const deletingUser = ref(false)
+
+// Permissions state
+const permissions = ref({
+  projects:   { can_create: false, can_update: false, can_delete: false },
+  categories: { can_create: false, can_update: false, can_delete: false },
+  tags:       { can_create: false, can_update: false, can_delete: false },
+})
+const permissionsLoading = ref(false)
+const permissionsSaving = ref(false)
+
+const isAdminUser = computed(() => {
+  const roleName = user.value.role?.name?.toLowerCase()
+  return roleName === 'admin'
+})
+
+const permissionResources = [
+  { key: 'projects',   label: 'Projects',   icon: FolderIcon,          bg: 'bg-brand-violet/10', iconColor: 'text-brand-violet dark:text-brand-cyan' },
+  { key: 'categories', label: 'Categories', icon: RectangleStackIcon,  bg: 'bg-blue-500/10',     iconColor: 'text-blue-500' },
+  { key: 'tags',       label: 'Tags',       icon: TagIcon,             bg: 'bg-green-500/10',    iconColor: 'text-green-500' },
+]
+
+function togglePerm(resource, field) {
+  permissions.value[resource][field] = !permissions.value[resource][field]
+}
+
+async function loadPermissions(userId) {
+  permissionsLoading.value = true
+  try {
+    const { data } = await adminApi.getUserPermissions(userId)
+    permissions.value = data.data
+  } catch {} finally {
+    permissionsLoading.value = false
+  }
+}
+
+async function savePermissions() {
+  permissionsSaving.value = true
+  try {
+    const payload = Object.entries(permissions.value).map(([resource, perms]) => ({
+      resource,
+      ...perms,
+    }))
+    await adminApi.updateUserPermissions(route.params.id, { permissions: payload })
+    uiStore.showToast('Permissions saved successfully!')
+  } catch {
+    uiStore.showToast('Failed to save permissions', 'error')
+  } finally {
+    permissionsSaving.value = false
+  }
+}
 
 function roleBadgeClass(role) {
   const map = {
@@ -203,6 +321,11 @@ onMounted(async () => {
     user.value = u
     form.value = { name: u.name, email: u.email, role_id: u.role?.id || '' }
     roles.value = rolesRes.data.data || []
+
+    // Load per-user permissions if this is an admin user and current user is superadmin
+    if (authStore.isSuperAdmin && u.role?.name?.toLowerCase() === 'admin') {
+      await loadPermissions(u.id)
+    }
   } catch {
     form.value = null
   } finally {
