@@ -66,6 +66,23 @@ services:
         value: file
       - key: FILESYSTEM_DISK
         value: local
+      # ── Upstash Redis ──
+      - key: REDIS_CLIENT
+        value: predis
+      - key: REDIS_SCHEME
+        value: tls
+      - key: REDIS_HOST
+        value: living-tadpole-83117.upstash.io
+      - key: REDIS_PORT
+        value: "6379"
+      - key: REDIS_PASSWORD
+        sync: false # Set in Render dashboard
+      - key: CACHE_DRIVER
+        value: redis
+      - key: QUEUE_CONNECTION
+        value: redis
+      - key: SESSION_DRIVER
+        value: redis
       - key: TURNSTILE_SECRET_KEY
         sync: false # Set manually: get from Cloudflare Dashboard → Turnstile → your site → Secret Key
       # ── Mail (required for Forgot Password emails) ──
