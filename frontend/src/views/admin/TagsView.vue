@@ -620,8 +620,11 @@ async function handleDelete() {
     showDeleteModal.value = false
     deletingTag.value = null
     await fetchTags()
-  } catch {
-    showToast('Failed to delete tag', 'error')
+  } catch (err) {
+    const msg = err.response?.data?.intercepted
+      ? err.response.data.message
+      : 'Failed to delete tag'
+    showToast(msg, err.response?.data?.intercepted ? 'warning' : 'error')
   } finally {
     deleting.value = false
   }

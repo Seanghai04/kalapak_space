@@ -626,8 +626,11 @@ async function handleDelete() {
     showDeleteModal.value = false
     deletingCategory.value = null
     await fetchCategories()
-  } catch {
-    showToast('Failed to delete category', 'error')
+  } catch (err) {
+    const msg = err.response?.data?.intercepted
+      ? err.response.data.message
+      : 'Failed to delete category'
+    showToast(msg, err.response?.data?.intercepted ? 'warning' : 'error')
   } finally {
     deleting.value = false
   }

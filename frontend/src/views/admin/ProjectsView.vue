@@ -358,8 +358,12 @@ async function handleDelete() {
     projects.value = projects.value.filter(p => p.id !== deleteTarget.value.id)
     uiStore.showToast('Project deleted')
     deleteTarget.value = null
-  } catch { uiStore.showToast('Failed to delete', 'error') }
-  finally { deleting.value = false }
+  } catch (err) {
+    const msg = err.response?.data?.intercepted
+      ? err.response.data.message
+      : 'Failed to delete'
+    uiStore.showToast(msg, err.response?.data?.intercepted ? 'warning' : 'error')
+  } finally { deleting.value = false }
 }
 
 async function bulkDelete() {
