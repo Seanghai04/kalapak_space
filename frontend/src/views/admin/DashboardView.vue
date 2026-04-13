@@ -47,8 +47,8 @@
       </div>
     </div>
 
-    <!-- Storage Usage -->
-    <div class="mt-8">
+    <!-- Storage Usage (superadmin only) -->
+    <div v-if="authStore.isSuperAdmin" class="mt-8">
       <StorageStats />
     </div>
   </div>
@@ -59,12 +59,15 @@ import { ref, onMounted } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
 import { adminApi } from '@/services/api'
+import { useAuthStore } from '@/stores/auth'
 import StorageStats from '@/components/admin/StorageStats.vue'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 dayjs.extend(relativeTime)
+
+const authStore = useAuthStore()
 
 const statsCards = ref([
   { label: 'Total Users', value: 0, icon: '👥', bgClass: 'bg-blue-100 dark:bg-blue-900/30' },

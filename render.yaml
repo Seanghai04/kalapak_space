@@ -68,6 +68,26 @@ services:
         value: local
       - key: TURNSTILE_SECRET_KEY
         sync: false # Set manually in Render dashboard
+      - key: CLOUDINARY_URL
+        sync: false # Set manually in Render dashboard
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ENDPOINT
+        sync: false
+      - key: SUPABASE_ACCESS_KEY
+        sync: false
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+      - key: SUPABASE_BUCKET
+        sync: false
+      - key: SUPABASE_REGION
+        sync: false
 
   # -------------------------------------------------
   # Frontend — Vue 3 + Nginx (production build)
