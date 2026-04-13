@@ -95,10 +95,10 @@
                 leave-from-class="opacity-100 scale-100 translate-y-0"
                 leave-to-class="opacity-0 scale-95 -translate-y-1"
               >
-                <div v-if="notifOpen" class="absolute left-0 sm:right-0 sm:left-auto mt-3 -mx-4 sm:mx-0 w-[calc(100vw-2rem)] sm:w-80 md:w-96 rounded-2xl bg-white dark:bg-dark-800 shadow-xl shadow-black/10 dark:shadow-black/40 ring-1 ring-gray-200/80 dark:ring-white/[0.08] z-50 overflow-hidden">
+                <div v-if="notifOpen" class="fixed sm:absolute bottom-0 sm:bottom-auto left-0 sm:right-0 sm:left-auto sm:top-12 w-full sm:w-80 md:w-96 sm:rounded-2xl rounded-t-3xl bg-white dark:bg-dark-800 shadow-xl shadow-black/10 dark:shadow-black/40 ring-1 ring-gray-200/80 dark:ring-white/[0.08] z-50 overflow-hidden max-h-[80vh] sm:max-h-96">
                   <!-- Header -->
-                  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-white/[0.06]">
-                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Notifications</h3>
+                  <div class="flex items-center justify-between px-4 py-4 border-b border-gray-100 dark:border-white/[0.06]">
+                    <h3 class="text-base font-bold text-gray-900 dark:text-white">Notifications</h3>
                     <button
                       v-if="notifStore.unreadCount > 0"
                       @click="notifStore.markAllRead()"
@@ -109,14 +109,15 @@
                   </div>
 
                   <!-- Notification list -->
-                  <div class="max-h-80 overflow-y-auto">
-                    <div v-if="notifStore.loading && notifStore.notifications.length === 0" class="flex items-center justify-center py-8">
+                  <div class="overflow-y-auto max-h-96">
+                    <div v-if="notifStore.loading && notifStore.notifications.length === 0" class="flex items-center justify-center py-12">
                       <svg class="w-5 h-5 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                     </div>
 
-                    <div v-else-if="notifStore.notifications.length === 0" class="flex flex-col items-center justify-center py-10 px-4">
-                      <svg class="w-10 h-10 text-gray-300 dark:text-gray-600 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
-                      <p class="text-sm text-gray-400 dark:text-gray-500">No notifications yet</p>
+                    <div v-else-if="notifStore.notifications.length === 0" class="flex flex-col items-center justify-center py-16 px-6">
+                      <svg class="w-14 h-14 text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+                      <p class="text-base font-medium text-gray-600 dark:text-gray-400 text-center">No notifications yet</p>
+                      <p class="text-xs text-gray-500 dark:text-gray-500 text-center mt-1.5">Check back later for new updates</p>
                     </div>
 
                     <div v-else>
