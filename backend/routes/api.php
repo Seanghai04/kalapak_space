@@ -229,4 +229,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/storage-stats', [StorageStatsController::class, 'index']);
             Route::post('/storage-stats/refresh', [StorageStatsController::class, 'refresh']);
         }); // end superadmin
-});
+    }); // end admin
+}); // end auth:sanctum
