@@ -90,7 +90,8 @@
             <!-- Storage Provider Selector -->
             <div>
               <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">Upload to</label>
-              <div class="flex gap-2">
+              <!-- Both allowed: show toggle -->
+              <div v-if="allowedProviders === 'both'" class="flex gap-2">
                 <button type="button" @click="form.storage_provider = 'supabase'"
                   :class="form.storage_provider === 'supabase'
                     ? 'bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/30 ring-1 ring-emerald-200 dark:ring-emerald-500/20'
@@ -107,6 +108,13 @@
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                   Cloudinary
                 </button>
+              </div>
+              <!-- Single provider locked -->
+              <div v-else class="flex items-center gap-2 px-3 py-2 rounded-lg border bg-gray-50 dark:bg-dark-700 border-gray-200 dark:border-dark-600 text-xs text-gray-500 dark:text-gray-400">
+                <svg v-if="allowedProviders === 'supabase'" class="w-3.5 h-3.5 text-emerald-500" viewBox="0 0 109 113" fill="currentColor"><path d="M63.7 110.3c-2.6 3.1-7.8 3.1-10.4 0L2.5 49.2c-3.5-4.2-.3-10.4 5.2-10.4h100.6c5.5 0 8.7 6.2 5.2 10.4l-49.8 61.1z"/></svg>
+                <svg v-else class="w-3.5 h-3.5 text-blue-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                {{ allowedProviders === 'supabase' ? 'Supabase' : 'Cloudinary' }}
+                <span class="ml-auto text-[10px] text-gray-400">Set by Super Admin</span>
               </div>
             </div>
             <div class="relative">
@@ -216,6 +224,7 @@ const existingImage = ref(null)
 const saving = ref(false)
 const error = ref('')
 const editorReady = ref(false)
+const allowedProviders = ref('both')
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_]+/g, '-').replace(/^-+|-+$/g, '') || 'post'
@@ -262,6 +271,15 @@ onMounted(async () => {
     return
   }
   try { const { data } = await adminApi.getBlogCategories(); categories.value = data.data || [] } catch {}
+
+  try {
+    const { data } = await adminApi.getStorageSettings()
+    const allowed = data?.data?.allowed_storage_providers || 'both'
+    allowedProviders.value = allowed
+    if (allowed !== 'both') {
+      form.value.storage_provider = allowed
+    }
+  } catch { /* ignore */ }
   if (isEdit.value) {
     try {
       const { data } = await adminApi.getBlogPost(route.params.id)

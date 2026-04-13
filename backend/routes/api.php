@@ -207,6 +207,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         // Search (admin + superadmin)
         Route::get('/search', [SearchController::class, 'search']);
 
+        // Storage provider setting (readable by all admins)
+        Route::get('/settings/storage', function () {
+            $providers = \App\Models\Setting::getValue('allowed_storage_providers', 'both');
+            return response()->json(['success' => true, 'data' => ['allowed_storage_providers' => $providers]]);
+        });
+
         // ── Super Admin only routes ───────────────────────────────
         Route::middleware('superadmin')->group(function () {
             // Users

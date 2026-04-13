@@ -163,6 +163,7 @@ export const adminApi = {
 
   getSettings: () => api.get('/admin/settings'),
   updateSettings: (data) => api.put('/admin/settings', data),
+  getStorageSettings: () => api.get('/admin/settings/storage'),
 
   getApprovalRequests: (params) => api.get('/admin/approval-requests', { params }),
   approveRequest: (id, data) => api.post(`/admin/approval-requests/${id}/approve`, data),
