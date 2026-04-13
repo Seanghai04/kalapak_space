@@ -11,10 +11,28 @@
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
           Delete {{ selectedIds.length }}
         </button>
-        <select v-model="storageProvider" class="input-field !py-2 !px-3 text-sm min-w-[140px]">
-          <option value="supabase">☁️ Supabase</option>
-          <option value="cloudinary">🌐 Cloudinary</option>
-        </select>
+        <!-- Single provider locked by super admin -->
+        <div v-if="allowedProviders !== 'both'" class="flex items-center gap-1.5 px-3 py-2 rounded-lg border bg-gray-50 dark:bg-dark-700 border-gray-200 dark:border-dark-600 text-xs text-gray-500 dark:text-gray-400">
+          <svg v-if="allowedProviders === 'supabase'" class="w-3.5 h-3.5 text-emerald-500" viewBox="0 0 109 113" fill="currentColor"><path d="M63.7 110.3c-2.6 3.1-7.8 3.1-10.4 0L2.5 49.2c-3.5-4.2-.3-10.4 5.2-10.4h100.6c5.5 0 8.7 6.2 5.2 10.4l-49.8 61.1z"/></svg>
+          <svg v-else class="w-3.5 h-3.5 text-blue-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          {{ allowedProviders === 'supabase' ? 'Supabase' : 'Cloudinary' }}
+          <span class="text-[10px] text-gray-400 ml-1">· Set by Super Admin</span>
+        </div>
+        <!-- Both allowed: toggle buttons -->
+        <div v-else class="flex items-center border border-gray-200 dark:border-dark-600 rounded-lg overflow-hidden">
+          <button type="button" @click="storageProvider = 'supabase'"
+            :class="storageProvider === 'supabase' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-dark-700'"
+            class="px-3 py-2 flex items-center gap-1.5 transition-colors text-xs font-medium">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 109 113" fill="currentColor"><path d="M63.7 110.3c-2.6 3.1-7.8 3.1-10.4 0L2.5 49.2c-3.5-4.2-.3-10.4 5.2-10.4h100.6c5.5 0 8.7 6.2 5.2 10.4l-49.8 61.1z"/></svg>
+            Supabase
+          </button>
+          <button type="button" @click="storageProvider = 'cloudinary'"
+            :class="storageProvider === 'cloudinary' ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-dark-700'"
+            class="px-3 py-2 flex items-center gap-1.5 transition-colors text-xs font-medium border-l border-gray-200 dark:border-dark-600">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Cloudinary
+          </button>
+        </div>
         <label v-if="authStore.canDo('media', 'create')" class="btn-primary cursor-pointer flex items-center gap-2 text-sm">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
           Upload Files
@@ -342,6 +360,7 @@ const uploadProgress = ref({ current: 0, total: 0 })
 const isDragging = ref(false)
 const storageProvider = ref(localStorage.getItem('media_storage_provider') || 'supabase')
 watch(storageProvider, (v) => localStorage.setItem('media_storage_provider', v))
+const allowedProviders = ref('both')
 const meta = ref({ current_page: 1, last_page: 1, total: 0 })
 
 let debounceTimer = null
@@ -488,5 +507,13 @@ async function bulkDelete() {
   selectedIds.value = []
 }
 
-onMounted(() => fetchMedia())
+onMounted(async () => {
+  try {
+    const { data } = await adminApi.getStorageSettings()
+    const allowed = data?.data?.allowed_storage_providers || 'both'
+    allowedProviders.value = allowed
+    if (allowed !== 'both') storageProvider.value = allowed
+  } catch { /* ignore */ }
+  fetchMedia()
+})
 </script>
