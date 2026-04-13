@@ -1,0 +1,44 @@
+name: Database Backup (GitHub & Telegram)
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Runs every midnight UTC
+  workflow_dispatch: # Allow manual trigger from GitHub Actions tab
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install PostgreSQL Client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Create Database Backup
+        run: |
+          filename="backup-$(date +'%Y-%m-%d-%H%M').sql"
+          pg_dump "${{ secrets.DB_URL }}" > "$filename"
+          echo "BACKUP_FILE=$filename" >> $GITHUB_ENV
+
+      - name: Push to Backup Repository
+        run: |
+          git config --global user.name "Khat Vanna"
+          git config --global user.email "vanna@kalapak.space"
+          git clone https://x-access-token:${{ secrets.BACKUP_REPO_TOKEN }}@github.com/khatvanna/kalapak-db-backups.git backup_repo
+          cp ${{ env.BACKUP_FILE }} backup_repo/
+          cd backup_repo
+          git add .
+          git commit -m "📦 Automated Backup: ${{ env.BACKUP_FILE }}"
+          git push
+
+      - name: Send Report and File to Telegram
+        run: |
+          curl -F document=@"${{ env.BACKUP_FILE }}" \
+               -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+               -F caption="✅ *Kalapak DB Backup Success\!*%0A📅 Date: $(date +'%Y-%m-%d %H:%M')%0A📦 File: ${{ env.BACKUP_FILE }}" \
+               -F parse_mode="MarkdownV2" \
+               "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument"
