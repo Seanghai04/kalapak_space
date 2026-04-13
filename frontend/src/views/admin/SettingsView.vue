@@ -72,8 +72,26 @@
                 <span v-if="fieldHint(setting.key)" class="text-xs font-normal text-gray-400">{{ fieldHint(setting.key) }}</span>
               </label>
 
+              <!-- Boolean Toggle -->
+              <div v-if="setting.type === 'boolean'" class="flex items-center gap-4">
+                <button
+                  type="button"
+                  @click="toggleBoolean(setting)"
+                  class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
+                  :class="isBoolTrue(setting.value) ? 'bg-brand-violet dark:bg-brand-cyan' : 'bg-gray-300 dark:bg-dark-500'"
+                >
+                  <span
+                    class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                    :class="isBoolTrue(setting.value) ? 'translate-x-5' : 'translate-x-0'"
+                  />
+                </button>
+                <span class="text-sm" :class="isBoolTrue(setting.value) ? 'text-brand-violet dark:text-brand-cyan font-medium' : 'text-gray-500 dark:text-gray-400'">
+                  {{ isBoolTrue(setting.value) ? 'Enabled' : 'Disabled' }}
+                </span>
+              </div>
+
               <!-- URL Fields -->
-              <div v-if="isUrlField(setting.key)" class="relative">
+              <div v-else-if="isUrlField(setting.key)" class="relative">
                 <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
                 </div>
@@ -160,6 +178,7 @@ function groupStyle(group) {
     general: { bg: 'bg-brand-violet/10 dark:bg-brand-violet/20', text: 'text-brand-violet' },
     social: { bg: 'bg-blue-500/10', text: 'text-blue-500' },
     seo: { bg: 'bg-green-500/10', text: 'text-green-500' },
+    permissions: { bg: 'bg-amber-500/10', text: 'text-amber-500' },
   }
   return styles[group] || { bg: 'bg-gray-100 dark:bg-dark-700', text: 'text-gray-500' }
 }
@@ -169,6 +188,7 @@ function groupDescription(group) {
     general: 'Basic site information like name, tagline, and description',
     social: 'Contact information and social media links',
     seo: 'Search engine optimization and meta tags',
+    permissions: 'Control what actions admins can perform without Super Admin approval',
   }
   return desc[group] || 'Configure settings for this section'
 }
@@ -199,6 +219,15 @@ function isTextareaField(key) {
 
 function markChanged() {
   hasChanges.value = true
+}
+
+function isBoolTrue(val) {
+  return val === true || val === 1 || val === '1' || val === 'true'
+}
+
+function toggleBoolean(setting) {
+  setting.value = isBoolTrue(setting.value) ? '0' : '1'
+  markChanged()
 }
 
 function resetChanges() {

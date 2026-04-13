@@ -67,6 +67,7 @@ const routes = [
       { path: 'activity-logs', name: 'admin-activity-logs', component: () => import('@/views/admin/ActivityLogsView.vue'), meta: { requiresSuperAdmin: true } },
       { path: 'roles', name: 'admin-roles', component: () => import('@/views/admin/RolesView.vue'), meta: { requiresSuperAdmin: true } },
       { path: 'tags', name: 'admin-tags', component: () => import('@/views/admin/TagsView.vue') },
+      { path: 'approval-requests', name: 'admin-approval-requests', component: () => import('@/views/admin/ApprovalRequestsView.vue'), meta: { requiresSuperAdmin: true } },
     ],
   },
   // 404

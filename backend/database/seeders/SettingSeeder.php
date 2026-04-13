@@ -18,6 +18,7 @@ class SettingSeeder extends Seeder
             ['key' => 'telegram_url', 'value' => 'https://t.me/kalapakteam', 'type' => 'string', 'group' => 'social'],
             ['key' => 'meta_title', 'value' => 'Kalapak Code Team | Coding the Universe', 'type' => 'string', 'group' => 'seo'],
             ['key' => 'meta_description', 'value' => 'Full-Stack · AI · Cloud · Mobile — Building the Future from Cambodia', 'type' => 'string', 'group' => 'seo'],
+            ['key' => 'admin_direct_action', 'value' => '1', 'type' => 'boolean', 'group' => 'permissions'],
         ];
 
         foreach ($settings as $setting) {

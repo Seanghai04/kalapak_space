@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\ApprovalRequestController;
 use App\Http\Controllers\Admin\SearchController;
 use App\Http\Controllers\Admin\StorageStatsController;
 use App\Models\Tag;
@@ -228,6 +229,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
             // Storage Stats
             Route::get('/storage-stats', [StorageStatsController::class, 'index']);
             Route::post('/storage-stats/refresh', [StorageStatsController::class, 'refresh']);
+
+            // Approval Requests
+            Route::get('/approval-requests', [ApprovalRequestController::class, 'index']);
+            Route::post('/approval-requests/{id}/approve', [ApprovalRequestController::class, 'approve']);
+            Route::post('/approval-requests/{id}/reject', [ApprovalRequestController::class, 'reject']);
         }); // end superadmin
     }); // end admin
 }); // end auth:sanctum

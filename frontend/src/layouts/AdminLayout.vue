@@ -427,11 +427,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
 import { useNotificationStore } from '@/stores/notifications'
+import { adminApi } from '@/services/api'
 import ThemeToggle from '@/components/common/ThemeToggle.vue'
 import SearchModal from '@/components/admin/AdminSearchModal.vue'
 import {
@@ -444,6 +445,7 @@ import {
   PhotoIcon,
   CogIcon,
   ClipboardDocumentListIcon,
+  ClipboardDocumentCheckIcon,
   ShieldCheckIcon,
   InboxStackIcon,
   TagIcon,
@@ -462,6 +464,15 @@ const notifDropdownRef = ref(null)
 const notifOpen = ref(false)
 const sidebarCollapsed = ref(false)
 const searchOpen = ref(false)
+const pendingApprovalsCount = ref(0)
+
+async function fetchPendingApprovals() {
+  if (!authStore.isSuperAdmin) return
+  try {
+    const { data } = await adminApi.getApprovalRequests({ status: 'pending' })
+    pendingApprovalsCount.value = data.meta?.total || 0
+  } catch {}
+}
 
 // ── Navigation groups ──
 const mainNavItems = [
@@ -480,11 +491,19 @@ const contentNavItems = [
   { label: 'Applications', to: '/admin/applications', routeName: 'admin-applications', icon: InboxStackIcon },
 ]
 
-const systemNavItems = [
+const systemNavItems = computed(() => [
   { label: 'Roles', to: '/admin/roles', routeName: 'admin-roles', icon: ShieldCheckIcon },
   { label: 'Settings', to: '/admin/settings', routeName: 'admin-settings', icon: CogIcon },
   { label: 'Activity Logs', to: '/admin/activity-logs', routeName: 'admin-activity-logs', icon: ClipboardDocumentListIcon },
-]
+  {
+    label: 'Approval Requests',
+    to: '/admin/approval-requests',
+    routeName: 'admin-approval-requests',
+    icon: ClipboardDocumentCheckIcon,
+    badge: pendingApprovalsCount.value || null,
+    badgeColor: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400',
+  },
+])
 
 function isNavActive(item) {
   if (item.routeName === 'admin-dashboard') {
@@ -555,6 +574,7 @@ function handleSearchKeydown(e) {
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
   document.addEventListener('keydown', handleSearchKeydown)
+  fetchPendingApprovals()
 })
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
