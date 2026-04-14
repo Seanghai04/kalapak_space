@@ -55,7 +55,7 @@ async function handleSubmit() {
     await authApi.forgotPassword({ email: email.value, turnstile_token: turnstileToken.value })
     sent.value = true
   } catch (e) {
-    error.value = e.response?.data?.debug || e.response?.data?.message || 'Failed to send reset link'
+    error.value = e.response?.data?.message || 'Failed to send reset link'
     // Reset the CAPTCHA so the user can re-verify
     turnstileToken.value = ''
   } finally {
