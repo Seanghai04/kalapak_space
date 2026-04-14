@@ -22,7 +22,7 @@ class PasswordResetController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to send reset email. Please try again later.',
-                'debug' => app()->isLocal() ? $e->getMessage() : null,
+                'debug' => $e->getMessage(),
             ], 500);
         }
 
