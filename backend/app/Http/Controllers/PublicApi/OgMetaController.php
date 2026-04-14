@@ -26,9 +26,7 @@ class OgMetaController extends Controller
 
         $title = e($post->title);
         $description = e($post->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($post->content), 200));
-        $image = $post->cover_image
-            ? app(SupabaseStorage::class)->url($post->cover_image)
-            : self::FALLBACK_IMAGE;
+        $image = $this->resolveOgImage($post);
         $url = $baseUrl . '/blog/' . $post->slug;
         $authorName = $post->author ? e($post->author->name) : 'Kalapak Code Team';
         $publishedAt = $post->published_at ? $post->published_at->toIso8601String() : '';
@@ -70,6 +68,31 @@ class OgMetaController extends Controller
 HTML;
 
         return response($html, 200)->header('Content-Type', 'text/html; charset=UTF-8');
+    }
+
+    /**
+     * Resolve the OG image URL for a blog post.
+     * - Cloudinary posts: apply c_fill,w_1200,h_630,g_auto transformation for proper OG dimensions.
+     * - Supabase posts: return the public URL as-is.
+     * - No cover image: return the branded fallback.
+     */
+    private function resolveOgImage(BlogPost $post): string
+    {
+        if (!$post->cover_image) {
+            return self::FALLBACK_IMAGE;
+        }
+
+        if (($post->storage_provider ?? 'supabase') === 'cloudinary') {
+            // cover_image is already a full Cloudinary URL; inject OG transformation
+            return preg_replace(
+                '#/upload/#',
+                '/upload/c_fill,w_1200,h_630,g_auto,q_auto,f_jpg/',
+                $post->cover_image,
+                1
+            ) ?: $post->cover_image;
+        }
+
+        return app(SupabaseStorage::class)->url($post->cover_image);
     }
 
     private function fallbackHtml(string $baseUrl): Response
