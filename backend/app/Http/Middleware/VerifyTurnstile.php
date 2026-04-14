@@ -19,30 +19,26 @@ class VerifyTurnstile
 
         $token = $request->input('turnstile_token');
 
+        // If no token provided, fail open (widget may not have loaded)
         if (empty($token)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'CAPTCHA verification is required.',
-            ], 422);
+            return $next($request);
         }
 
-        $response = null;
         try {
             $response = Http::timeout(5)->asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
                 'secret' => $secret,
                 'response' => $token,
                 'remoteip' => $request->ip(),
             ]);
+
+            if (!$response->json('success')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'CAPTCHA verification failed. Please try again.',
+                ], 422);
+            }
         } catch (\Exception $e) {
             // Cloudflare unreachable — fail open to not block users
-            return $next($request);
-        }
-
-        if (!$response->json('success')) {
-            return response()->json([
-                'success' => false,
-                'message' => 'CAPTCHA verification failed. Please try again.',
-            ], 422);
         }
 
         return $next($request);

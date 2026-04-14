@@ -24,6 +24,7 @@
         <span v-if="loading">Sending...</span>
         <span v-else>Send Reset Link</span>
       </button>
+      <p v-if="!turnstileToken" class="text-xs text-center text-gray-400">Waiting for CAPTCHA verification…</p>
       <p v-if="error" class="text-sm text-red-500 text-center">{{ error }}</p>
     </form>
 
