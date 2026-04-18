@@ -29,15 +29,14 @@
               v-for="link in navLinks"
               :key="link.name"
               :to="link.to"
-              class="nav-link relative px-4 py-2 rounded-xl text-[13px] font-semibold tracking-wide transition-all duration-300"
+              class="nav-link relative px-3 py-1.5 rounded-xl text-[12.5px] font-semibold tracking-wide transition-all duration-300 whitespace-nowrap"
               :class="[
                 isActive(link.name)
                   ? 'nav-link-active text-white shadow-md shadow-brand-violet/25 dark:shadow-brand-cyan/25'
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
               ]"
             >
-              <span class="relative z-10 flex items-center gap-1.5">
-                <component :is="link.icon" class="w-3.5 h-3.5" />
+              <span class="relative z-10">
                 {{ link.label }}
               </span>
               <!-- Active pill background -->
@@ -560,7 +559,7 @@ onUnmounted(() => {
 
 const navLinks = [
   { name: 'home', to: '/', label: 'Home', icon: IconHome },
-  { name: 'about', to: '/about', label: 'About Us', icon: IconAbout },
+  { name: 'about', to: '/about', label: 'About', icon: IconAbout },
   { name: 'projects', to: '/projects', label: 'Portfolio', icon: IconPortfolio },
   { name: 'blog', to: '/blog', label: 'Insights', icon: IconBlog },
   { name: 'join', to: '/join', label: 'Careers', icon: IconCareers },
