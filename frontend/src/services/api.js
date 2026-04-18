@@ -63,6 +63,8 @@ export const publicApi = {
   getTags: () => api.get('/tags'),
   getSettings: () => api.get('/settings/public'),
   sendContact: (data) => api.post('/contact', data),
+  getDocs: () => api.get('/docs'),
+  getDoc: (slug) => api.get(`/docs/${slug}`),
 }
 
 export const memberApi = {
@@ -181,6 +183,13 @@ export const adminApi = {
   deleteTag: (id) => api.delete(`/admin/tags/${id}`),
 
   search: (params) => api.get('/admin/search', { params }),
+
+  getDocs: (params) => api.get('/admin/docs', { params }),
+  getDoc: (id) => api.get(`/admin/docs/${id}`),
+  createDoc: (data) => api.post('/admin/docs', data),
+  updateDoc: (id, data) => api.put(`/admin/docs/${id}`, data),
+  deleteDoc: (id) => api.delete(`/admin/docs/${id}`),
+  getDocCategories: () => api.get('/admin/docs/categories'),
 }
 
 export default api

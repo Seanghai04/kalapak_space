@@ -17,6 +17,7 @@ const routes = [
       { path: 'contact', name: 'contact', component: () => import('@/views/public/ContactView.vue'), meta: { title: 'Contact – Kalapak Code Team' } },
       { path: 'privacy', name: 'privacy', component: () => import('@/views/public/PrivacyPolicyView.vue'), meta: { title: 'Privacy Policy – Kalapak Code Team' } },
       { path: 'terms', name: 'terms', component: () => import('@/views/public/TermsOfServiceView.vue'), meta: { title: 'Terms of Service – Kalapak Code Team' } },
+      { path: 'docs', name: 'docs', component: () => import('@/views/public/DocsView.vue'), meta: { title: 'Docs – Kalapak Code Team' } },
     ],
   },
   // Auth
@@ -68,6 +69,9 @@ const routes = [
       { path: 'roles', name: 'admin-roles', component: () => import('@/views/admin/RolesView.vue'), meta: { requiresSuperAdmin: true } },
       { path: 'tags', name: 'admin-tags', component: () => import('@/views/admin/TagsView.vue') },
       { path: 'approval-requests', name: 'admin-approval-requests', component: () => import('@/views/admin/ApprovalRequestsView.vue'), meta: { requiresSuperAdmin: true } },
+      { path: 'docs', name: 'admin-docs', component: () => import('@/views/admin/DocsView.vue') },
+      { path: 'docs/create', name: 'admin-docs-create', component: () => import('@/views/admin/DocFormView.vue') },
+      { path: 'docs/:id/edit', name: 'admin-docs-edit', component: () => import('@/views/admin/DocFormView.vue') },
     ],
   },
   // 404

@@ -26,6 +26,8 @@ use App\Http\Controllers\Admin\ApprovalRequestController;
 use App\Http\Controllers\Admin\UserPermissionController;
 use App\Http\Controllers\Admin\SearchController;
 use App\Http\Controllers\Admin\StorageStatsController;
+use App\Http\Controllers\Admin\DocController;
+use App\Http\Controllers\PublicApi\DocController as PublicDocController;
 use App\Models\Tag;
 use App\Models\TeamMember;
 use App\Http\Resources\TeamMemberResource;
@@ -65,6 +67,10 @@ Route::get('/projects/{slug}', [ProjectController::class, 'show']);
 Route::get('/blog/posts', [BlogController::class, 'index']);
 Route::get('/blog/posts/{slug}', [BlogController::class, 'show']);
 Route::get('/blog/categories', [BlogController::class, 'categories']);
+
+// Docs (public)
+Route::get('/docs', [PublicDocController::class, 'index']);
+Route::get('/docs/{slug}', [PublicDocController::class, 'show']);
 
 // OG Meta: Dynamic Open Graph tags for social media crawlers
 Route::get('/og/blog/{slug}', [OgMetaController::class, 'blogPost']);
@@ -209,6 +215,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/media', [MediaController::class, 'index']);
         Route::post('/media/upload', [MediaController::class, 'upload']);
         Route::delete('/media/{id}', [MediaController::class, 'destroy']);
+
+        // Docs (admin + superadmin)
+        Route::get('/docs', [DocController::class, 'index']);
+        Route::post('/docs', [DocController::class, 'store']);
+        Route::get('/docs/categories', [DocController::class, 'categories']);
+        Route::get('/docs/{id}', [DocController::class, 'show']);
+        Route::put('/docs/{id}', [DocController::class, 'update']);
+        Route::delete('/docs/{id}', [DocController::class, 'destroy']);
 
         // Search (admin + superadmin)
         Route::get('/search', [SearchController::class, 'search']);
