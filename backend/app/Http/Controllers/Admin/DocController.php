@@ -13,43 +13,51 @@ class DocController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Doc::with('author');
+        try {
+            $query = Doc::with('author');
 
-        if ($search = $request->get('search')) {
-            $query->where('title', 'ilike', "%{$search}%");
+            if ($search = $request->get('search')) {
+                $query->where('title', 'ilike', "%{$search}%");
+            }
+
+            if ($status = $request->get('status')) {
+                $query->where('status', $status);
+            }
+
+            if ($category = $request->get('category')) {
+                $query->where('category', $category);
+            }
+
+            $docs = $query->orderBy('category')->orderBy('order_num')->orderByDesc('created_at')->paginate(20);
+
+            return response()->json([
+                'success' => true,
+                'data' => $docs->items(),
+                'meta' => [
+                    'current_page' => $docs->currentPage(),
+                    'last_page' => $docs->lastPage(),
+                    'per_page' => $docs->perPage(),
+                    'total' => $docs->total(),
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
-
-        if ($status = $request->get('status')) {
-            $query->where('status', $status);
-        }
-
-        if ($category = $request->get('category')) {
-            $query->where('category', $category);
-        }
-
-        $docs = $query->orderBy('category')->orderBy('order_num')->orderByDesc('created_at')->paginate(20);
-
-        return response()->json([
-            'success' => true,
-            'data' => $docs->items(),
-            'meta' => [
-                'current_page' => $docs->currentPage(),
-                'last_page' => $docs->lastPage(),
-                'per_page' => $docs->perPage(),
-                'total' => $docs->total(),
-            ],
-        ]);
     }
 
     // Returns a flat list of all docs (id, title, slug, parent_id) for parent-page selectors
     public function all(): JsonResponse
     {
-        $docs = Doc::select('id', 'title', 'slug', 'parent_id', 'category')
-            ->orderBy('category')
-            ->orderBy('order_num')
-            ->get();
+        try {
+            $docs = Doc::select('id', 'title', 'slug', 'parent_id', 'category')
+                ->orderBy('category')
+                ->orderBy('order_num')
+                ->get();
 
-        return response()->json(['success' => true, 'data' => $docs]);
+            return response()->json(['success' => true, 'data' => $docs]);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     public function store(Request $request): JsonResponse
