@@ -37,19 +37,33 @@ use Illuminate\Support\Facades\Route;
 
 // TEMP: Quick deploy probe — remove after diagnosis
 Route::get('/probe', function () {
+    $results = ['deployed_at' => now()->toISOString()];
     try {
-        $hasDocs = \Illuminate\Support\Facades\Schema::hasTable('docs');
-        $hasDocSections = \Illuminate\Support\Facades\Schema::hasTable('doc_sections');
-        $docCount = $hasDocs ? \App\Models\Doc::count() : null;
-        return response()->json([
-            'deployed_at' => now()->toISOString(),
-            'docs_table' => $hasDocs,
-            'doc_sections_table' => $hasDocSections,
-            'doc_count' => $docCount,
-        ]);
+        $results['docs_table'] = \Illuminate\Support\Facades\Schema::hasTable('docs');
+        $results['doc_sections_table'] = \Illuminate\Support\Facades\Schema::hasTable('doc_sections');
     } catch (\Throwable $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
+        $results['schema_error'] = $e->getMessage();
     }
+    try {
+        $results['doc_count'] = \App\Models\Doc::count();
+    } catch (\Throwable $e) {
+        $results['count_error'] = ['msg' => $e->getMessage(), 'class' => get_class($e)];
+    }
+    try {
+        $docs = \App\Models\Doc::with('author')->orderBy('category')->orderBy('order_num')->orderByDesc('created_at')->paginate(20);
+        $results['paginate_test'] = 'ok';
+        $results['paginate_total'] = $docs->total();
+    } catch (\Throwable $e) {
+        $results['paginate_error'] = ['msg' => $e->getMessage(), 'class' => get_class($e), 'file' => basename($e->getFile()), 'line' => $e->getLine()];
+    }
+    try {
+        $all = \App\Models\Doc::select('id', 'title', 'slug', 'parent_id', 'category')->orderBy('category')->orderBy('order_num')->get();
+        $results['all_test'] = 'ok';
+        $results['all_count'] = $all->count();
+    } catch (\Throwable $e) {
+        $results['all_error'] = ['msg' => $e->getMessage(), 'class' => get_class($e), 'file' => basename($e->getFile()), 'line' => $e->getLine()];
+    }
+    return response()->json($results);
 });
 
 // Auth
