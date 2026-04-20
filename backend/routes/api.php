@@ -35,6 +35,23 @@ use Illuminate\Support\Facades\Route;
 
 // ── PUBLIC ROUTES ─────────────────────────────────────
 
+// TEMP: Quick deploy probe — remove after diagnosis
+Route::get('/probe', function () {
+    try {
+        $hasDocs = \Illuminate\Support\Facades\Schema::hasTable('docs');
+        $hasDocSections = \Illuminate\Support\Facades\Schema::hasTable('doc_sections');
+        $docCount = $hasDocs ? \App\Models\Doc::count() : null;
+        return response()->json([
+            'deployed_at' => now()->toISOString(),
+            'docs_table' => $hasDocs,
+            'doc_sections_table' => $hasDocSections,
+            'doc_count' => $docCount,
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+});
+
 // Auth
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
