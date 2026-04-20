@@ -100,13 +100,6 @@ class DocController extends Controller
                 'data' => $doc->load(['author', 'sections']),
                 'message' => 'Doc created successfully.',
             ], 201);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            throw $e; // let Laravel handle validation errors normally
-        } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => '[DEBUG] ' . get_class($e) . ': ' . $e->getMessage() . ' in ' . basename($e->getFile()) . ':' . $e->getLine(),
-            ], 500);
         }
     }
 

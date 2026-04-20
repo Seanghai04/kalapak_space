@@ -35,37 +35,6 @@ use Illuminate\Support\Facades\Route;
 
 // ── PUBLIC ROUTES ─────────────────────────────────────
 
-// TEMP: Quick deploy probe — remove after diagnosis
-Route::get('/probe', function () {
-    $results = ['deployed_at' => now()->toISOString()];
-    try {
-        $results['docs_table'] = \Illuminate\Support\Facades\Schema::hasTable('docs');
-        $results['doc_sections_table'] = \Illuminate\Support\Facades\Schema::hasTable('doc_sections');
-    } catch (\Throwable $e) {
-        $results['schema_error'] = $e->getMessage();
-    }
-    try {
-        $results['doc_count'] = \App\Models\Doc::count();
-    } catch (\Throwable $e) {
-        $results['count_error'] = ['msg' => $e->getMessage(), 'class' => get_class($e)];
-    }
-    try {
-        $docs = \App\Models\Doc::with('author')->orderBy('category')->orderBy('order_num')->orderByDesc('created_at')->paginate(20);
-        $results['paginate_test'] = 'ok';
-        $results['paginate_total'] = $docs->total();
-    } catch (\Throwable $e) {
-        $results['paginate_error'] = ['msg' => $e->getMessage(), 'class' => get_class($e), 'file' => basename($e->getFile()), 'line' => $e->getLine()];
-    }
-    try {
-        $all = \App\Models\Doc::select('id', 'title', 'slug', 'parent_id', 'category')->orderBy('category')->orderBy('order_num')->get();
-        $results['all_test'] = 'ok';
-        $results['all_count'] = $all->count();
-    } catch (\Throwable $e) {
-        $results['all_error'] = ['msg' => $e->getMessage(), 'class' => get_class($e), 'file' => basename($e->getFile()), 'line' => $e->getLine()];
-    }
-    return response()->json($results);
-});
-
 // Auth
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
