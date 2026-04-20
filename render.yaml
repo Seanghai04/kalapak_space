@@ -135,7 +135,9 @@ services:
     plan: free
     envVars:
       - key: BACKEND_URL
-        value: https://kalapakspace-backend.onrender.com
+        value: https://kalapakspace-backends.onrender.com
+      - key: VITE_API_URL
+        value: https://kalapakspace-backends.onrender.com/api
 
 # -------------------------------------------------
 # PostgreSQL Database
