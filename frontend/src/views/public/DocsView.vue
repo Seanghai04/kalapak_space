@@ -27,49 +27,76 @@
         </div>
 
         <nav v-else>
-          <div v-for="(items, category) in filteredDocs" :key="category" class="mb-4">
+          <div v-for="mainMenu in filteredNavTree" :key="mainMenu.id" class="mb-4">
+            <!-- Main Menu header (collapsible) -->
             <button
-              @click="toggleCategory(category)"
+              @click="toggleMenu(mainMenu.id)"
               class="w-full flex items-center justify-between px-2 mb-2 group"
             >
-              <span class="text-[11px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">{{ category }}</span>
+              <span class="text-[11px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">{{ mainMenu.name }}</span>
               <svg
                 class="w-3 h-3 text-gray-400 dark:text-gray-500 transition-transform duration-200"
-                :class="collapsedCategories.has(category) ? '' : '-rotate-90'"
+                :class="collapsedMenus.has(mainMenu.id) ? '' : '-rotate-90'"
                 fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"
               ><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
-            <ul v-show="collapsedCategories.has(category)" class="space-y-0.5">
-              <li v-for="page in items" :key="page.slug">
-                <!-- Top-level page -->
-                <button
-                  @click="loadDoc(page.slug)"
-                  class="w-full text-left px-3 py-1.5 rounded-lg text-[13.5px] transition-colors duration-150"
-                  :class="currentSlug === page.slug
-                    ? 'bg-brand-violet/10 dark:bg-brand-cyan/10 text-brand-violet dark:text-brand-cyan font-semibold border-l-2 border-brand-violet dark:border-brand-cyan'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/[0.04]'"
-                >
-                  {{ page.title }}
-                </button>
-                <!-- Subpages (indented) -->
-                <ul v-if="page.children && page.children.length" class="mt-0.5 ml-3 pl-3 border-l border-gray-200 dark:border-white/[0.07] space-y-0.5">
-                  <li v-for="sub in page.children" :key="sub.slug">
+
+            <div v-show="collapsedMenus.has(mainMenu.id)">
+              <!-- Direct pages of main menu (no sub-menu) -->
+              <ul v-if="mainMenu.pages?.length" class="space-y-0.5 mb-1">
+                <li v-for="page in mainMenu.pages" :key="page.slug">
+                  <button
+                    @click="loadDoc(page.slug)"
+                    class="w-full text-left px-3 py-1.5 rounded-lg text-[13.5px] transition-colors duration-150"
+                    :class="currentSlug === page.slug
+                      ? 'bg-brand-violet/10 dark:bg-brand-cyan/10 text-brand-violet dark:text-brand-cyan font-semibold border-l-2 border-brand-violet dark:border-brand-cyan'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/[0.04]'"
+                  >{{ page.title }}</button>
+                  <ul v-if="page.children?.length" class="mt-0.5 ml-3 pl-3 border-l border-gray-200 dark:border-white/[0.07] space-y-0.5">
+                    <li v-for="sub in page.children" :key="sub.slug">
+                      <button
+                        @click="loadDoc(sub.slug)"
+                        class="w-full text-left px-2 py-1.5 rounded-lg text-[13px] transition-colors duration-150"
+                        :class="currentSlug === sub.slug
+                          ? 'bg-brand-violet/10 dark:bg-brand-cyan/10 text-brand-violet dark:text-brand-cyan font-semibold border-l-2 border-brand-violet dark:border-brand-cyan'
+                          : 'text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/[0.04]'"
+                      >{{ sub.title }}</button>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+
+              <!-- Sub-menus with their pages -->
+              <div v-for="subMenu in mainMenu.children" :key="subMenu.id" class="mb-2">
+                <p class="px-3 pt-1 pb-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">{{ subMenu.name }}</p>
+                <ul class="space-y-0.5">
+                  <li v-for="page in subMenu.pages" :key="page.slug">
                     <button
-                      @click="loadDoc(sub.slug)"
-                      class="w-full text-left px-2 py-1.5 rounded-lg text-[13px] transition-colors duration-150"
-                      :class="currentSlug === sub.slug
+                      @click="loadDoc(page.slug)"
+                      class="w-full text-left px-3 py-1.5 rounded-lg text-[13.5px] transition-colors duration-150"
+                      :class="currentSlug === page.slug
                         ? 'bg-brand-violet/10 dark:bg-brand-cyan/10 text-brand-violet dark:text-brand-cyan font-semibold border-l-2 border-brand-violet dark:border-brand-cyan'
-                        : 'text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/[0.04]'"
-                    >
-                      {{ sub.title }}
-                    </button>
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/[0.04]'"
+                    >{{ page.title }}</button>
+                    <!-- Subpages (indented under page) -->
+                    <ul v-if="page.children?.length" class="mt-0.5 ml-3 pl-3 border-l border-gray-200 dark:border-white/[0.07] space-y-0.5">
+                      <li v-for="sub in page.children" :key="sub.slug">
+                        <button
+                          @click="loadDoc(sub.slug)"
+                          class="w-full text-left px-2 py-1.5 rounded-lg text-[13px] transition-colors duration-150"
+                          :class="currentSlug === sub.slug
+                            ? 'bg-brand-violet/10 dark:bg-brand-cyan/10 text-brand-violet dark:text-brand-cyan font-semibold border-l-2 border-brand-violet dark:border-brand-cyan'
+                            : 'text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/[0.04]'"
+                        >{{ sub.title }}</button>
+                      </li>
+                    </ul>
                   </li>
                 </ul>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
 
-          <div v-if="Object.keys(filteredDocs).length === 0 && !loading" class="text-center py-8 text-sm text-gray-400">
+          <div v-if="filteredNavTree.length === 0 && !loading" class="text-center py-8 text-sm text-gray-400">
             No docs found.
           </div>
         </nav>
@@ -250,7 +277,7 @@ function renderContent(content) {
 const route = useRoute()
 const router = useRouter()
 
-const allDocs = ref({})
+const navTree = ref([])
 const loading = ref(true)
 const currentDoc = ref(null)
 const docLoading = ref(false)
@@ -259,45 +286,47 @@ const searchQuery = ref('')
 const sidebarOpen = ref(false)
 const tocItems = ref([])
 const activeToc = ref('')
-const collapsedCategories = ref(new Set())
+const collapsedMenus = ref(new Set())
 
-function toggleCategory(cat) {
-  if (collapsedCategories.value.has(cat)) {
-    collapsedCategories.value.delete(cat)
+function toggleMenu(id) {
+  if (collapsedMenus.value.has(id)) {
+    collapsedMenus.value.delete(id)
   } else {
-    collapsedCategories.value.add(cat)
+    collapsedMenus.value.add(id)
   }
-  // trigger reactivity
-  collapsedCategories.value = new Set(collapsedCategories.value)
+  collapsedMenus.value = new Set(collapsedMenus.value)
 }
 
-// Flat ordered list (pages then their children)
+// Flat ordered list of all pages (for prev/next navigation)
 const flatDocs = computed(() => {
   const list = []
-  for (const items of Object.values(allDocs.value)) {
-    for (const page of items) {
+  for (const mainMenu of navTree.value) {
+    for (const page of (mainMenu.pages || [])) {
       list.push(page)
-      if (page.children && page.children.length) {
-        list.push(...page.children)
+      for (const sub of (page.children || [])) list.push(sub)
+    }
+    for (const subMenu of (mainMenu.children || [])) {
+      for (const page of (subMenu.pages || [])) {
+        list.push(page)
+        for (const sub of (page.children || [])) list.push(sub)
       }
     }
   }
   return list
 })
 
-const filteredDocs = computed(() => {
-  if (!searchQuery.value.trim()) return allDocs.value
+const filteredNavTree = computed(() => {
+  if (!searchQuery.value.trim()) return navTree.value
   const q = searchQuery.value.toLowerCase()
-  const result = {}
-  for (const [cat, items] of Object.entries(allDocs.value)) {
-    const filtered = items.filter(page => {
-      if (page.title.toLowerCase().includes(q)) return true
-      if (page.children) return page.children.some(s => s.title.toLowerCase().includes(q))
-      return false
-    })
-    if (filtered.length) result[cat] = filtered
-  }
-  return result
+  const matchPage = (p) => p.title.toLowerCase().includes(q) || (p.children || []).some(c => c.title.toLowerCase().includes(q))
+  return navTree.value.map(mainMenu => ({
+    ...mainMenu,
+    pages: (mainMenu.pages || []).filter(matchPage),
+    children: (mainMenu.children || []).map(sub => ({
+      ...sub,
+      pages: (sub.pages || []).filter(matchPage),
+    })).filter(sub => sub.pages.length > 0),
+  })).filter(m => m.pages.length > 0 || m.children.length > 0)
 })
 
 const prevDoc = computed(() => {
@@ -313,13 +342,14 @@ const nextDoc = computed(() => {
 async function fetchAllDocs() {
   try {
     loading.value = true
-    const { data } = await publicApi.getDocs()
-    allDocs.value = data.data || {}
-    // Only expand the first category by default
-    const cats = Object.keys(allDocs.value)
-    collapsedCategories.value = new Set(cats.slice(0, 1))
+    const { data } = await publicApi.getDocsNav()
+    navTree.value = data.data || []
+    // Expand first main menu by default
+    if (navTree.value.length > 0) {
+      collapsedMenus.value = new Set([navTree.value[0].id])
+    }
   } catch {
-    allDocs.value = {}
+    navTree.value = []
   } finally {
     loading.value = false
   }
@@ -573,6 +603,21 @@ onUnmounted(() => {
   font-size: 0.875rem;
   line-height: 1.7;
   margin-bottom: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #30363d #161b22;
+}
+.prose-doc :deep(pre)::-webkit-scrollbar {
+  height: 6px;
+}
+.prose-doc :deep(pre)::-webkit-scrollbar-track {
+  background: #161b22;
+}
+.prose-doc :deep(pre)::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 3px;
+}
+.prose-doc :deep(pre)::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
 }
 
 .prose-doc :deep(pre code.hljs) {
@@ -651,57 +696,4 @@ onUnmounted(() => {
 }
 </style>
 
-<!-- Global styles for dynamically injected elements (copy button, wrapper) -->
-<style>
-.code-block-wrapper {
-  margin-bottom: 1.5rem;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid #30363d;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-}
-
-.code-block-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 1rem;
-  background: #161b22;
-  border-bottom: 1px solid #30363d;
-}
-
-.code-block-lang {
-  font-size: 0.72rem;
-  font-family: ui-monospace, monospace;
-  color: #8b949e;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.copy-code-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.3rem 0.7rem;
-  font-size: 0.72rem;
-  font-family: ui-sans-serif, system-ui, sans-serif;
-  font-weight: 500;
-  color: #8b949e;
-  background: #21262d;
-  border: 1px solid #30363d;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  line-height: 1;
-}
-.copy-code-btn:hover {
-  background: #30363d;
-  color: #c9d1d9;
-  border-color: #8b949e;
-}
-.copy-code-btn.copied {
-  color: #3fb950;
-  border-color: rgba(63,185,80,0.4);
-  background: rgba(63,185,80,0.08);
-}
-</style>
+<!-- Code block styles are in main.css (global) -->

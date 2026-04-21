@@ -174,21 +174,96 @@
               </div>
             </div>
 
-            <!-- Category -->
+            <!-- Category (multi-select chips) -->
             <div>
-              <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">Category <span class="text-red-400">*</span></label>
-              <input
-                v-model="form.category"
-                type="text"
-                list="category-list"
-                required
-                class="input-field"
-                placeholder="e.g. Getting Started"
-              />
-              <datalist id="category-list">
-                <option v-for="cat in categories" :key="cat" :value="cat" />
-              </datalist>
-              <p class="text-[10px] text-gray-400 mt-1">Groups pages in the sidebar.</p>
+              <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">Category</label>
+
+              <!-- Selected chips -->
+              <div class="flex flex-wrap gap-1.5 mb-2" v-if="form.categories.length">
+                <span
+                  v-for="cat in form.categories" :key="cat"
+                  class="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-0.5 rounded-full text-xs font-semibold
+                         bg-brand-violet/15 dark:bg-brand-cyan/15 text-brand-violet dark:text-brand-cyan"
+                >
+                  {{ cat }}
+                  <button type="button" @click="removeCategory(cat)"
+                    class="w-4 h-4 rounded-full flex items-center justify-center hover:bg-brand-violet/20 dark:hover:bg-brand-cyan/20 transition-colors">
+                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                  </button>
+                </span>
+              </div>
+
+              <!-- Dropdown to add categories -->
+              <div class="relative" ref="catDropdownRef">
+                <div
+                  class="input-field flex items-center gap-2 cursor-pointer select-none"
+                  @click="catOpen = !catOpen"
+                >
+                  <span class="flex-1 text-sm" :class="form.categories.length ? 'text-gray-400 dark:text-gray-500' : 'text-gray-400'">
+                    {{ form.categories.length ? 'Add more...' : 'Select categories...' }}
+                  </span>
+                  <svg class="w-4 h-4 text-gray-400 shrink-0 transition-transform" :class="catOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                  </svg>
+                </div>
+
+                <div v-if="catOpen"
+                  class="absolute z-20 w-full mt-1 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-600 rounded-xl shadow-xl overflow-hidden">
+                  <!-- Existing categories -->
+                  <div class="max-h-40 overflow-y-auto">
+                    <button
+                      v-for="cat in categories" :key="cat.name"
+                      type="button"
+                      @click="toggleCategory(cat.name)"
+                      class="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50 dark:hover:bg-white/[0.04] transition-colors"
+                      :class="form.categories.includes(cat.name) ? 'text-brand-violet dark:text-brand-cyan font-semibold' : 'text-gray-700 dark:text-gray-300'"
+                    >
+                      <svg v-if="form.categories.includes(cat.name)" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                      </svg>
+                      <span v-else class="w-3.5 h-3.5 shrink-0" />
+                      {{ cat.name }}
+                    </button>
+                    <p v-if="!categories.length" class="px-3 py-2 text-xs text-gray-400">No categories yet.</p>
+                  </div>
+                  <!-- New category input -->
+                  <div class="border-t border-gray-100 dark:border-dark-700 p-2">
+                    <div class="flex gap-2">
+                      <input
+                        v-model="newCatInput"
+                        @keydown.enter.prevent="addNewCategory"
+                        type="text"
+                        placeholder="New category name..."
+                        class="flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-dark-600 bg-transparent outline-none focus:border-brand-violet dark:focus:border-brand-cyan text-gray-800 dark:text-gray-200"
+                      />
+                      <button type="button" @click="addNewCategory"
+                        class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-brand-violet/10 dark:bg-brand-cyan/10 text-brand-violet dark:text-brand-cyan hover:bg-brand-violet/20 dark:hover:bg-brand-cyan/20 transition-colors">
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="text-[10px] text-gray-400 mt-1">Choose one or more categories.</p>
+            </div>
+
+            <!-- Menu -->
+            <div>
+              <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">
+                Menu <span class="text-red-400">*</span>
+              </label>
+              <select v-model.number="form.doc_menu_id" required class="input-field">
+                <option :value="null" disabled>-- Select a menu --</option>
+                <option v-for="menu in menus" :key="menu.id" :value="menu.id">
+                  {{ menu.parent_id ? '\u00a0\u00a0\u2514 ' + menu.name : menu.name }}
+                </option>
+              </select>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-[10px] text-gray-400">Groups pages in the sidebar.</p>
+                <router-link :to="{ name: 'admin-doc-menus' }" class="text-[10px] text-brand-violet dark:text-brand-cyan hover:underline">Manage menus</router-link>
+              </div>
             </div>
 
             <!-- Parent Page -->
@@ -267,26 +342,31 @@ const error = ref('')
 const slugEditing = ref(false)
 const slugManuallyEdited = ref(false)
 const slugInputRef = ref(null)
-const categories = ref([])
+const menus = ref([])
 const allParentDocs = ref([])
+const categories = ref([])
+const catOpen = ref(false)
+const newCatInput = ref('')
+const catDropdownRef = ref(null)
 
 const form = ref({
   title: '',
   slug: '',
-  category: '',
+  categories: ['General'],
+  doc_menu_id: null,
   parent_id: null,
   order_num: 0,
   status: 'draft',
   sections: [],
 })
 
-// Docs grouped by category for the parent-page selector
+// Docs grouped by menu for the parent-page selector
 const groupedParentDocs = computed(() => {
   const groups = {}
   for (const doc of allParentDocs.value) {
-    // Exclude the current doc (can't be its own parent)
     if (isEdit.value && doc.id === parseInt(route.params.id)) continue
-    const cat = doc.category || 'General'
+    const menuEntry = menus.value.find(m => m.id === doc.doc_menu_id)
+    const cat = menuEntry?.name || 'General'
     if (!groups[cat]) groups[cat] = []
     groups[cat].push(doc)
   }
@@ -341,7 +421,41 @@ function moveSectionDown(idx) {
   [arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]]
 }
 
+// ── Category helpers ──────────────────────────────────────────────
+function toggleCategory(name) {
+  const idx = form.value.categories.indexOf(name)
+  if (idx === -1) { form.value.categories.push(name) }
+  else { form.value.categories.splice(idx, 1) }
+}
+
+function removeCategory(name) {
+  form.value.categories = form.value.categories.filter(c => c !== name)
+}
+
+async function addNewCategory() {
+  const name = newCatInput.value.trim()
+  if (!name) return
+  // Add to local categories list if not there
+  if (!categories.value.find(c => c.name === name)) {
+    try {
+      await adminApi.createDocCategory({ name })
+      await fetchCategories()
+    } catch { /* already exists */ }
+  }
+  if (!form.value.categories.includes(name)) { form.value.categories.push(name) }
+  newCatInput.value = ''
+}
+
 // ── API calls ────────────────────────────────────────────────────
+async function fetchMenus() {
+  try {
+    const { data } = await adminApi.getDocMenusFlat()
+    menus.value = data.data || []
+  } catch {
+    menus.value = []
+  }
+}
+
 async function fetchCategories() {
   try {
     const { data } = await adminApi.getDocCategories()
@@ -367,7 +481,8 @@ async function fetchDoc() {
     form.value = {
       title: doc.title,
       slug: doc.slug,
-      category: doc.category,
+      categories: Array.isArray(doc.categories) && doc.categories.length ? doc.categories : (doc.category ? [doc.category] : ['General']),
+      doc_menu_id: doc.doc_menu_id ?? null,
       parent_id: doc.parent_id ?? null,
       order_num: doc.order_num ?? 0,
       status: doc.status,
@@ -390,7 +505,8 @@ async function handleSubmit() {
     const payload = {
       title: form.value.title,
       slug: form.value.slug || slugify(form.value.title),
-      category: form.value.category,
+      categories: form.value.categories?.length ? form.value.categories : ['General'],
+      doc_menu_id: form.value.doc_menu_id || null,
       parent_id: form.value.parent_id || null,
       order_num: form.value.order_num,
       status: form.value.status,
@@ -414,11 +530,21 @@ async function handleSubmit() {
 }
 
 onMounted(async () => {
-  await Promise.all([fetchCategories(), fetchAllDocs()])
+  await Promise.all([fetchMenus(), fetchAllDocs(), fetchCategories()])
   if (isEdit.value) {
     await fetchDoc()
+  } else if (route.query.menu_id) {
+    // Pre-fill doc_menu_id from ?menu_id= query param (navigated from Doc Menus page)
+    form.value.doc_menu_id = parseInt(route.query.menu_id)
   }
   await nextTick()
   editorReady.value = true
+
+  // Close category dropdown on outside click
+  document.addEventListener('mousedown', (e) => {
+    if (catDropdownRef.value && !catDropdownRef.value.contains(e.target)) {
+      catOpen.value = false
+    }
+  })
 })
 </script>

@@ -95,7 +95,7 @@
                   prose-headings:font-sans prose-headings:text-gray-900 dark:prose-headings:text-white
                   prose-a:text-brand-violet dark:prose-a:text-brand-cyan prose-a:no-underline hover:prose-a:underline
                   prose-code:text-brand-violet dark:prose-code:text-brand-cyan prose-code:bg-brand-violet/5 dark:prose-code:bg-brand-cyan/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-[''] prose-code:after:content-['']
-                  prose-pre:bg-gray-900 dark:prose-pre:bg-dark-900 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-dark-600 prose-pre:rounded-xl
+                  prose-pre:bg-[#0d1117] dark:prose-pre:bg-[#0d1117] prose-pre:border-0 prose-pre:rounded-none prose-pre:m-0 prose-pre:p-0
                   prose-img:rounded-xl prose-img:shadow-lg
                   prose-blockquote:border-brand-violet dark:prose-blockquote:border-brand-cyan prose-blockquote:bg-brand-violet/5 dark:prose-blockquote:bg-brand-cyan/5 prose-blockquote:rounded-r-xl prose-blockquote:py-1 prose-blockquote:px-6
                   prose-hr:border-gray-200 dark:prose-hr:border-dark-600
@@ -295,32 +295,46 @@ function copyLink() {
 }
 
 function addCopyButtons() {
-  nextTick(() => {
+  setTimeout(() => {
     const container = document.querySelector('.prose')
     if (!container) return
     container.querySelectorAll('pre').forEach((pre) => {
       if (pre.parentElement?.classList.contains('code-block-wrapper')) return
+
+      const codeEl = pre.querySelector('code')
+      const lang = (codeEl?.className.match(/language-(\w+)/) || [])[1] || ''
+
       const wrapper = document.createElement('div')
       wrapper.className = 'code-block-wrapper'
       pre.parentNode.insertBefore(wrapper, pre)
       wrapper.appendChild(pre)
-      const btn = document.createElement('button')
-      btn.className = 'copy-code-btn'
-      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><span>Copy</span>'
-      btn.addEventListener('click', () => {
-        const code = pre.querySelector('code')
-        const text = code ? code.innerText : pre.innerText
-        navigator.clipboard.writeText(text)
-        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Copied!</span>'
-        btn.classList.add('copied')
+
+      const header = document.createElement('div')
+      header.className = 'code-block-header'
+      header.innerHTML = `
+        <span class="code-block-lang">${lang}</span>
+        <button class="copy-code-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy
+        </button>`
+
+      const btn = header.querySelector('.copy-code-btn')
+      btn.addEventListener('click', async () => {
+        const code = codeEl?.innerText || pre.innerText
+        try {
+          await navigator.clipboard.writeText(code)
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Copied!`
+          btn.classList.add('copied')
+        } catch {}
         setTimeout(() => {
-          btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><span>Copy</span>'
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy`
           btn.classList.remove('copied')
         }, 2000)
       })
-      wrapper.appendChild(btn)
+
+      wrapper.insertBefore(header, pre)
     })
-  })
+  }, 50)
 }
 
 function styleBlockquotes() {

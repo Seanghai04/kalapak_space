@@ -70,8 +70,11 @@ const routes = [
       { path: 'tags', name: 'admin-tags', component: () => import('@/views/admin/TagsView.vue') },
       { path: 'approval-requests', name: 'admin-approval-requests', component: () => import('@/views/admin/ApprovalRequestsView.vue'), meta: { requiresSuperAdmin: true } },
       { path: 'docs', name: 'admin-docs', component: () => import('@/views/admin/DocsView.vue') },
+      { path: 'docs/reorder', name: 'admin-docs-reorder', component: () => import('@/views/admin/DocsReorderView.vue') },
       { path: 'docs/create', name: 'admin-docs-create', component: () => import('@/views/admin/DocFormView.vue') },
       { path: 'docs/:id/edit', name: 'admin-docs-edit', component: () => import('@/views/admin/DocFormView.vue') },
+      { path: 'doc-menus', name: 'admin-doc-menus', component: () => import('@/views/admin/DocMenusView.vue') },
+      { path: 'doc-categories', name: 'admin-doc-categories', component: () => import('@/views/admin/DocCategoriesView.vue') },
     ],
   },
   // 404

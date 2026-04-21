@@ -15,10 +15,17 @@ class Doc extends Model
         'slug',
         'content',
         'category',
+        'categories',
+        'category_order',
         'order_num',
         'status',
         'author_id',
         'parent_id',
+        'doc_menu_id',
+    ];
+
+    protected $casts = [
+        'categories' => 'array',
     ];
 
     public function author()
@@ -34,6 +41,11 @@ class Doc extends Model
     public function children()
     {
         return $this->hasMany(Doc::class, 'parent_id')->orderBy('order_num');
+    }
+
+    public function docMenu()
+    {
+        return $this->belongsTo(DocMenu::class, 'doc_menu_id');
     }
 
     public function sections()

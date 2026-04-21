@@ -125,7 +125,7 @@
                 prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-relaxed
                 prose-a:text-brand-violet dark:prose-a:text-brand-cyan prose-a:no-underline hover:prose-a:underline
                 prose-code:text-brand-violet dark:prose-code:text-brand-cyan prose-code:bg-brand-violet/5 dark:prose-code:bg-brand-cyan/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:font-code prose-code:text-sm
-                prose-pre:bg-gray-50 dark:prose-pre:bg-dark-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-dark-600 prose-pre:rounded-xl
+                prose-pre:bg-[#0d1117] dark:prose-pre:bg-[#0d1117] prose-pre:border-0 prose-pre:rounded-none prose-pre:m-0 prose-pre:p-0
                 prose-img:rounded-xl prose-img:border prose-img:border-gray-100 dark:prose-img:border-dark-600
                 prose-blockquote:border-brand-violet dark:prose-blockquote:border-brand-cyan prose-blockquote:bg-brand-violet/5 dark:prose-blockquote:bg-brand-cyan/5 prose-blockquote:rounded-r-xl prose-blockquote:py-1 prose-blockquote:px-6
                 prose-li:text-gray-600 dark:prose-li:text-gray-400"
@@ -227,7 +227,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { Marked } from 'marked'
 import { markedHighlight } from 'marked-highlight'
@@ -278,6 +278,49 @@ function statusClasses(status) {
   return map[status] || 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
 }
 
+function addCopyButtons() {
+  setTimeout(() => {
+    const container = document.querySelector('.prose')
+    if (!container) return
+    container.querySelectorAll('pre').forEach((pre) => {
+      if (pre.parentElement?.classList.contains('code-block-wrapper')) return
+
+      const codeEl = pre.querySelector('code')
+      const lang = (codeEl?.className.match(/language-(\w+)/) || [])[1] || ''
+
+      const wrapper = document.createElement('div')
+      wrapper.className = 'code-block-wrapper'
+      pre.parentNode.insertBefore(wrapper, pre)
+      wrapper.appendChild(pre)
+
+      const header = document.createElement('div')
+      header.className = 'code-block-header'
+      header.innerHTML = `
+        <span class="code-block-lang">${lang}</span>
+        <button class="copy-code-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy
+        </button>`
+
+      const btn = header.querySelector('.copy-code-btn')
+      btn.addEventListener('click', async () => {
+        const code = codeEl?.innerText || pre.innerText
+        try {
+          await navigator.clipboard.writeText(code)
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Copied!`
+          btn.classList.add('copied')
+        } catch {}
+        setTimeout(() => {
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy`
+          btn.classList.remove('copied')
+        }, 2000)
+      })
+
+      wrapper.insertBefore(header, pre)
+    })
+  }, 50)
+}
+
 onMounted(async () => {
   try {
     const { data } = await publicApi.getProject(route.params.slug)
@@ -286,6 +329,7 @@ onMounted(async () => {
     project.value = null
   } finally {
     loading.value = false
+    addCopyButtons()
   }
 })
 </script>

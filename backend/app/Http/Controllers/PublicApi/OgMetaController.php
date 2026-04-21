@@ -99,7 +99,7 @@ HTML;
             ) ?: $post->cover_image;
         }
 
-        return app(SupabaseStorage::class)->url($post->cover_image);
+        return app(SupabaseStorage::class)->url($post->cover_image) ?? self::FALLBACK_IMAGE;
     }
 
     private function fallbackHtml(string $baseUrl): Response

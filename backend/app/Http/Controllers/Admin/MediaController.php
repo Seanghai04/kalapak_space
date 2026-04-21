@@ -149,6 +149,6 @@ class MediaController extends Controller
             return $this->cloudinary()->image($item->path)->toUrl();
         }
 
-        return app(SupabaseStorage::class)->url($item->path);
+        return app(SupabaseStorage::class)->url($item->path) ?? '';
     }
 }

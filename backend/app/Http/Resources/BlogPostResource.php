@@ -26,7 +26,11 @@ class BlogPostResource extends JsonResource
             'author' => $this->whenLoaded('author', fn() => [
                 'id' => $this->author->id,
                 'name' => $this->author->name,
-                'avatar' => $this->author->avatar ? app(SupabaseStorage::class)->url($this->author->avatar) : null,
+                'avatar' => $this->author->avatar
+                    ? ($this->author->avatar_disk === 'cloudinary'
+                        ? (new \Cloudinary\Cloudinary(config('cloudinary.cloud_url')))->image($this->author->avatar)->toUrl()
+                        : app(SupabaseStorage::class)->url($this->author->avatar))
+                    : null,
                 'bio' => $this->author->bio,
             ]),
             'category' => $this->whenLoaded('category', fn() => [

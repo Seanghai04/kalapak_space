@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\UserPermissionController;
 use App\Http\Controllers\Admin\SearchController;
 use App\Http\Controllers\Admin\StorageStatsController;
 use App\Http\Controllers\Admin\DocController;
+use App\Http\Controllers\Admin\DocMenuController;
 use App\Http\Controllers\PublicApi\DocController as PublicDocController;
 use App\Models\Tag;
 use App\Models\TeamMember;
@@ -53,6 +54,7 @@ Route::get('/blog/posts/{slug}', [BlogController::class, 'show']);
 Route::get('/blog/categories', [BlogController::class, 'categories']);
 
 // Docs (public)
+Route::get('/docs/nav', [PublicDocController::class, 'nav']);
 Route::get('/docs', [PublicDocController::class, 'index']);
 Route::get('/docs/{slug}', [PublicDocController::class, 'show']);
 
@@ -203,11 +205,23 @@ Route::middleware(['auth:sanctum'])->group(function () {
         // Docs (admin + superadmin)
         Route::get('/docs', [DocController::class, 'index']);
         Route::post('/docs', [DocController::class, 'store']);
+        Route::post('/docs/reorder', [DocController::class, 'reorder']);
         Route::get('/docs/categories', [DocController::class, 'categories']);
+        Route::post('/docs/categories', [DocController::class, 'storeCategory']);
+        Route::post('/docs/categories/rename', [DocController::class, 'renameCategory']);
+        Route::post('/docs/categories/delete', [DocController::class, 'deleteCategory']);
         Route::get('/docs/all', [DocController::class, 'all']);
         Route::get('/docs/{id}', [DocController::class, 'show']);
         Route::put('/docs/{id}', [DocController::class, 'update']);
         Route::delete('/docs/{id}', [DocController::class, 'destroy']);
+
+        // Doc Menus (admin + superadmin)
+        Route::get('/doc-menus', [DocMenuController::class, 'index']);
+        Route::get('/doc-menus/flat', [DocMenuController::class, 'flat']);
+        Route::post('/doc-menus', [DocMenuController::class, 'store']);
+        Route::post('/doc-menus/reorder', [DocMenuController::class, 'reorder']);
+        Route::put('/doc-menus/{id}', [DocMenuController::class, 'update']);
+        Route::delete('/doc-menus/{id}', [DocMenuController::class, 'destroy']);
 
         // Search (admin + superadmin)
         Route::get('/search', [SearchController::class, 'search']);

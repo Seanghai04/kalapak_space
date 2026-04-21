@@ -59,10 +59,25 @@ class SupabaseStorage
     }
 
     /**
-     * Get the public URL for a file.
+     * Returns true when Supabase is configured with real credentials.
      */
-    public function url(string $path): string
+    public function isConfigured(): bool
     {
+        return !empty($this->url)
+            && !empty($this->key)
+            && !str_contains($this->url, 'YOUR_PROJECT_ID')
+            && $this->key !== 'your-anon-key'
+            && $this->key !== 'your-service-role-key';
+    }
+
+    /**
+     * Get the public URL for a file, or null when Supabase is not configured.
+     */
+    public function url(string $path): ?string
+    {
+        if (!$this->isConfigured()) {
+            return null;
+        }
         return "{$this->url}/storage/v1/object/public/{$this->bucket}/{$path}";
     }
 

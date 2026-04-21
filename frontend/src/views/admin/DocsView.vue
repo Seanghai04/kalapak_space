@@ -6,10 +6,16 @@
         <h1 class="text-2xl font-sans font-bold dark:text-white">Docs</h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage documentation pages and guides</p>
       </div>
-      <router-link :to="{ name: 'admin-docs-create' }" class="btn-primary flex items-center gap-2 text-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        New Doc
-      </router-link>
+      <div class="flex items-center gap-3">
+        <router-link :to="{ name: 'admin-docs-reorder' }" class="btn-ghost flex items-center gap-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+          Reorder
+        </router-link>
+        <router-link :to="{ name: 'admin-docs-create' }" class="btn-primary flex items-center gap-2 text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          New Doc
+        </router-link>
+      </div>
     </div>
 
     <!-- Stats -->
@@ -57,7 +63,7 @@
         </select>
         <select v-model="categoryFilter" class="input-field w-full md:w-48" @change="fetchDocs()">
           <option value="">All Categories</option>
-          <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
+          <option v-for="cat in categories" :key="cat.id ?? cat" :value="cat.name ?? cat">{{ cat.name ?? cat }}</option>
         </select>
       </div>
     </div>

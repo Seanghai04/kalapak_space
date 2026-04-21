@@ -65,6 +65,7 @@ export const publicApi = {
   sendContact: (data) => api.post('/contact', data),
   getDocs: () => api.get('/docs'),
   getDoc: (slug) => api.get(`/docs/${slug}`),
+  getDocsNav: () => api.get('/docs/nav'),
 }
 
 export const memberApi = {
@@ -190,7 +191,18 @@ export const adminApi = {
   createDoc: (data) => api.post('/admin/docs', data),
   updateDoc: (id, data) => api.put(`/admin/docs/${id}`, data),
   deleteDoc: (id) => api.delete(`/admin/docs/${id}`),
+  reorderDocs: (data) => api.post('/admin/docs/reorder', data),
   getDocCategories: () => api.get('/admin/docs/categories'),
+  createDocCategory: (data) => api.post('/admin/docs/categories', data),
+  renameDocCategory: (data) => api.post('/admin/docs/categories/rename', data),
+  deleteDocCategory: (data) => api.post('/admin/docs/categories/delete', data),
+
+  getDocMenus: () => api.get('/admin/doc-menus'),
+  getDocMenusFlat: () => api.get('/admin/doc-menus/flat'),
+  createDocMenu: (data) => api.post('/admin/doc-menus', data),
+  updateDocMenu: (id, data) => api.put(`/admin/doc-menus/${id}`, data),
+  deleteDocMenu: (id) => api.delete(`/admin/doc-menus/${id}`),
+  reorderDocMenus: (data) => api.post('/admin/doc-menus/reorder', data),
 }
 
 export default api

@@ -451,6 +451,7 @@ import {
   TagIcon,
   RectangleStackIcon,
   BookOpenIcon,
+  ListBulletIcon,
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -491,6 +492,8 @@ const contentNavItems = [
   { label: 'Messages', to: '/admin/messages', routeName: 'admin-messages', icon: EnvelopeIcon, badge: null, badgeColor: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400' },
   { label: 'Applications', to: '/admin/applications', routeName: 'admin-applications', icon: InboxStackIcon },
   { label: 'Docs', to: '/admin/docs', routeName: 'admin-docs', icon: BookOpenIcon },
+  { label: 'Doc Categories', to: '/admin/doc-categories', routeName: 'admin-doc-categories', icon: TagIcon },
+  { label: 'Doc Menus', to: '/admin/doc-menus', routeName: 'admin-doc-menus', icon: ListBulletIcon },
 ]
 
 const systemNavItems = computed(() => [
