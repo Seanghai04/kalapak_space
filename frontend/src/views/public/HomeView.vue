@@ -109,9 +109,6 @@
 
     <!-- ═══════════════════ FEATURED PROJECTS ═══════════════════ -->
     <section class="py-16 sm:py-20 lg:py-28 relative z-10 bg-gray-50/50 dark:bg-dark-900/50">
-      <!-- Background decoration -->
-      <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-violet/20 to-transparent" />
-      <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-cyan/20 to-transparent" />
 
       <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16" data-aos="fade-up">
@@ -223,7 +220,6 @@
 
     <!-- ═══════════════════ LATEST BLOG ═══════════════════ -->
     <section class="py-16 sm:py-20 lg:py-28 relative z-10 bg-gray-50/50 dark:bg-dark-900/50">
-      <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-violet/20 to-transparent" />
       <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16" data-aos="fade-up">
           <div>
@@ -276,9 +272,7 @@
 
     <!-- ═══════════════════ TECH STACK — MARQUEE ═══════════════════ -->
     <section class="tech-section relative z-10 overflow-hidden">
-      <!-- Subtle top/bottom borders -->
-      <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-violet/30 to-transparent" />
-      <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-cyan/30 to-transparent" />
+
       <!-- Glow orbs -->
       <div class="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-brand-violet/[0.07] blur-[120px] pointer-events-none" />
       <div class="absolute top-1/2 right-1/4 -translate-y-1/2 w-[350px] h-[350px] rounded-full bg-brand-cyan/[0.07] blur-[120px] pointer-events-none" />
@@ -316,35 +310,6 @@
       </div>
     </section>
 
-    <!-- ═══════════════════ CTA ═══════════════════ -->
-    <section class="py-16 sm:py-20 lg:py-28 relative z-10">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div data-aos="fade-up" class="relative rounded-3xl overflow-hidden">
-          <!-- BG gradient -->
-          <div class="absolute inset-0 bg-gradient-brand opacity-90" />
-          <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIxIiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIwLjEiLz48L3N2Zz4=')] opacity-50" />
-
-          <div class="relative px-6 py-12 sm:px-8 sm:py-16 md:px-16 md:py-20 text-center">
-            <h2 class="text-2xl sm:text-3xl md:text-5xl font-sans font-bold text-white mb-4 leading-tight">
-              Ready to build<br />something amazing?
-            </h2>
-            <p class="text-base sm:text-lg text-white/80 mb-8 sm:mb-10 max-w-xl mx-auto">
-              Whether you want to join our team or collaborate on a project, we'd love to hear from you.
-            </p>
-            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 px-4 sm:px-0">
-              <router-link to="/join" class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-white text-brand-violet font-bold rounded-xl hover:bg-gray-100 transition-all duration-300 hover:-translate-y-0.5 shadow-lg hover:shadow-xl text-sm sm:text-base">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
-                Join the Team
-              </router-link>
-              <router-link to="/contact" class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 border-2 border-white/30 text-white font-bold rounded-xl hover:bg-white/10 transition-all duration-300 hover:-translate-y-0.5 text-sm sm:text-base">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                Get in Touch
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
   </div>
 </template>

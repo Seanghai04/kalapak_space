@@ -276,31 +276,6 @@
       </div>
     </section>
 
-    <!-- ═══════════════════ CTA ═══════════════════ -->
-    <section class="pb-24 relative z-10">
-      <div class="max-w-4xl mx-auto px-4">
-        <div data-aos="fade-up" class="relative rounded-3xl overflow-hidden">
-          <div class="absolute inset-0 bg-gradient-brand opacity-90" />
-          <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 24px 24px;" />
-          <div class="relative z-10 px-8 md:px-16 py-14 text-center">
-            <h2 class="text-2xl md:text-3xl font-sans font-bold text-white mb-3">Have a project idea?</h2>
-            <p class="text-white/80 max-w-lg mx-auto mb-8 leading-relaxed text-sm">
-              We're always excited to explore new challenges. Let's build something amazing together.
-            </p>
-            <div class="flex flex-wrap justify-center gap-4">
-              <router-link to="/contact" class="inline-flex items-center gap-2 px-7 py-3.5 bg-white text-brand-violet font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:-translate-y-0.5 shadow-lg text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/></svg>
-                Let's Talk
-              </router-link>
-              <router-link to="/join" class="inline-flex items-center gap-2 px-7 py-3.5 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 hover:-translate-y-0.5 text-sm">
-                Join Our Team
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
   </div>
 </template>

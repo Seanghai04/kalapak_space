@@ -215,31 +215,6 @@
       </div>
     </section>
 
-    <!-- ═══════════════════ CTA ═══════════════════ -->
-    <section class="pb-16 sm:pb-24 relative z-10">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6">
-        <div data-aos="fade-up" class="relative rounded-2xl sm:rounded-3xl overflow-hidden">
-          <div class="absolute inset-0 bg-gradient-brand opacity-90" />
-          <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 24px 24px;" />
-          <div class="relative z-10 px-6 py-10 sm:px-8 sm:py-14 md:px-16 text-center">
-            <h2 class="text-xl sm:text-2xl md:text-3xl font-sans font-bold text-white mb-3">Want to join the team?</h2>
-            <p class="text-white/80 max-w-lg mx-auto mb-6 sm:mb-8 leading-relaxed text-sm px-2 sm:px-0">
-              We're always looking for passionate developers to build with us. Check out our open positions.
-            </p>
-            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 px-2 sm:px-0">
-              <router-link to="/join" class="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 bg-white text-brand-violet font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:-translate-y-0.5 shadow-lg text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" /></svg>
-                Join Us
-              </router-link>
-              <router-link to="/projects" class="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 hover:-translate-y-0.5 text-sm">
-                View Projects
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
   </div>
 </template>

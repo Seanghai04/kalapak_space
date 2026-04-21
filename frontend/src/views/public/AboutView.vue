@@ -398,35 +398,6 @@
       </div>
     </section>
 
-    <!-- ═══════════════════ CTA ═══════════════════ -->
-    <section class="py-14 sm:py-18 lg:py-24 relative">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6">
-        <div data-aos="fade-up" class="relative rounded-2xl sm:rounded-3xl overflow-hidden">
-          <!-- Background -->
-          <div class="absolute inset-0 bg-gradient-brand opacity-90" />
-          <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 24px 24px;" />
-          <!-- Content -->
-          <div class="relative z-10 px-6 py-12 sm:px-8 sm:py-14 md:px-16 md:py-16 text-center">
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-sans font-bold text-white mb-4">
-              Want to work with us?
-            </h2>
-            <p class="text-sm sm:text-base text-white/80 max-w-xl mx-auto mb-6 sm:mb-8 leading-relaxed">
-              Whether you have a project idea, want to collaborate, or just want to say hello — we'd love to hear from you.
-            </p>
-            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 px-2 sm:px-0">
-              <router-link to="/contact" class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-white text-brand-violet font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:-translate-y-0.5 shadow-lg text-sm sm:text-base">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
-                <span>Get in Touch</span>
-              </router-link>
-              <router-link to="/join" class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 hover:-translate-y-0.5 text-sm sm:text-base">
-                <span>Join the Team</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
   </div>
 </template>

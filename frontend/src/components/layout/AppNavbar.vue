@@ -3,13 +3,10 @@
     class="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
     :class="[
       scrolled
-        ? 'nav-scrolled backdrop-blur-2xl shadow-lg shadow-black/5 dark:shadow-black/20'
-        : 'nav-top backdrop-blur-md'
+        ? 'nav-scrolled'
+        : 'nav-top'
     ]"
   >
-    <!-- Top accent line -->
-    <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-brand-violet/40 dark:via-brand-cyan/40 to-transparent" />
-
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-[68px]">
 
@@ -398,8 +395,6 @@
       </div>
     </transition>
 
-    <!-- Bottom accent line (subtle) -->
-    <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-200/50 dark:via-white/[0.04] to-transparent" />
   </nav>
 
   <!-- ═══ Search Modal ═══ -->
@@ -576,19 +571,23 @@ function handleLogout() {
 <style scoped>
 /* ── Nav background states ── */
 .nav-top {
-  background: rgba(255, 255, 255, 0.6);
+  background: transparent;
+  border-bottom: none;
 }
 :root.dark .nav-top,
 .dark .nav-top {
-  background: rgba(2, 0, 36, 0.6);
+  background: transparent;
+  border-bottom: none;
 }
 
 .nav-scrolled {
-  background: rgba(255, 255, 255, 0.85);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.92) 75%, transparent 100%);
+  border-bottom: none;
 }
 :root.dark .nav-scrolled,
 .dark .nav-scrolled {
-  background: rgba(2, 0, 36, 0.88);
+  background: linear-gradient(to bottom, rgba(2,0,36,0.95) 75%, transparent 100%);
+  border-bottom: none;
 }
 
 /* ── Active nav link ── */
