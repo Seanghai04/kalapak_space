@@ -34,11 +34,14 @@ Thumbs.db
 /frontend/node_modules
 /frontend/dist
 /frontend/.vite
+/frontend/.nuxt
+/frontend/.output
 
 # Docker
 postgres_data/
 pgadmin_data/
 /public/storage
+/backend/public/storage
 # Logs
 *.log
 npm-debug.log*

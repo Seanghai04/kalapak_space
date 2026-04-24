@@ -1,9 +1,11 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
-import router from '@/router'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL:
+    import.meta.env.VITE_API_URL ||
+    import.meta.env.NUXT_PUBLIC_API_URL ||
+    '/api',
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -34,7 +36,9 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       const authStore = useAuthStore()
       authStore.logout()
-      router.push({ name: 'login' })
+      if (typeof window !== 'undefined') {
+        window.location.href = '/auth/login'
+      }
     }
     if (error.response?.status === 429) {
       const retryAfter = error.response.headers['retry-after'] || 60

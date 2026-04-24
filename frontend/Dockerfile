@@ -12,7 +12,7 @@ FROM base AS dev
 RUN npm install
 COPY . .
 EXPOSE 3000
-CMD ["npx", "vite", "--host", "0.0.0.0", "--port", "3000"]
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
 
 # ===========================================
 # Stage 3: Build (production bundle)
@@ -28,7 +28,7 @@ RUN npm run build
 FROM nginx:alpine AS production
 
 # Copy built assets
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/.output/public /usr/share/nginx/html
 
 # Copy nginx config template & entrypoint
 COPY nginx.conf /etc/nginx/nginx.conf.template
