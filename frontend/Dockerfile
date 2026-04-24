@@ -23,19 +23,15 @@ COPY . .
 RUN npm run build
 
 # ===========================================
-# Stage 4: Production (Render / nginx)
+# Stage 4: Production (Render / Nuxt SSR)
 # ===========================================
-FROM nginx:alpine AS production
+FROM node:20-alpine AS production
+WORKDIR /app
+ENV NODE_ENV=production
 
-# Copy built assets
-COPY --from=build /app/.output/public /usr/share/nginx/html
-
-# Copy nginx config template & entrypoint
-COPY nginx.conf /etc/nginx/nginx.conf.template
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+# Copy Nuxt production output (server + public assets)
+COPY --from=build /app/.output ./.output
 
 EXPOSE 10000
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", ".output/server/index.mjs"]

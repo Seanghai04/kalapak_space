@@ -134,10 +134,10 @@ services:
     dockerContext: ./frontend
     plan: free
     envVars:
-      - key: BACKEND_URL
-        value: https://kalapakspace-backends.onrender.com
-      - key: VITE_API_URL
-        value: https://kalapakspace-backends.onrender.com/api
+      - key: NUXT_PUBLIC_API_URL
+        value: https://kalapak-backend.onrender.com/api
+      - key: NUXT_PUBLIC_SITE_URL
+        value: https://kalapak-frontend.onrender.com
 
 # -------------------------------------------------
 # PostgreSQL Database
