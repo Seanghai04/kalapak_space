@@ -14,7 +14,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('auth_token')
+  const token = import.meta.client ? localStorage.getItem('auth_token') : null
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
