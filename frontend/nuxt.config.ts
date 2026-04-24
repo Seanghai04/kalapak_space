@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
   ssr: false,
-  pages: false,
+  pages: true,
   devtools: { enabled: true },
   app: {
     head: {
