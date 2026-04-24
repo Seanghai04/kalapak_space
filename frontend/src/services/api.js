@@ -1,11 +1,22 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
+function resolveApiBaseURL() {
+  // Server runtime (Nuxt SSR on Node/Render)
+  if (typeof window === 'undefined') {
+    return process.env.NUXT_PUBLIC_API_URL || process.env.VITE_API_URL || '/api'
+  }
+
+  // Client runtime from Nuxt payload config
+  const nuxtRuntimeApi = window.__NUXT__?.config?.public?.apiUrl
+  if (nuxtRuntimeApi) return nuxtRuntimeApi
+
+  // Build-time fallback for local/dev compatibility
+  return import.meta.env.NUXT_PUBLIC_API_URL || import.meta.env.VITE_API_URL || '/api'
+}
+
 const api = axios.create({
-  baseURL:
-    import.meta.env.VITE_API_URL ||
-    import.meta.env.NUXT_PUBLIC_API_URL ||
-    '/api',
+  baseURL: resolveApiBaseURL(),
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
