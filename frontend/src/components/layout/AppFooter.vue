@@ -85,14 +85,15 @@
 
 <script setup>
 import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useThemeStore } from '@/stores/theme'
 
 const themeStore = useThemeStore()
-const d = computed(() => themeStore.isDark)
+const { isDark } = storeToRefs(themeStore)
 
 const footerBg = computed(() =>
-  d.value
-    ? `radial-gradient(ellipse 130% 140% at 50% 110%, rgba(123,47,255,0.88) 0%, rgba(0,212,255,0.34) 48%, rgba(2,0,36,0.98) 78%, #020024 100%),
+  isDark.value
+    ? `radial-gradient(ellipse 130% 140% at 50% 110%, rgba(123,47,255,0.22) 0%, rgba(0,212,255,0.12) 36%, rgba(2,0,36,0.98) 68%, #020024 100%),
        #020024`
     : `radial-gradient(ellipse 130% 140% at 50% 110%, rgba(123,47,255,0.58) 0%, rgba(0,212,255,0.20) 48%, rgba(248,250,252,0.98) 78%, #f8fafc 100%),
        #f8fafc`
