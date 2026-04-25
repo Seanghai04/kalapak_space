@@ -1,18 +1,35 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
+function normalizeDevApiUrl(url) {
+  if (!url) return url
+
+  // In local dev, avoid hitting Nuxt app routes at :3000/api (404)
+  if (
+    typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
+    url === '/api'
+  ) {
+    return 'http://127.0.0.1:8000/api'
+  }
+
+  return url
+}
+
 function resolveApiBaseURL() {
   // Server runtime (Nuxt SSR on Node/Render)
   if (typeof window === 'undefined') {
-    return process.env.NUXT_PUBLIC_API_URL || process.env.VITE_API_URL || '/api'
+    return process.env.NUXT_PUBLIC_API_URL || process.env.VITE_API_URL || 'http://127.0.0.1:8000/api'
   }
 
   // Client runtime from Nuxt payload config
   const nuxtRuntimeApi = window.__NUXT__?.config?.public?.apiUrl
-  if (nuxtRuntimeApi) return nuxtRuntimeApi
+  if (nuxtRuntimeApi) return normalizeDevApiUrl(nuxtRuntimeApi)
 
   // Build-time fallback for local/dev compatibility
-  return import.meta.env.NUXT_PUBLIC_API_URL || import.meta.env.VITE_API_URL || '/api'
+  return normalizeDevApiUrl(
+    import.meta.env.NUXT_PUBLIC_API_URL || import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api'
+  )
 }
 
 const api = axios.create({

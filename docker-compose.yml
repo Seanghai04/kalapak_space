@@ -56,12 +56,31 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: kalapak_backend
+    entrypoint: ["sh", "/var/www/html/docker-entrypoint.sh"]
+    environment:
+      APP_ENV: local
+      RUN_DB_SEED: "0"
+      RUN_MIGRATIONS: "0"
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_DATABASE: kalapak_db
+      DB_USERNAME: kalapak_user
+      DB_PASSWORD: kalapak_secret
+      DB_SSLMODE: prefer
+      CACHE_DRIVER: file
+      QUEUE_CONNECTION: sync
+      SESSION_DRIVER: file
     env_file:
       - ./backend/.env
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/var/www/html
+      - ./backend/routes/api.php:/var/www/html/routes/api.php
+      - ./backend/app/Services/SupabaseStorage.php:/var/www/html/app/Services/SupabaseStorage.php
+      - ./backend/app/Http/Controllers/PublicApi/DocController.php:/var/www/html/app/Http/Controllers/PublicApi/DocController.php
+      - ./backend/app/Models/Doc.php:/var/www/html/app/Models/Doc.php
+      - ./backend/app/Models/DocMenu.php:/var/www/html/app/Models/DocMenu.php
     depends_on:
       postgres:
         condition: service_healthy
@@ -77,6 +96,8 @@ services:
       dockerfile: Dockerfile
       target: dev
     container_name: kalapak_frontend
+    environment:
+      NUXT_DEV_API_PROXY: http://backend:8000
     ports:
       - "3000:3000"
     volumes:

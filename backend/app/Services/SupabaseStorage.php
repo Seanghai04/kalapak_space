@@ -63,11 +63,24 @@ class SupabaseStorage
      */
     public function isConfigured(): bool
     {
-        return !empty($this->url)
-            && !empty($this->key)
-            && !str_contains($this->url, 'YOUR_PROJECT_ID')
-            && $this->key !== 'your-anon-key'
-            && $this->key !== 'your-service-role-key';
+        if (empty($this->url) || empty($this->key)) {
+            return false;
+        }
+
+        $urlLower = strtolower($this->url);
+        $keyLower = strtolower($this->key);
+        $host = strtolower((string) parse_url($this->url, PHP_URL_HOST));
+
+        if (
+            str_contains($urlLower, 'your_project_id') ||
+            str_contains($host, 'your_project_id') ||
+            $keyLower === 'your-anon-key' ||
+            $keyLower === 'your-service-role-key'
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -75,6 +88,10 @@ class SupabaseStorage
      */
     public function url(string $path): ?string
     {
+        if (preg_match('/^https?:\/\//i', $path)) {
+            return $path;
+        }
+
         if (!$this->isConfigured()) {
             return null;
         }

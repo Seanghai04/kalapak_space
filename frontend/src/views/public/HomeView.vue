@@ -13,7 +13,7 @@
       <!-- Floating code particles -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <span v-for="(p, i) in particles" :key="i" class="absolute text-xs font-code select-none"
-          :class="p.color" :style="{ left: p.x + '%', top: p.y + '%', opacity: p.opacity, animationDelay: p.delay + 's', animationDuration: p.duration + 's' }"
+          :class="p.color" :style="{ left: p.x, top: p.y, opacity: p.opacity, animationDelay: p.delay, animationDuration: p.duration }"
           style="animation: floatParticle ease-in-out infinite">{{ p.text }}</span>
       </div>
 
@@ -39,18 +39,8 @@
             <span>Explore Projects</span>
             <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
           </router-link>
-          <router-link to="/about" class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 border border-gray-200 dark:border-dark-500 text-gray-700 dark:text-gray-200 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-dark-700/50 transition-all duration-300 hover:-translate-y-0.5 backdrop-blur-sm text-sm sm:text-base">
-            <span>Meet the Team</span>
-          </router-link>
         </div>
 
-        <!-- Scroll indicator -->
-        <div data-aos="fade-up" data-aos-delay="600" class="flex flex-col items-center gap-2">
-          <span class="text-[10px] uppercase tracking-[0.2em] text-gray-400">Scroll to explore</span>
-          <div class="w-5 h-8 rounded-full border-2 border-gray-300 dark:border-dark-500 flex justify-center pt-1">
-            <div class="w-1 h-2 rounded-full bg-brand-violet dark:bg-brand-cyan animate-bounce" />
-          </div>
-        </div>
       </div>
     </section>
 
@@ -392,15 +382,31 @@ const techStack = [
   { name: 'GitHub', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg' },
 ]
 
-const particles = Array.from({ length: 20 }, (_, i) => ({
-  text: ['<div>', '</>', '{...}', '( )', '[ ]', 'fn()', '===', '&&', '=>', '/**/', '<?php', 'npm', 'git', '::',  '++', '0x', '#!', '~/'][i % 18],
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  opacity: 0.06 + Math.random() * 0.08,
-  delay: Math.random() * 8,
-  duration: 6 + Math.random() * 8,
-  color: i % 2 === 0 ? 'text-brand-violet/30 dark:text-brand-violet/20' : 'text-brand-cyan/30 dark:text-brand-cyan/20',
-}))
+function seededUnit(seed) {
+  const x = Math.sin(seed * 999.91) * 10000
+  return x - Math.floor(x)
+}
+
+function fixed(value, decimals) {
+  return value.toFixed(decimals)
+}
+
+const particles = Array.from({ length: 20 }, (_, i) => {
+  const token = [
+    '<div>', '</>', '{...}', '( )', '[ ]', 'fn()', '===', '&&', '=>',
+    '/**/', '<?php', 'npm', 'git', '::', '++', '0x', '#!', '~/',
+  ][i % 18]
+
+  return {
+    text: token,
+    x: `${fixed(seededUnit(i + 1) * 100, 4)}%`,
+    y: `${fixed(seededUnit(i + 101) * 100, 4)}%`,
+    opacity: fixed(0.06 + seededUnit(i + 201) * 0.08, 6),
+    delay: `${fixed(seededUnit(i + 301) * 8, 4)}s`,
+    duration: `${fixed(6 + seededUnit(i + 401) * 8, 4)}s`,
+    color: i % 2 === 0 ? 'text-brand-violet/30 dark:text-brand-violet/20' : 'text-brand-cyan/30 dark:text-brand-cyan/20',
+  }
+})
 
 function formatDate(date) {
   return date ? dayjs(date).format('MMM D, YYYY') : ''
