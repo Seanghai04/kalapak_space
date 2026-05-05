@@ -45,18 +45,34 @@ onMounted(() => {
 })
 
 async function handleSubmit() {
+  const token = route.params.token || route.query.token
+  if (!token) {
+    error.value = 'Invalid or missing reset token. Please request a new reset link.'
+    return
+  }
+
+  if (form.value.password !== form.value.password_confirmation) {
+    error.value = 'Password confirmation does not match.'
+    return
+  }
+
   loading.value = true
   error.value = ''
   success.value = ''
   try {
-    await authApi.resetPassword({
+    const { data } = await authApi.resetPassword({
       ...form.value,
-      token: route.params.token,
+      token,
     })
+
+    if (!data?.success) {
+      throw new Error(data?.message || 'Unable to reset password.')
+    }
+
     success.value = 'Password reset successfully! Redirecting...'
     setTimeout(() => router.push({ name: 'login' }), 2000)
   } catch (e) {
-    error.value = e.response?.data?.message || 'Failed to reset password'
+    error.value = e.response?.data?.message || e.message || 'Failed to reset password'
   } finally {
     loading.value = false
   }
