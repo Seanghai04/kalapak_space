@@ -29,7 +29,12 @@ const routes = [
       { path: 'login', name: 'login', component: () => import('@/views/auth/LoginView.vue') },
       { path: 'register', name: 'register', component: () => import('@/views/auth/RegisterView.vue') },
       { path: 'forgot-password', name: 'forgot-password', component: () => import('@/views/auth/ForgotPasswordView.vue') },
-      { path: 'reset-password/:token', name: 'reset-password', component: () => import('@/views/auth/ResetPasswordView.vue') },
+      {
+        path: 'reset-password/:token?',
+        name: 'reset-password',
+        component: () => import('@/views/auth/ResetPasswordView.vue'),
+        meta: { guestOnly: false },
+      },
       { path: 'google/callback', name: 'google-callback', component: () => import('@/views/auth/GoogleCallbackView.vue') },
       { path: 'github/callback', name: 'github-callback', component: () => import('@/views/auth/GitHubCallbackView.vue') },
     ],
