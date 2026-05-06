@@ -5,9 +5,14 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   router.beforeEach(async (to) => {
     const authStore = useAuthStore();
+    authStore.restoreFromStorage();
 
     if (authStore.token && !authStore.user) {
-      await authStore.fetchMe();
+      try {
+        await authStore.fetchMe();
+      } catch {
+        // Keep auth state on transient network/backend errors.
+      }
     }
 
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
@@ -23,7 +28,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
 
     if (to.meta.guestOnly && authStore.isAuthenticated) {
-      return { name: "home" };
+      return authStore.isAdmin ? { name: "admin-dashboard" } : { name: "home" };
     }
 
     return true;
