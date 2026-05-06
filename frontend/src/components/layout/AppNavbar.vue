@@ -581,9 +581,9 @@ const navLinks = [
   { name: 'docs', to: '/docs', label: 'Docs', icon: IconDocs },
 ]
 
-function handleLogout() {
-  authStore.logout()
-  router.push({ name: 'home' })
+async function handleLogout() {
+  await authStore.logout()
+  router.replace({ name: 'home' })
 }
 </script>
 
