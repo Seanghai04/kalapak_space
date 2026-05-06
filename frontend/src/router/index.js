@@ -101,6 +101,11 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  const isClient = typeof window !== 'undefined'
+  if (!isClient) {
+    return next()
+  }
+
   const authStore = useAuthStore()
 
   // Fetch user if token exists but user not loaded
