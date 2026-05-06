@@ -107,6 +107,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   const authStore = useAuthStore()
+  authStore.restoreFromStorage()
 
   // Fetch user if token exists but user not loaded
   if (authStore.token && !authStore.user) {

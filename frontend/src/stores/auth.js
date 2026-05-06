@@ -32,6 +32,21 @@ export const useAuthStore = defineStore('auth', () => {
   const isAdmin = computed(() => ['admin', 'superadmin'].includes(user.value?.role?.name))
   const isMember = computed(() => ['member', 'admin', 'superadmin'].includes(user.value?.role?.name))
 
+  function restoreFromStorage() {
+    if (!isClient) return
+    if (!token.value) {
+      token.value = localStorage.getItem('auth_token')
+    }
+    if (!user.value) {
+      try {
+        const raw = localStorage.getItem('auth_user')
+        user.value = raw ? JSON.parse(raw) : null
+      } catch {
+        user.value = null
+      }
+    }
+  }
+
   function canDo(resource, action) {
     if (isSuperAdmin.value) return true
     return permissions.value[resource]?.['can_' + action] ?? false
@@ -143,6 +158,7 @@ export const useAuthStore = defineStore('auth', () => {
     isAdmin,
     isMember,
     canDo,
+    restoreFromStorage,
     fetchPermissions,
     login,
     register,
