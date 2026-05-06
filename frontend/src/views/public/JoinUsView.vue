@@ -313,7 +313,7 @@
             </div>
 
             <!-- Navigation buttons -->
-            <div v-if="currentStep === 3" class="flex justify-center pt-2">
+            <div v-if="currentStep === 3 && isTurnstileReady" class="flex justify-center pt-2">
               <VueTurnstile :site-key="turnstileSiteKey" v-model="turnstileToken" />
             </div>
             <div class="flex items-center gap-4 pt-2">
@@ -370,7 +370,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { memberApi } from '@/services/api'
 import CustomSelect from '@/components/common/CustomSelect.vue'
 import VueTurnstile from 'vue-turnstile'
@@ -382,6 +382,12 @@ const error = ref('')
 const openFaq = ref(null)
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
 const turnstileToken = ref('')
+const mounted = ref(false)
+const isTurnstileReady = computed(() => mounted.value && !!turnstileSiteKey)
+
+onMounted(() => {
+  mounted.value = true
+})
 
 const form = reactive({
   name: '',

@@ -17,7 +17,7 @@
         <label class="block text-sm font-medium dark:text-gray-300 mb-1">Email</label>
         <input v-model="email" type="email" required class="input-field" placeholder="your@email.com" />
       </div>
-      <div class="flex justify-center">
+      <div v-if="isTurnstileReady" class="flex justify-center">
         <VueTurnstile :site-key="turnstileSiteKey" v-model="turnstileToken" theme="dark" />
       </div>
       <button type="submit" :disabled="loading" class="btn-primary w-full">
@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { authApi } from '@/services/api'
 import VueTurnstile from 'vue-turnstile'
 
@@ -47,6 +47,12 @@ const sent = ref(false)
 const error = ref('')
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
 const turnstileToken = ref('')
+const mounted = ref(false)
+const isTurnstileReady = computed(() => mounted.value && !!turnstileSiteKey)
+
+onMounted(() => {
+  mounted.value = true
+})
 
 async function handleSubmit() {
   loading.value = true

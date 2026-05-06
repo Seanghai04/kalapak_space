@@ -118,7 +118,7 @@
                   class="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-dark-700 border border-gray-200 dark:border-dark-500 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-violet/30 dark:focus:ring-brand-cyan/30 focus:border-brand-violet dark:focus:border-brand-cyan transition-all duration-300 resize-none" />
                 <p class="text-[10px] text-gray-400 mt-1 text-right">{{ form.message.length }} / 2000</p>
               </div>
-              <div class="flex justify-center">
+              <div v-if="isTurnstileReady" class="flex justify-center">
                 <VueTurnstile :site-key="turnstileSiteKey" v-model="turnstileToken" />
               </div>
               <button type="submit" :disabled="submitting"
@@ -204,7 +204,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { publicApi } from '@/services/api'
 import VueTurnstile from 'vue-turnstile'
 
@@ -214,6 +214,12 @@ const submitted = ref(false)
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
 const turnstileToken = ref('')
 const error = ref('')
+const mounted = ref(false)
+const isTurnstileReady = computed(() => mounted.value && !!turnstileSiteKey)
+
+onMounted(() => {
+  mounted.value = true
+})
 
 const contactInfo = [
   { label: 'Email', value: 'kalapakteam@gmail.com', href: 'mailto:kalapakteam@gmail.com', bgClass: 'bg-violet-100 dark:bg-violet-900/20', icon: '<svg class="w-5 h-5 text-brand-violet" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>' },

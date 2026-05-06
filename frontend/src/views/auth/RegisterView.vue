@@ -151,7 +151,7 @@
       </div>
 
       <!-- Turnstile CAPTCHA -->
-      <div class="flex justify-center">
+      <div v-if="isTurnstileReady" class="flex justify-center">
         <VueTurnstile :site-key="turnstileSiteKey" v-model="turnstileToken" theme="dark" />
       </div>
 
@@ -229,7 +229,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import VueTurnstile from 'vue-turnstile'
@@ -239,6 +239,12 @@ const authStore = useAuthStore()
 
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
 const turnstileToken = ref('')
+const mounted = ref(false)
+const isTurnstileReady = computed(() => mounted.value && !!turnstileSiteKey)
+
+onMounted(() => {
+  mounted.value = true
+})
 
 function loginWithGoogle() {
   const backendUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://kalapakspace-backends.onrender.com'

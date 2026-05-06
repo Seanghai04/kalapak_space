@@ -4,7 +4,8 @@ import { authApi, memberApi, adminApi } from '@/services/api'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
-  const token = ref(import.meta.client ? localStorage.getItem('auth_token') : null)
+  const isClient = typeof window !== 'undefined'
+  const token = ref(isClient ? localStorage.getItem('auth_token') : null)
   const loading = ref(false)
 
   // Per-resource permissions (fetched for admin users)
@@ -43,7 +44,7 @@ export const useAuthStore = defineStore('auth', () => {
       const { data } = await authApi.login(credentials)
       token.value = data.data.token
       user.value = data.data.user
-      if (import.meta.client) {
+      if (isClient) {
         localStorage.setItem('auth_token', data.data.token)
       }
       return data
@@ -58,7 +59,7 @@ export const useAuthStore = defineStore('auth', () => {
       const { data } = await authApi.register(formData)
       token.value = data.data.token
       user.value = data.data.user
-      if (import.meta.client) {
+      if (isClient) {
         localStorage.setItem('auth_token', data.data.token)
       }
       return data
@@ -103,7 +104,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
     user.value = null
     token.value = null
-    if (import.meta.client) {
+    if (isClient) {
       localStorage.removeItem('auth_token')
     }
   }
