@@ -142,14 +142,17 @@ export const useAuthStore = defineStore('auth', () => {
     if (isLoggingOut.value) return
     isLoggingOut.value = true
     try {
-      if (token.value) {
-        try { await authApi.logout() } catch { /* ignore */ }
-      }
+      const previousToken = token.value
       user.value = null
       token.value = null
       if (isClient) {
         localStorage.removeItem('auth_token')
         localStorage.removeItem('auth_user')
+      }
+
+      // Notify backend in background after local session is already cleared.
+      if (previousToken) {
+        try { await authApi.logout() } catch { /* ignore */ }
       }
     } finally {
       isLoggingOut.value = false

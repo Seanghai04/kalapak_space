@@ -1088,12 +1088,11 @@ onUnmounted(() => {
 });
 
 async function handleLogout() {
+  await authStore.logout();
   if (typeof window !== "undefined") {
-    void authStore.logout();
     window.location.replace("/auth/login");
     return;
   }
-  await authStore.logout();
   router.replace({ name: "login" });
 }
 </script>
