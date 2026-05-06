@@ -583,7 +583,11 @@ const navLinks = [
 
 async function handleLogout() {
   await authStore.logout()
-  router.replace({ name: 'home' })
+  if (typeof window !== 'undefined') {
+    window.location.replace('/auth/login')
+    return
+  }
+  router.replace({ name: 'login' })
 }
 </script>
 
