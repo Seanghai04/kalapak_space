@@ -16,6 +16,7 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref(persistedUser)
   const token = ref(isClient ? localStorage.getItem('auth_token') : null)
   const loading = ref(false)
+  const isLoggingOut = ref(false)
 
   // Per-resource permissions (fetched for admin users)
   const permissions = ref({
@@ -137,14 +138,20 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function logout() {
-    if (token.value) {
-      try { await authApi.logout() } catch { /* ignore */ }
-    }
-    user.value = null
-    token.value = null
-    if (isClient) {
-      localStorage.removeItem('auth_token')
-      localStorage.removeItem('auth_user')
+    if (isLoggingOut.value) return
+    isLoggingOut.value = true
+    try {
+      if (token.value) {
+        try { await authApi.logout() } catch { /* ignore */ }
+      }
+      user.value = null
+      token.value = null
+      if (isClient) {
+        localStorage.removeItem('auth_token')
+        localStorage.removeItem('auth_user')
+      }
+    } finally {
+      isLoggingOut.value = false
     }
   }
 

@@ -41,6 +41,8 @@ const api = axios.create({
   withCredentials: true,
 })
 
+let isHandlingUnauthorized = false
+
 api.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null
   if (token) {
@@ -62,6 +64,21 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
+      const requestUrl = String(error.config?.url || '')
+      const skip401Handler =
+        !!error.config?._skip401Handler ||
+        requestUrl.includes('/auth/logout') ||
+        requestUrl.includes('/auth/login')
+
+      if (skip401Handler) {
+        return Promise.reject(error)
+      }
+
+      if (isHandlingUnauthorized) {
+        return Promise.reject(error)
+      }
+
+      isHandlingUnauthorized = true
       const authStore = useAuthStore()
       authStore.logout()
       if (typeof window !== 'undefined') {
@@ -79,7 +96,7 @@ api.interceptors.response.use(
 export const authApi = {
   login: (data) => api.post('/auth/login', data),
   register: (data) => api.post('/auth/register', data),
-  logout: () => api.post('/auth/logout'),
+  logout: () => api.post('/auth/logout', {}, { _skip401Handler: true }),
   me: () => api.get('/auth/me'),
   forgotPassword: (data) => api.post('/auth/forgot-password', data),
   resetPassword: (data) => api.post('/auth/reset-password', data),
