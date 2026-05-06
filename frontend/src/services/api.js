@@ -69,8 +69,15 @@ api.interceptors.response.use(
         !!error.config?._skip401Handler ||
         requestUrl.includes('/auth/logout') ||
         requestUrl.includes('/auth/login')
+      const isAuthCheckRequest = requestUrl.includes('/auth/me')
 
       if (skip401Handler) {
+        return Promise.reject(error)
+      }
+
+      // Only force a global logout when identity check fails.
+      // For other endpoints, let the page handle the 401 without killing the session.
+      if (!isAuthCheckRequest) {
         return Promise.reject(error)
       }
 
@@ -82,7 +89,10 @@ api.interceptors.response.use(
       const authStore = useAuthStore()
       authStore.logout()
       if (typeof window !== 'undefined') {
-        window.location.href = '/auth/login'
+        const alreadyOnLogin = window.location.pathname.startsWith('/auth/login')
+        if (!alreadyOnLogin) {
+          window.location.href = '/auth/login'
+        }
       }
     }
     if (error.response?.status === 429) {

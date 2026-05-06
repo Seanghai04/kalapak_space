@@ -138,6 +138,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function logout() {
+    if (!token.value && !user.value) return
     if (isLoggingOut.value) return
     isLoggingOut.value = true
     try {
