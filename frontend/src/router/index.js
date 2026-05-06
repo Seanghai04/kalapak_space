@@ -105,7 +105,11 @@ router.beforeEach(async (to, from, next) => {
 
   // Fetch user if token exists but user not loaded
   if (authStore.token && !authStore.user) {
-    await authStore.fetchMe()
+    try {
+      await authStore.fetchMe()
+    } catch {
+      // Keep current auth state; avoid forcing logout on transient failures.
+    }
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
@@ -121,7 +125,8 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.meta.guestOnly && authStore.isAuthenticated) {
-    return next({ name: 'home' })
+    const redirectTarget = authStore.isAdmin ? { name: 'admin-dashboard' } : { name: 'home' }
+    return next(redirectTarget)
   }
 
   next()

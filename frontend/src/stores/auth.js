@@ -3,8 +3,17 @@ import { ref, computed } from 'vue'
 import { authApi, memberApi, adminApi } from '@/services/api'
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref(null)
   const isClient = typeof window !== 'undefined'
+  const persistedUser = (() => {
+    if (!isClient) return null
+    try {
+      const raw = localStorage.getItem('auth_user')
+      return raw ? JSON.parse(raw) : null
+    } catch {
+      return null
+    }
+  })()
+  const user = ref(persistedUser)
   const token = ref(isClient ? localStorage.getItem('auth_token') : null)
   const loading = ref(false)
 
@@ -46,6 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = data.data.user
       if (isClient) {
         localStorage.setItem('auth_token', data.data.token)
+        localStorage.setItem('auth_user', JSON.stringify(data.data.user))
       }
       return data
     } finally {
@@ -61,6 +71,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = data.data.user
       if (isClient) {
         localStorage.setItem('auth_token', data.data.token)
+        localStorage.setItem('auth_user', JSON.stringify(data.data.user))
       }
       return data
     } finally {
@@ -74,9 +85,15 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const { data } = await authApi.me()
       user.value = data.data
+      if (isClient) {
+        localStorage.setItem('auth_user', JSON.stringify(data.data))
+      }
       await fetchPermissions()
-    } catch {
-      logout()
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        await logout()
+      }
+      throw error
     } finally {
       loading.value = false
     }
@@ -85,6 +102,9 @@ export const useAuthStore = defineStore('auth', () => {
   async function updateProfile(formData) {
     const { data } = await memberApi.updateProfile(formData)
     user.value = data.data
+    if (isClient) {
+      localStorage.setItem('auth_user', JSON.stringify(data.data))
+    }
     return data
   }
 
@@ -95,6 +115,9 @@ export const useAuthStore = defineStore('auth', () => {
   async function uploadAvatar(formData) {
     const { data } = await memberApi.uploadAvatar(formData)
     user.value = data.data
+    if (isClient) {
+      localStorage.setItem('auth_user', JSON.stringify(data.data))
+    }
     return data
   }
 
@@ -106,6 +129,7 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = null
     if (isClient) {
       localStorage.removeItem('auth_token')
+      localStorage.removeItem('auth_user')
     }
   }
 
