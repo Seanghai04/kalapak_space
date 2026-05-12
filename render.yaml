@@ -30,6 +30,9 @@ services:
         generateValue: true
       - key: APP_DEBUG
         value: "false"
+      # Run Laravel migrations on each deploy so new tables/columns exist (e.g. series, collections).
+      - key: RUN_MIGRATIONS
+        value: "1"
       - key: APP_URL
         value: https://kalapak-backend.onrender.com
       - key: FRONTEND_URL

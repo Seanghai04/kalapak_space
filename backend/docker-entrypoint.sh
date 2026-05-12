@@ -35,6 +35,10 @@ echo "    DB_SSLMODE=${DB_SSLMODE}"
 echo "    PGSSLMODE=${PGSSLMODE}"
 
 MIGRATE_EXIT=0
+# Render / production: migrate on boot unless explicitly disabled (RUN_MIGRATIONS=0).
+if [ -z "${RUN_MIGRATIONS}" ] && [ "${APP_ENV}" = "production" ]; then
+    RUN_MIGRATIONS=1
+fi
 if [ "${RUN_MIGRATIONS}" = "1" ] || [ "${RUN_MIGRATIONS}" = "true" ]; then
     echo "==> [DB] Running pending migrations..."
     php artisan migrate --force --no-interaction 2>&1
