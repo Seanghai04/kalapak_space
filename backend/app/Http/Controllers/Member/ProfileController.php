@@ -9,6 +9,7 @@ use Cloudinary\Cloudinary;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
@@ -23,8 +24,20 @@ class ProfileController extends Controller
 
     public function update(Request $request): JsonResponse
     {
+        $request->merge([
+            'username' => strtolower(trim((string) $request->input('username', ''))),
+        ]);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'username' => [
+                'required',
+                'string',
+                'min:3',
+                'max:30',
+                'regex:/^[a-z0-9_]+$/',
+                Rule::unique('users', 'username')->ignore($request->user()->id),
+            ],
             'bio' => ['nullable', 'string', 'max:1000'],
             'github_url' => ['nullable', 'url'],
             'linkedin_url' => ['nullable', 'url'],

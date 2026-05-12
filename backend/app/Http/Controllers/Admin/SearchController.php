@@ -34,6 +34,7 @@ class SearchController extends Controller
             $results['users'] = User::with('role')
                 ->where(function ($query) use ($q) {
                     $query->where('name', 'ilike', "%{$q}%")
+                        ->orWhere('username', 'ilike', "%{$q}%")
                         ->orWhere('email', 'ilike', "%{$q}%");
                 })
                 ->limit($limit)
@@ -41,7 +42,7 @@ class SearchController extends Controller
                 ->map(fn($u) => [
                     'id' => $u->id,
                     'title' => $u->name,
-                    'subtitle' => $u->email,
+                    'subtitle' => '@' . $u->username . ' · ' . $u->email,
                     'meta' => $u->role?->name ?? 'No role',
                     'avatar' => $u->avatar ? app(SupabaseStorage::class)->url($u->avatar) : null,
                     'is_active' => $u->is_active,

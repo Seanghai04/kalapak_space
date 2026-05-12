@@ -77,6 +77,7 @@
                 {{ authStore.user.role.name.toUpperCase() }}
               </span>
             </div>
+            <p v-if="authStore.user?.username" class="text-brand-cyan/90 text-sm font-medium mb-1">@{{ authStore.user.username }}</p>
             <p class="text-gray-400 mb-3">{{ authStore.user?.email }}</p>
             <div class="flex flex-wrap items-center gap-4">
               <a
@@ -149,6 +150,17 @@
                 </div>
               </div>
               <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                  <span class="text-purple-400 text-sm font-bold">@</span>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-xs text-gray-500">Username</p>
+                  <p class="text-sm font-medium text-brand-violet dark:text-brand-cyan truncate">
+                    {{ authStore.user?.username ? '@' + authStore.user.username : '—' }}
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-brand-cyan/10 flex items-center justify-center">
                   <svg class="w-5 h-5 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
@@ -205,7 +217,7 @@
             </div>
 
             <form @submit.prevent="handleUpdateProfile" class="p-6 space-y-6">
-              <!-- Name & Email Row -->
+              <!-- Name, Username & Email -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
@@ -224,22 +236,42 @@
                   </div>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Username</label>
                   <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                      </svg>
+                      <span class="text-gray-400 text-sm font-medium">@</span>
                     </div>
                     <input
-                      v-model="profileForm.email"
-                      type="email"
-                      disabled
-                      class="w-full pl-12 pr-4 py-3 bg-dark-700/30 dark:bg-dark-700/30 bg-gray-100 border border-dark-600/50 dark:border-dark-600/50 border-gray-200 rounded-xl text-gray-500 cursor-not-allowed"
+                      v-model="profileForm.username"
+                      type="text"
+                      required
+                      minlength="3"
+                      maxlength="30"
+                      pattern="[a-zA-Z0-9_]+"
+                      autocomplete="username"
+                      class="w-full pl-10 pr-4 py-3 bg-dark-800/50 dark:bg-dark-800/50 bg-gray-50 border border-dark-600 dark:border-dark-600 border-gray-200 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-brand-violet focus:ring-1 focus:ring-brand-violet/50 transition-all"
+                      placeholder="your_handle"
                     />
                   </div>
-                  <p class="mt-1.5 text-xs text-gray-500">Email cannot be changed</p>
+                  <p class="mt-1.5 text-xs text-gray-500">3–30 characters: letters, numbers, underscores.</p>
                 </div>
+              </div>
+              <div class="mt-6">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                    </svg>
+                  </div>
+                  <input
+                    v-model="profileForm.email"
+                    type="email"
+                    disabled
+                    class="w-full pl-12 pr-4 py-3 bg-dark-700/30 dark:bg-dark-700/30 bg-gray-100 border border-dark-600/50 dark:border-dark-600/50 border-gray-200 rounded-xl text-gray-500 cursor-not-allowed"
+                  />
+                </div>
+                <p class="mt-1.5 text-xs text-gray-500">Email cannot be changed</p>
               </div>
 
               <!-- Bio -->
@@ -546,7 +578,7 @@ const securityTips = [
 ]
 
 // Profile form
-const profileForm = ref({ name: '', email: '', bio: '', github_url: '', linkedin_url: '' })
+const profileForm = ref({ name: '', username: '', email: '', bio: '', github_url: '', linkedin_url: '' })
 const saving = ref(false)
 const profileMsg = ref('')
 const profileError = ref(false)
@@ -589,34 +621,40 @@ const pwStrength = computed(() => {
   return levels[score] || levels[0]
 })
 
+function syncProfileFormFromAuthUser() {
+  const u = authStore.user
+  if (!u) return
+  profileForm.value = {
+    name: u.name || '',
+    username: u.username || '',
+    email: u.email || '',
+    bio: u.bio || '',
+    github_url: u.github_url || '',
+    linkedin_url: u.linkedin_url || '',
+  }
+}
+
 onMounted(async () => {
+  // Always reload identity from API here so the page matches the database (e.g. after
+  // manual edits in pgAdmin). The app otherwise only uses cached Pinia / localStorage.
+  if (authStore.token) {
+    try {
+      await authStore.fetchMe()
+    } catch {
+      /* keep cached user if request fails */
+    }
+  }
   try {
     const { data } = await memberApi.getStorageSettings()
     const allowed = data?.data?.allowed_storage_providers || 'both'
     allowedProviders.value = allowed
     if (allowed !== 'both') avatarStorageProvider.value = allowed
   } catch { /* ignore */ }
-  if (authStore.user) {
-    profileForm.value = {
-      name: authStore.user.name || '',
-      email: authStore.user.email || '',
-      bio: authStore.user.bio || '',
-      github_url: authStore.user.github_url || '',
-      linkedin_url: authStore.user.linkedin_url || '',
-    }
-  }
+  syncProfileFormFromAuthUser()
 })
 
 function resetProfileForm() {
-  if (authStore.user) {
-    profileForm.value = {
-      name: authStore.user.name || '',
-      email: authStore.user.email || '',
-      bio: authStore.user.bio || '',
-      github_url: authStore.user.github_url || '',
-      linkedin_url: authStore.user.linkedin_url || '',
-    }
-  }
+  syncProfileFormFromAuthUser()
   profileMsg.value = ''
 }
 
@@ -631,6 +669,7 @@ async function handleUpdateProfile() {
   try {
     await authStore.updateProfile({
       name: profileForm.value.name,
+      username: profileForm.value.username,
       bio: profileForm.value.bio,
       github_url: profileForm.value.github_url || null,
       linkedin_url: profileForm.value.linkedin_url || null,

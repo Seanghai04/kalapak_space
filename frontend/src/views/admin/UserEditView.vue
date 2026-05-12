@@ -35,6 +35,7 @@
             />
           </div>
           <h2 class="text-lg font-bold text-gray-900 dark:text-white">{{ user.name }}</h2>
+          <p v-if="user.username" class="text-sm text-brand-violet dark:text-brand-cyan font-medium">@{{ user.username }}</p>
           <p class="text-sm text-gray-500 dark:text-gray-400">{{ user.email }}</p>
           <span :class="roleBadgeClass(user.role?.name)" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium mt-3">
             <span class="w-1.5 h-1.5 rounded-full" :class="roleDotClass(user.role?.name)" />
@@ -95,6 +96,13 @@
               <input v-model="form.name" type="text" required class="input-field w-full" placeholder="Enter full name" />
             </div>
             <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Username</label>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">@</span>
+                <input v-model="form.username" type="text" required minlength="3" maxlength="30" pattern="[a-zA-Z0-9_]+" class="input-field w-full pl-8" placeholder="unique_handle" />
+              </div>
+            </div>
+            <div class="md:col-span-2">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email Address</label>
               <input v-model="form.email" type="email" required class="input-field w-full" placeholder="Enter email" />
             </div>
@@ -322,7 +330,7 @@ onMounted(async () => {
     ])
     const u = userRes.data.data
     user.value = u
-    form.value = { name: u.name, email: u.email, role_id: u.role?.id || '' }
+    form.value = { name: u.name, username: u.username || '', email: u.email, role_id: u.role?.id || '' }
     roles.value = rolesRes.data.data || []
 
     // Load per-user permissions if this is an admin user and current user is superadmin

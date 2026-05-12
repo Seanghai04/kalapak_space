@@ -12,7 +12,7 @@ class ProjectController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Project::with(['tags', 'creator'])->whereNull('deleted_at');
+        $query = Project::with(['tags', 'creator', 'collection'])->whereNull('deleted_at');
 
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
@@ -29,6 +29,22 @@ class ProjectController extends Controller
             $query->where('status', $status);
         }
 
+        $creatorScoped = false;
+        if ($request->filled('created_by')) {
+            $userId = (int) $request->get('created_by');
+            if ($userId > 0) {
+                $query->where('created_by', $userId)
+                    ->whereHas('creator', fn($q) => $q->where('is_active', true));
+                $creatorScoped = true;
+            }
+        }
+        if (!$creatorScoped) {
+            $creator = strtolower(trim((string) $request->get('creator')));
+            if ($creator !== '') {
+                $query->whereHas('creator', fn($q) => $q->whereRaw('LOWER(username) = ?', [$creator])->where('is_active', true));
+            }
+        }
+
         $sort = $request->get('sort', 'newest');
         $query = match ($sort) {
             'stars' => $query->orderByDesc('stars_count'),
@@ -36,7 +52,8 @@ class ProjectController extends Controller
             default => $query->orderByDesc('created_at'),
         };
 
-        $projects = $query->paginate(12);
+        $perPage = min(50, max(1, (int) $request->get('per_page', 12)));
+        $projects = $query->paginate($perPage);
 
         return response()->json([
             'success' => true,
@@ -52,7 +69,7 @@ class ProjectController extends Controller
 
     public function show(string $slug): JsonResponse
     {
-        $project = Project::with(['tags', 'creator'])->where('slug', $slug)->firstOrFail();
+        $project = Project::with(['tags', 'creator', 'collection'])->where('slug', $slug)->firstOrFail();
 
         return response()->json([
             'success' => true,

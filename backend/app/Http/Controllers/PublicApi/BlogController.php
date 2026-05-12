@@ -13,10 +13,9 @@ class BlogController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = BlogPost::with(['author', 'category'])
+        $query = BlogPost::with(['author', 'category', 'series'])
             ->withCount('approvedComments')
-            ->where('status', 'published')
-            ->whereNotNull('published_at');
+            ->where('status', 'published');
 
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
@@ -29,7 +28,25 @@ class BlogController extends Controller
             $query->whereHas('category', fn($q) => $q->where('slug', $category));
         }
 
-        $posts = $query->orderByDesc('published_at')->paginate(9);
+        // Prefer author_id (stable FK). If author_id is present but invalid (e.g. 0), fall back to ?author=username.
+        $authorScoped = false;
+        if ($request->filled('author_id')) {
+            $authorId = (int) $request->get('author_id');
+            if ($authorId > 0) {
+                $query->where('author_id', $authorId)
+                    ->whereHas('author', fn($q) => $q->where('is_active', true));
+                $authorScoped = true;
+            }
+        }
+        if (!$authorScoped) {
+            $author = strtolower(trim((string) $request->get('author')));
+            if ($author !== '') {
+                $query->whereHas('author', fn($q) => $q->whereRaw('LOWER(username) = ?', [$author])->where('is_active', true));
+            }
+        }
+
+        $perPage = min(50, max(1, (int) $request->get('per_page', 9)));
+        $posts = $query->orderByRaw('COALESCE(published_at, created_at) DESC')->paginate($perPage);
 
         return response()->json([
             'success' => true,
@@ -45,7 +62,7 @@ class BlogController extends Controller
 
     public function show(string $slug): JsonResponse
     {
-        $post = BlogPost::with(['author', 'category', 'approvedComments.user', 'approvedComments.replies'])
+        $post = BlogPost::with(['author', 'category', 'series', 'approvedComments.user', 'approvedComments.replies'])
             ->where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();

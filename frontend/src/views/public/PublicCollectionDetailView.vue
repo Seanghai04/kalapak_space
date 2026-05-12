@@ -1,0 +1,93 @@
+<template>
+  <div class="min-h-screen pb-20">
+    <div v-if="loading" class="flex justify-center py-32">
+      <div class="w-10 h-10 border-4 border-brand-violet/30 border-t-brand-violet rounded-full animate-spin" />
+    </div>
+    <EmptyState v-else-if="notFound" title="Collection not found" message="This collection does not exist or has no public page." />
+    <template v-else>
+      <section class="relative overflow-hidden pt-20 pb-12 sm:pt-24 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900">
+        <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
+          <router-link :to="`/u/${author.username}`" class="text-sm text-brand-cyan/90 hover:underline mb-4 inline-block">← @{{ author.username }}</router-link>
+          <div class="flex flex-wrap items-center gap-3 mb-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-brand-cyan border border-white/20">Collection</span>
+            <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ collection.name }}</h1>
+          </div>
+          <p v-if="collection.description" class="text-gray-300 text-sm max-w-2xl mt-2">{{ collection.description }}</p>
+        </div>
+      </section>
+      <section class="max-w-7xl mx-auto px-4 sm:px-6 -mt-6 relative z-10">
+        <div v-if="projects.length" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7">
+          <router-link
+            v-for="project in projects"
+            :key="project.id"
+            :to="`/projects/${project.slug}`"
+            class="group flex flex-col rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/80 dark:bg-dark-800/80 backdrop-blur-sm overflow-hidden hover:border-brand-violet/30 dark:hover:border-brand-cyan/30 transition-all hover:-translate-y-1 hover:shadow-xl"
+          >
+            <div class="relative aspect-video overflow-hidden bg-gray-100 dark:bg-dark-700">
+              <img v-if="project.cover_image" :src="project.cover_image" :alt="project.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div v-else class="w-full h-full bg-gradient-brand opacity-25" />
+            </div>
+            <div class="p-5 flex flex-col flex-1">
+              <h2 class="text-base font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-brand-violet dark:group-hover:text-brand-cyan">{{ project.title }}</h2>
+              <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mt-2 flex-1">{{ project.description }}</p>
+            </div>
+          </router-link>
+        </div>
+        <EmptyState v-else title="No projects in this collection" message="Projects will show up here when assigned to this collection." />
+        <div v-if="meta.last_page > 1" class="mt-10">
+          <Pagination :current-page="meta.current_page" :last-page="meta.last_page" @page-change="loadPage" />
+        </div>
+      </section>
+    </template>
+  </div>
+</template>
+
+<script setup>
+import { ref, watch, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { publicApi } from '@/services/api'
+import EmptyState from '@/components/common/EmptyState.vue'
+import Pagination from '@/components/common/Pagination.vue'
+
+const route = useRoute()
+const loading = ref(true)
+const notFound = ref(false)
+const payload = ref(null)
+
+const collection = computed(() => payload.value?.collection || null)
+const author = computed(() => payload.value?.author || { username: '', name: '' })
+const projects = computed(() => payload.value?.projects || [])
+const meta = computed(() => ({
+  current_page: payload.value?.meta?.current_page ?? 1,
+  last_page: payload.value?.meta?.last_page ?? 1,
+}))
+
+async function loadPage(page = 1) {
+  loading.value = true
+  notFound.value = false
+  const username = String(route.params.username || '').trim()
+  const slug = String(route.params.slug || '').trim()
+  if (!username || !slug) {
+    notFound.value = true
+    loading.value = false
+    return
+  }
+  try {
+    const { data } = await publicApi.getPublicCollectionPage(username, slug, { page, per_page: 12 })
+    payload.value = data.data
+    document.title = `${data.data?.collection?.name || 'Collection'} – @${username} | Kalapak Code Team`
+  } catch (e) {
+    if (e.response?.status === 404) notFound.value = true
+    payload.value = null
+    document.title = 'Collection – Kalapak Code Team'
+  } finally {
+    loading.value = false
+  }
+}
+
+watch(
+  () => [route.params.username, route.params.slug],
+  () => loadPage(1),
+  { immediate: true }
+)
+</script>

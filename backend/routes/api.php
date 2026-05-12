@@ -29,10 +29,23 @@ use App\Http\Controllers\Admin\StorageStatsController;
 use App\Http\Controllers\Admin\DocController;
 use App\Http\Controllers\Admin\DocMenuController;
 use App\Http\Controllers\PublicApi\DocController as PublicDocController;
+use App\Http\Controllers\PublicApi\UserProfileContentController;
+use App\Http\Controllers\PublicApi\PublicSeriesController;
+use App\Http\Controllers\PublicApi\PublicCollectionController;
+use App\Http\Controllers\Admin\SeriesController;
+use App\Http\Controllers\Admin\CollectionsController;
+use App\Http\Resources\BlogPostResource;
+use App\Http\Resources\ProjectResource;
+use App\Models\BlogPost;
+use App\Models\Project;
 use App\Models\Tag;
 use App\Models\TeamMember;
+use App\Models\User;
 use App\Http\Resources\TeamMemberResource;
+use App\Services\SupabaseStorage;
+use Cloudinary\Cloudinary;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 // ── PUBLIC ROUTES ─────────────────────────────────────
 
@@ -52,6 +65,114 @@ Route::get('/projects/{slug}', [ProjectController::class, 'show']);
 Route::get('/blog/posts', [BlogController::class, 'index']);
 Route::get('/blog/posts/{slug}', [BlogController::class, 'show']);
 Route::get('/blog/categories', [BlogController::class, 'categories']);
+
+// Public profile content (path-scoped — always filtered to this username)
+Route::get('/users/{username}/blog-posts', [UserProfileContentController::class, 'blogPosts']);
+Route::get('/users/{username}/projects', [UserProfileContentController::class, 'projects']);
+Route::get('/users/{username}/series/{slug}', [PublicSeriesController::class, 'show']);
+Route::get('/users/{username}/collections/{slug}', [PublicCollectionController::class, 'show']);
+
+// Public member profiles (by username). Implemented as a closure so Docker setups that mount
+// only `routes/` still pick up the handler without relying on newer files under `app/`.
+Route::get('/users/{username}', function (string $username) {
+    $username = strtolower(trim($username));
+
+    $user = User::query()
+        ->with('role')
+        ->whereRaw('LOWER(username) = ?', [$username])
+        ->where('is_active', true)
+        ->firstOrFail();
+
+    $avatarUrl = null;
+    if ($user->avatar && is_string($user->avatar)) {
+        $av = trim($user->avatar);
+        if ($av !== '') {
+            if (preg_match('/^https?:\/\//i', $av)) {
+                $avatarUrl = $av;
+            } else {
+                $disk = $user->avatar_disk ?? 'supabase';
+                if ($disk === 'cloudinary') {
+                    $cloudUrl = config('cloudinary.cloud_url');
+                    if (is_string($cloudUrl) && trim($cloudUrl) !== '') {
+                        try {
+                            $avatarUrl = (new Cloudinary($cloudUrl))->image($av)->toUrl();
+                        } catch (\Throwable) {
+                            $avatarUrl = null;
+                        }
+                    }
+                } else {
+                    $avatarUrl = app(SupabaseStorage::class)->url($av);
+                }
+            }
+        }
+    }
+
+    $request = request();
+
+    $blogWith = ['author', 'category'];
+    if (Schema::hasTable('series') && Schema::hasColumn('blog_posts', 'series_id')) {
+        $blogWith[] = 'series';
+    }
+
+    $postsPaginator = BlogPost::with($blogWith)
+        ->withCount('approvedComments')
+        ->where('status', 'published')
+        ->where('author_id', $user->id)
+        ->orderByRaw('COALESCE(published_at, created_at) DESC')
+        ->paginate(9);
+
+    $blogPostsPayload = $postsPaginator->getCollection()
+        ->map(fn(BlogPost $post) => (new BlogPostResource($post))->toArray($request))
+        ->values()
+        ->all();
+
+    $projectWith = ['tags', 'creator'];
+    if (Schema::hasTable('collections') && Schema::hasColumn('projects', 'collection_id')) {
+        $projectWith[] = 'collection';
+    }
+
+    $projectsPaginator = Project::with($projectWith)
+        ->whereNull('deleted_at')
+        ->where('created_by', $user->id)
+        ->orderByDesc('created_at')
+        ->paginate(9);
+
+    $projectsPayload = $projectsPaginator->getCollection()
+        ->map(fn(Project $project) => (new ProjectResource($project))->toArray($request))
+        ->values()
+        ->all();
+
+    return response()->json([
+        'success' => true,
+        'data' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'username' => $user->username,
+            'avatar' => $avatarUrl,
+            'bio' => $user->bio,
+            'github_url' => $user->github_url,
+            'linkedin_url' => $user->linkedin_url,
+            'role' => $user->role ? [
+                'display_name' => $user->role->display_name,
+            ] : null,
+            'joined_at' => $user->created_at?->format(\DateTimeInterface::ATOM),
+            'blog_posts' => $blogPostsPayload,
+            'blog_posts_meta' => [
+                'current_page' => $postsPaginator->currentPage(),
+                'last_page' => $postsPaginator->lastPage(),
+                'per_page' => $postsPaginator->perPage(),
+                'total' => $postsPaginator->total(),
+            ],
+            'projects' => $projectsPayload,
+            'projects_meta' => [
+                'current_page' => $projectsPaginator->currentPage(),
+                'last_page' => $projectsPaginator->lastPage(),
+                'per_page' => $projectsPaginator->perPage(),
+                'total' => $projectsPaginator->total(),
+            ],
+        ],
+    ]);
+});
 
 // Docs (public)
 Route::get('/docs/nav', [PublicDocController::class, 'nav']);
@@ -152,6 +273,20 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/blog/categories', [BlogPostController::class, 'storeCategory']);
         Route::put('/blog/categories/{id}', [BlogPostController::class, 'updateCategory']);
         Route::delete('/blog/categories/{id}', [BlogPostController::class, 'destroyCategory']);
+
+        // Series (admin + superadmin)
+        Route::get('/series/assignable', [SeriesController::class, 'assignable']);
+        Route::get('/series', [SeriesController::class, 'index']);
+        Route::post('/series', [SeriesController::class, 'store']);
+        Route::put('/series/{id}', [SeriesController::class, 'update']);
+        Route::delete('/series/{id}', [SeriesController::class, 'destroy']);
+
+        // Collections (admin + superadmin)
+        Route::get('/collections/assignable', [CollectionsController::class, 'assignable']);
+        Route::get('/collections', [CollectionsController::class, 'index']);
+        Route::post('/collections', [CollectionsController::class, 'store']);
+        Route::put('/collections/{id}', [CollectionsController::class, 'update']);
+        Route::delete('/collections/{id}', [CollectionsController::class, 'destroy']);
 
         // Applications (admin + superadmin)
         Route::get('/applications', [AdminApplicationController::class, 'index']);

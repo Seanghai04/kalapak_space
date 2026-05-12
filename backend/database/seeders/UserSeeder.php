@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
             ['email' => 'admin@kalapak.dev'],
             [
                 'name' => 'Khat Vanna',
+                'username' => 'khat_vanna',
                 'password' => 'password',
                 'role_id' => $adminRole->id,
                 'bio' => 'Founder & Full-Stack Developer at Kalapak Code Team',
@@ -28,6 +29,7 @@ class UserSeeder extends Seeder
             ['email' => 'member@kalapak.dev'],
             [
                 'name' => 'Rom Chamraeun',
+                'username' => 'rom_chamraeun',
                 'password' => 'password',
                 'role_id' => $memberRole->id,
                 'bio' => 'Co-Founder & Full-Stack Developer',
@@ -39,6 +41,7 @@ class UserSeeder extends Seeder
             ['email' => 'guest@kalapak.dev'],
             [
                 'name' => 'Test Guest',
+                'username' => 'test_guest',
                 'password' => 'password',
                 'role_id' => $memberRole->id,
                 'is_active' => true,
@@ -49,6 +52,7 @@ class UserSeeder extends Seeder
             ['email' => 'norng@kalapak.dev'],
             [
                 'name' => 'Phuem Norng',
+                'username' => 'phuem_norng',
                 'password' => 'password',
                 'role_id' => $memberRole->id,
                 'bio' => 'Co-Founder & Full-Stack Developer',
@@ -60,6 +64,7 @@ class UserSeeder extends Seeder
             ['email' => 'seanghai@kalapak.dev'],
             [
                 'name' => 'Pheun Seanghai',
+                'username' => 'pheun_seanghai',
                 'password' => 'password',
                 'role_id' => $memberRole->id,
                 'bio' => 'Co-Founder & Full-Stack Developer',

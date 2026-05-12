@@ -73,7 +73,16 @@
 
           <!-- Meta info bar -->
           <div data-aos="fade-up" data-aos-delay="400" class="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-500 dark:text-gray-400">
-            <span v-if="project.creator" class="flex items-center gap-2">
+            <router-link
+              v-if="project.creator?.username"
+              :to="{ name: 'user-profile', params: { username: project.creator.username } }"
+              class="flex items-center gap-2 rounded-lg -m-1 p-1 hover:text-brand-violet dark:hover:text-brand-cyan transition-colors"
+            >
+              <img v-if="project.creator.avatar" :src="project.creator.avatar" class="w-5 h-5 rounded-full object-cover" />
+              <span v-else class="w-5 h-5 rounded-full bg-gradient-brand flex items-center justify-center text-white text-[10px] font-bold">{{ project.creator.name?.charAt(0) }}</span>
+              {{ project.creator.name }}
+            </router-link>
+            <span v-else-if="project.creator" class="flex items-center gap-2">
               <img v-if="project.creator.avatar" :src="project.creator.avatar" class="w-5 h-5 rounded-full object-cover" />
               <span v-else class="w-5 h-5 rounded-full bg-gradient-brand flex items-center justify-center text-white text-[10px] font-bold">{{ project.creator.name?.charAt(0) }}</span>
               {{ project.creator.name }}
@@ -168,9 +177,19 @@
                   </div>
                   <div v-if="project.creator" class="flex justify-between items-center">
                     <dt class="text-xs text-gray-500 dark:text-gray-400">Creator</dt>
-                    <dd class="flex items-center gap-1.5 text-xs text-gray-700 dark:text-gray-300 font-medium">
-                      <img v-if="project.creator.avatar" :src="project.creator.avatar" class="w-4 h-4 rounded-full object-cover" />
-                      {{ project.creator.name }}
+                    <dd class="text-xs text-gray-700 dark:text-gray-300 font-medium min-w-0">
+                      <router-link
+                        v-if="project.creator.username"
+                        :to="{ name: 'user-profile', params: { username: project.creator.username } }"
+                        class="inline-flex items-center gap-1.5 max-w-full rounded-md hover:text-brand-violet dark:hover:text-brand-cyan transition-colors"
+                      >
+                        <img v-if="project.creator.avatar" :src="project.creator.avatar" class="w-4 h-4 shrink-0 rounded-full object-cover" />
+                        <span class="truncate">{{ project.creator.name }}</span>
+                      </router-link>
+                      <span v-else class="inline-flex items-center gap-1.5">
+                        <img v-if="project.creator.avatar" :src="project.creator.avatar" class="w-4 h-4 rounded-full object-cover" />
+                        {{ project.creator.name }}
+                      </span>
                     </dd>
                   </div>
                 </dl>

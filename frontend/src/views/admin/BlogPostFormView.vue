@@ -158,6 +158,20 @@
                 placeholder="Uncategorized"
               />
             </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">Series <span class="text-gray-400 font-normal">(optional)</span></label>
+              <div class="flex gap-2">
+                <CustomSelect
+                  v-model="form.series_id"
+                  class="flex-1 min-w-0"
+                  :options="[{ label: 'None', value: '' }, ...filteredSeries.map((s) => ({ label: s.name, value: String(s.id) }))]"
+                  placeholder="None"
+                />
+                <button type="button" class="shrink-0 px-3 py-2 rounded-lg border border-gray-200 dark:border-dark-600 text-xs font-medium text-brand-violet dark:text-brand-cyan hover:bg-gray-50 dark:hover:bg-white/[0.04]" @click="openSeriesModal">
+                  New
+                </button>
+              </div>
+            </div>
             <div class="flex items-center justify-between py-2">
               <div>
                 <p class="text-sm font-medium dark:text-gray-200">Featured</p>
@@ -197,6 +211,23 @@
         </div>
       </div>
     </form>
+
+    <teleport to="body">
+      <transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
+        <div v-if="seriesModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click.self="seriesModalOpen = false">
+          <div class="w-full max-w-sm rounded-2xl bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-600 shadow-xl p-6 space-y-3">
+            <h3 class="text-lg font-bold dark:text-white">New series</h3>
+            <input v-model="newSeries.name" type="text" class="input-field w-full" placeholder="Name" @input="newSeries.slug = slugify(newSeries.name)" />
+            <input v-model="newSeries.slug" type="text" class="input-field w-full font-mono text-sm" placeholder="slug" />
+            <p v-if="seriesModalError" class="text-sm text-red-500">{{ seriesModalError }}</p>
+            <div class="flex justify-end gap-2 pt-2">
+              <button type="button" class="btn-ghost text-sm" @click="seriesModalOpen = false">Cancel</button>
+              <button type="button" class="btn-primary text-sm" :disabled="seriesSaving" @click="createSeriesInline">{{ seriesSaving ? '…' : 'Create' }}</button>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </teleport>
   </div>
 </template>
 
@@ -215,9 +246,21 @@ const uiStore = useUiStore()
 const authStore = useAuthStore()
 
 const isEdit = computed(() => !!route.params.id)
-const form = ref({ title: '', slug: '', excerpt: '', content: '', category_id: '', status: 'draft', is_featured: false, storage_provider: localStorage.getItem('media_storage_provider') || 'supabase' })
+const form = ref({ title: '', slug: '', excerpt: '', content: '', category_id: '', series_id: '', status: 'draft', is_featured: false, storage_provider: localStorage.getItem('media_storage_provider') || 'supabase' })
 watch(() => form.value.storage_provider, (v) => localStorage.setItem('media_storage_provider', v))
 const categories = ref([])
+const assignableSeries = ref([])
+const postAuthorId = ref(null)
+const filteredSeries = computed(() => {
+  const uid = postAuthorId.value ?? authStore.user?.id
+  if (!uid) return assignableSeries.value
+  if (authStore.isSuperAdmin) return assignableSeries.value
+  return assignableSeries.value.filter((s) => Number(s.author_id) === Number(uid))
+})
+const seriesModalOpen = ref(false)
+const newSeries = ref({ name: '', slug: '' })
+const seriesModalError = ref('')
+const seriesSaving = ref(false)
 const coverImage = ref(null)
 const imagePreview = ref(null)
 const existingImage = ref(null)
@@ -263,6 +306,40 @@ function removeImage() {
   existingImage.value = null
 }
 
+async function loadAssignableSeries() {
+  try {
+    const { data } = await adminApi.getAssignableSeries()
+    assignableSeries.value = data.data || []
+  } catch {
+    assignableSeries.value = []
+  }
+}
+
+function openSeriesModal() {
+  newSeries.value = { name: '', slug: '' }
+  seriesModalError.value = ''
+  seriesModalOpen.value = true
+}
+
+async function createSeriesInline() {
+  seriesModalError.value = ''
+  seriesSaving.value = true
+  try {
+    const slug = newSeries.value.slug || slugify(newSeries.value.name)
+    const { data } = await adminApi.createSeries({ name: newSeries.value.name, slug, description: '' })
+    const row = data.data
+    assignableSeries.value = [...assignableSeries.value, { id: row.id, name: row.name, slug: row.slug, author_id: row.author_id }].sort((a, b) => a.name.localeCompare(b.name))
+    form.value.series_id = String(row.id)
+    seriesModalOpen.value = false
+    uiStore.showToast('Series created')
+  } catch (e) {
+    const errs = e.response?.data?.errors
+    seriesModalError.value = errs ? Object.values(errs).flat().join(' ') : (e.response?.data?.message || 'Failed')
+  } finally {
+    seriesSaving.value = false
+  }
+}
+
 onMounted(async () => {
   const neededAction = isEdit.value ? 'update' : 'create'
   if (!authStore.canDo('blog_posts', neededAction)) {
@@ -271,6 +348,9 @@ onMounted(async () => {
     return
   }
   try { const { data } = await adminApi.getBlogCategories(); categories.value = data.data || [] } catch {}
+
+  postAuthorId.value = authStore.user?.id
+  await loadAssignableSeries()
 
   try {
     const { data } = await adminApi.getStorageSettings()
@@ -284,9 +364,10 @@ onMounted(async () => {
     try {
       const { data } = await adminApi.getBlogPost(route.params.id)
       const p = data.data
+      postAuthorId.value = p.author?.id || authStore.user?.id
       form.value = {
         title: p.title, slug: p.slug || '', excerpt: p.excerpt || '', content: p.content || '',
-        category_id: p.category?.id || '', status: p.status, is_featured: p.is_featured,
+        category_id: p.category?.id || '', series_id: p.series?.id != null ? String(p.series.id) : '', status: p.status, is_featured: p.is_featured,
         storage_provider: p.storage_provider || 'supabase',
       }
       if (p.cover_image) existingImage.value = p.cover_image

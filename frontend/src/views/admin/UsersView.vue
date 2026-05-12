@@ -63,7 +63,7 @@
           <input
             v-model="search"
             type="text"
-            placeholder="Search by name or email..."
+            placeholder="Search by name, username, or email..."
             class="input-field !pl-10 w-full"
             @input="debouncedFetch"
           />
@@ -161,6 +161,7 @@
                 </div>
                 <div class="min-w-0">
                   <p class="font-semibold text-gray-900 dark:text-white truncate">{{ user.name }}</p>
+                  <p class="text-xs text-brand-violet dark:text-brand-cyan truncate">@{{ user.username }}</p>
                   <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ user.email }}</p>
                 </div>
               </div>
@@ -258,6 +259,7 @@
             />
           </div>
           <h3 class="font-semibold text-gray-900 dark:text-white text-sm">{{ user.name }}</h3>
+          <p class="text-xs text-brand-violet dark:text-brand-cyan truncate max-w-full">@{{ user.username }}</p>
           <p class="text-xs text-gray-500 dark:text-gray-400 truncate max-w-full mt-0.5">{{ user.email }}</p>
           <span :class="roleBadgeClass(user.role?.name)" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium mt-2">
             {{ user.role?.display_name || user.role?.name || 'Member' }}
@@ -327,6 +329,14 @@
               <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
                 <input v-model="createForm.name" type="text" required class="input-field w-full" placeholder="Enter full name" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
+                <div class="relative">
+                  <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">@</span>
+                  <input v-model="createForm.username" type="text" required minlength="3" maxlength="30" pattern="[a-zA-Z0-9_]+" class="input-field w-full pl-8" placeholder="unique_handle" />
+                </div>
+                <p class="text-xs text-gray-500 mt-1">Letters, numbers, underscores. 3–30 characters.</p>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
@@ -413,7 +423,7 @@ const selectedIds = ref([])
 const showCreateModal = ref(false)
 const creating = ref(false)
 const createError = ref('')
-const createForm = ref({ name: '', email: '', password: '', role_id: '' })
+const createForm = ref({ name: '', username: '', email: '', password: '', role_id: '' })
 
 // Delete modal
 const deleteTarget = ref(null)
@@ -494,7 +504,7 @@ async function handleCreate() {
     await adminApi.createUser(createForm.value)
     uiStore.showToast('User created successfully!')
     showCreateModal.value = false
-    createForm.value = { name: '', email: '', password: '', role_id: '' }
+    createForm.value = { name: '', username: '', email: '', password: '', role_id: '' }
     fetchUsers()
   } catch (e) {
     createError.value = e.response?.data?.message || 'Failed to create user'

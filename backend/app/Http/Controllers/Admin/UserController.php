@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -19,6 +20,7 @@ class UserController extends Controller
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'ilike', "%{$search}%")
+                    ->orWhere('username', 'ilike', "%{$search}%")
                     ->orWhere('email', 'ilike', "%{$search}%");
             });
         }
@@ -47,8 +49,13 @@ class UserController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        $request->merge([
+            'username' => strtolower(trim((string) $request->input('username', ''))),
+        ]);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'min:3', 'max:30', 'regex:/^[a-z0-9_]+$/', 'unique:users,username'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
             'role_id' => ['required', 'exists:roles,id'],
@@ -79,8 +86,20 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
+        $request->merge([
+            'username' => strtolower(trim((string) $request->input('username', ''))),
+        ]);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'username' => [
+                'required',
+                'string',
+                'min:3',
+                'max:30',
+                'regex:/^[a-z0-9_]+$/',
+                Rule::unique('users', 'username')->ignore($id),
+            ],
             'email' => ['required', 'email', 'unique:users,email,' . $id],
             'role_id' => ['required', 'exists:roles,id'],
         ]);

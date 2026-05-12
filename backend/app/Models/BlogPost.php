@@ -19,6 +19,7 @@ class BlogPost extends Model
         'storage_provider',
         'author_id',
         'category_id',
+        'series_id',
         'status',
         'is_featured',
         'views_count',
@@ -42,6 +43,11 @@ class BlogPost extends Model
     public function category()
     {
         return $this->belongsTo(BlogCategory::class, 'category_id');
+    }
+
+    public function series()
+    {
+        return $this->belongsTo(Series::class, 'series_id');
     }
 
     public function comments()

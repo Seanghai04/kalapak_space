@@ -25,6 +25,7 @@ class Project extends Model
         'stars_count',
         'forks_count',
         'created_by',
+        'collection_id',
         'storage_provider',
     ];
 
@@ -40,6 +41,11 @@ class Project extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function collection()
+    {
+        return $this->belongsTo(ContentCollection::class, 'collection_id');
     }
 
     public function tags()

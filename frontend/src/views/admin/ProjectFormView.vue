@@ -165,6 +165,25 @@
             </div>
           </div>
 
+          <!-- Collection -->
+          <div class="glass-card space-y-4">
+            <h2 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <svg class="w-4 h-4 text-brand-violet dark:text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+              Collection <span class="text-gray-400 font-normal text-xs">(optional)</span>
+            </h2>
+            <div class="flex gap-2">
+              <CustomSelect
+                v-model="form.collection_id"
+                class="flex-1 min-w-0"
+                :options="[{ label: 'None', value: '' }, ...filteredCollections.map((c) => ({ label: c.name, value: String(c.id) }))]"
+                placeholder="None"
+              />
+              <button type="button" class="shrink-0 px-3 py-2 rounded-lg border border-gray-200 dark:border-dark-600 text-xs font-medium text-brand-violet dark:text-brand-cyan hover:bg-gray-50 dark:hover:bg-white/[0.04]" @click="openCollectionModal">
+                New
+              </button>
+            </div>
+          </div>
+
           <!-- Tags Card -->
           <div class="glass-card space-y-4">
             <h2 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
@@ -194,6 +213,23 @@
         </div>
       </div>
     </form>
+
+    <teleport to="body">
+      <transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
+        <div v-if="collectionModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click.self="collectionModalOpen = false">
+          <div class="w-full max-w-sm rounded-2xl bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-600 shadow-xl p-6 space-y-3">
+            <h3 class="text-lg font-bold dark:text-white">New collection</h3>
+            <input v-model="newCollection.name" type="text" class="input-field w-full" placeholder="Name" @input="newCollection.slug = slugify(newCollection.name)" />
+            <input v-model="newCollection.slug" type="text" class="input-field w-full font-mono text-sm" placeholder="slug" />
+            <p v-if="collectionModalError" class="text-sm text-red-500">{{ collectionModalError }}</p>
+            <div class="flex justify-end gap-2 pt-2">
+              <button type="button" class="btn-ghost text-sm" @click="collectionModalOpen = false">Cancel</button>
+              <button type="button" class="btn-primary text-sm" :disabled="collectionSaving" @click="createCollectionInline">{{ collectionSaving ? '…' : 'Create' }}</button>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </teleport>
   </div>
 </template>
 
@@ -215,11 +251,24 @@ const isEdit = computed(() => !!route.params.id)
 const form = ref({
   title: '', slug: '', description: '', long_description: '', status: 'active',
   is_featured: false, is_open_source: false, demo_url: '', repo_url: '',
+  collection_id: '',
   storage_provider: localStorage.getItem('media_storage_provider') || 'supabase',
 })
 watch(() => form.value.storage_provider, (v) => localStorage.setItem('media_storage_provider', v))
 const availableTags = ref([])
 const selectedTags = ref([])
+const assignableCollections = ref([])
+const projectCreatorId = ref(null)
+const filteredCollections = computed(() => {
+  const uid = projectCreatorId.value ?? authStore.user?.id
+  if (!uid) return assignableCollections.value
+  if (authStore.isSuperAdmin) return assignableCollections.value
+  return assignableCollections.value.filter((c) => Number(c.author_id) === Number(uid))
+})
+const collectionModalOpen = ref(false)
+const newCollection = ref({ name: '', slug: '' })
+const collectionModalError = ref('')
+const collectionSaving = ref(false)
 const coverImage = ref(null)
 const imagePreview = ref(null)
 const existingImage = ref(null)
@@ -255,6 +304,40 @@ function autoSlug() {
   if (!isEdit.value) form.value.slug = slugify(form.value.title)
 }
 
+async function loadAssignableCollections() {
+  try {
+    const { data } = await adminApi.getAssignableCollections()
+    assignableCollections.value = data.data || []
+  } catch {
+    assignableCollections.value = []
+  }
+}
+
+function openCollectionModal() {
+  newCollection.value = { name: '', slug: '' }
+  collectionModalError.value = ''
+  collectionModalOpen.value = true
+}
+
+async function createCollectionInline() {
+  collectionModalError.value = ''
+  collectionSaving.value = true
+  try {
+    const slug = newCollection.value.slug || slugify(newCollection.value.name)
+    const { data } = await adminApi.createCollection({ name: newCollection.value.name, slug, description: '' })
+    const row = data.data
+    assignableCollections.value = [...assignableCollections.value, { id: row.id, name: row.name, slug: row.slug, author_id: row.author_id }].sort((a, b) => a.name.localeCompare(b.name))
+    form.value.collection_id = String(row.id)
+    collectionModalOpen.value = false
+    uiStore.showToast('Collection created')
+  } catch (e) {
+    const errs = e.response?.data?.errors
+    collectionModalError.value = errs ? Object.values(errs).flat().join(' ') : (e.response?.data?.message || 'Failed')
+  } finally {
+    collectionSaving.value = false
+  }
+}
+
 onMounted(async () => {
   // Check permission before loading form
   const action = isEdit.value ? 'update' : 'create'
@@ -269,6 +352,9 @@ onMounted(async () => {
     availableTags.value = data.data || data
   } catch { /* ignore */ }
 
+  projectCreatorId.value = authStore.user?.id
+  await loadAssignableCollections()
+
   try {
     const { data } = await adminApi.getStorageSettings()
     const allowed = data?.data?.allowed_storage_providers || 'both'
@@ -282,10 +368,12 @@ onMounted(async () => {
     try {
       const { data } = await adminApi.getProject(route.params.id)
       const p = data.data
+      projectCreatorId.value = p.creator?.id || authStore.user?.id
       form.value = {
         title: p.title, slug: p.slug, description: p.description, long_description: p.long_description || '',
         status: p.status, is_featured: p.is_featured, is_open_source: p.is_open_source || false,
         demo_url: p.demo_url || '', repo_url: p.repo_url || '',
+        collection_id: p.collection?.id != null ? String(p.collection.id) : '',
         storage_provider: p.storage_provider || 'supabase',
       }
       selectedTags.value = (p.tags || []).map((t) => t.id)

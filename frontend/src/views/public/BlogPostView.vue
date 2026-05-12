@@ -43,13 +43,29 @@
             {{ post.title }}
           </h1>
           <!-- Meta bar -->
-          <div data-aos="fade-up" data-aos-delay="100" class="flex flex-wrap items-center gap-3 sm:gap-5 text-xs sm:text-sm text-white/70">
-            <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-full overflow-hidden ring-2 ring-white/20">
+            <div data-aos="fade-up" data-aos-delay="100" class="flex flex-wrap items-center gap-3 sm:gap-5 text-xs sm:text-sm text-white/70">
+            <router-link
+              v-if="post.author?.username"
+              :to="{ name: 'user-profile', params: { username: post.author.username } }"
+              class="flex items-center gap-2.5 rounded-xl hover:bg-white/10 transition-colors -m-1 p-1"
+            >
+              <div class="w-9 h-9 rounded-full overflow-hidden ring-2 ring-white/20 flex-shrink-0">
                 <img v-if="post.author?.avatar" :src="post.author.avatar" :alt="post.author.name" class="w-full h-full object-cover" />
                 <div v-else class="w-full h-full bg-gradient-brand flex items-center justify-center text-white text-sm font-bold">{{ post.author?.name?.charAt(0) }}</div>
               </div>
-              <span class="font-medium text-white">{{ post.author?.name }}</span>
+              <div class="flex flex-col min-w-0">
+                <span class="font-medium text-white leading-tight">{{ post.author?.name }}</span>
+                <span class="text-white/60 text-xs sm:text-sm truncate">@{{ post.author.username }}</span>
+              </div>
+            </router-link>
+            <div v-else class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-full overflow-hidden ring-2 ring-white/20 flex-shrink-0">
+                <img v-if="post.author?.avatar" :src="post.author.avatar" :alt="post.author.name" class="w-full h-full object-cover" />
+                <div v-else class="w-full h-full bg-gradient-brand flex items-center justify-center text-white text-sm font-bold">{{ post.author?.name?.charAt(0) }}</div>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <span class="font-medium text-white leading-tight">{{ post.author?.name }}</span>
+              </div>
             </div>
             <span class="flex items-center gap-1.5">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
@@ -108,14 +124,32 @@
             <aside class="min-w-0 space-y-6 lg:sticky lg:top-24 lg:self-start">
 
               <!-- Author card -->
-              <div data-aos="fade-left" data-aos-delay="100"
-                class="rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm p-6 text-center overflow-hidden">
+              <router-link
+                v-if="post.author?.username"
+                :to="{ name: 'user-profile', params: { username: post.author.username } }"
+                data-aos="fade-left" data-aos-delay="100"
+                class="rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm p-6 text-center overflow-hidden block hover:border-brand-violet/40 dark:hover:border-brand-cyan/40 transition-colors"
+              >
                 <div class="w-16 h-16 rounded-full overflow-hidden ring-3 ring-brand-violet/20 dark:ring-brand-cyan/20 mx-auto mb-3">
                   <img v-if="post.author?.avatar" :src="post.author.avatar" :alt="post.author.name" class="w-full h-full object-cover" />
                   <div v-else class="w-full h-full bg-gradient-brand flex items-center justify-center text-white text-2xl font-bold">{{ post.author?.name?.charAt(0) }}</div>
                 </div>
-                <h3 class="font-sans font-bold text-gray-900 dark:text-white truncate">{{ post.author?.name }}</h3>
                 <p class="text-xs text-brand-violet dark:text-brand-cyan uppercase tracking-wider mb-2">Author</p>
+                <h3 class="font-sans font-bold text-gray-900 dark:text-white truncate">{{ post.author?.name }}</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">@{{ post.author.username }}</p>
+                <p v-if="post.author?.bio" class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3">{{ post.author.bio }}</p>
+              </router-link>
+              <div
+                v-else
+                data-aos="fade-left" data-aos-delay="100"
+                class="rounded-2xl border border-gray-100 dark:border-dark-600 bg-white/60 dark:bg-dark-800/60 backdrop-blur-sm p-6 text-center overflow-hidden"
+              >
+                <div class="w-16 h-16 rounded-full overflow-hidden ring-3 ring-brand-violet/20 dark:ring-brand-cyan/20 mx-auto mb-3">
+                  <img v-if="post.author?.avatar" :src="post.author.avatar" :alt="post.author.name" class="w-full h-full object-cover" />
+                  <div v-else class="w-full h-full bg-gradient-brand flex items-center justify-center text-white text-2xl font-bold">{{ post.author?.name?.charAt(0) }}</div>
+                </div>
+                <p class="text-xs text-brand-violet dark:text-brand-cyan uppercase tracking-wider mb-2">Author</p>
+                <h3 class="font-sans font-bold text-gray-900 dark:text-white truncate">{{ post.author?.name }}</h3>
                 <p v-if="post.author?.bio" class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3">{{ post.author.bio }}</p>
               </div>
 

@@ -75,6 +75,14 @@
           class="w-full md:w-40"
           @change="fetchProjects()"
         />
+        <CustomSelect
+          v-model="collectionFilter"
+          :options="[{ label: 'All Collections', value: '' }, ...collectionOptions.map((c) => ({ label: c.name, value: String(c.id) }))]"
+          placeholder="All Collections"
+          size="md"
+          class="w-full md:w-48"
+          @change="fetchProjects()"
+        />
         <div class="flex items-center border border-gray-200 dark:border-dark-600 rounded-lg overflow-hidden">
           <button @click="viewMode = 'table'" class="p-2 transition-colors" :class="viewMode === 'table' ? 'bg-brand-violet/10 text-brand-violet dark:bg-brand-cyan/10 dark:text-brand-cyan' : 'text-gray-400 hover:text-gray-600'">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
@@ -270,6 +278,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { adminApi } from '@/services/api'
 import { useUiStore } from '@/stores/ui'
 import { useAuthStore } from '@/stores/auth'
@@ -279,11 +288,14 @@ import CustomSelect from '@/components/common/CustomSelect.vue'
 
 const uiStore = useUiStore()
 const authStore = useAuthStore()
+const route = useRoute()
 const projects = ref([])
 const loading = ref(true)
 const search = ref('')
 const statusFilter = ref('')
 const featuredFilter = ref('')
+const collectionFilter = ref('')
+const collectionOptions = ref([])
 const viewMode = ref('table')
 const meta = ref({ current_page: 1, last_page: 1, per_page: 15, total: 0 })
 const selectedIds = ref([])
@@ -329,6 +341,7 @@ async function fetchProjects(page = 1) {
   try {
     const params = { page, search: search.value || undefined, status: statusFilter.value || undefined }
     if (featuredFilter.value === 'featured') params.is_featured = true
+    if (collectionFilter.value) params.collection_id = collectionFilter.value
     const { data } = await adminApi.getProjects(params)
     projects.value = data.data || []
     meta.value = data.meta || { current_page: 1, last_page: 1, per_page: 15, total: 0 }
@@ -378,5 +391,20 @@ async function bulkDelete() {
   } catch { uiStore.showToast('Some deletions failed', 'error') }
 }
 
-onMounted(() => fetchProjects())
+async function loadCollectionOptions() {
+  try {
+    const { data } = await adminApi.getCollections({ per_page: 100 })
+    collectionOptions.value = data.data || []
+  } catch {
+    collectionOptions.value = []
+  }
+}
+
+onMounted(async () => {
+  if (route.query.collection_id) {
+    collectionFilter.value = String(route.query.collection_id)
+  }
+  await loadCollectionOptions()
+  fetchProjects()
+})
 </script>

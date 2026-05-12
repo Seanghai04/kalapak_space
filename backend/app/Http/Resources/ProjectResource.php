@@ -31,10 +31,18 @@ class ProjectResource extends JsonResource
                 'slug' => $tag->slug,
                 'color' => $tag->color,
             ])),
+            'collection' => $this->whenLoaded('collection', fn() => $this->collection
+                ? [
+                    'id' => $this->collection->id,
+                    'name' => $this->collection->name,
+                    'slug' => $this->collection->slug,
+                ]
+                : null),
             'creator' => $this->whenLoaded('creator', fn() => [
                 'id' => $this->creator->id,
                 'name' => $this->creator->name,
-                'avatar' => $this->creator->avatar ? app(SupabaseStorage::class)->url($this->creator->avatar) : null,
+                'username' => $this->creator->username,
+                'avatar' => $this->creator->publicAvatarUrl(),
             ]),
             'created_at' => $this->created_at?->toISOString(),
         ];

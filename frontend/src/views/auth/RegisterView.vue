@@ -27,6 +27,28 @@
         </div>
       </div>
 
+      <!-- Username -->
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Username</label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <span class="text-gray-500 text-sm font-medium">@</span>
+          </div>
+          <input
+            v-model="form.username"
+            type="text"
+            required
+            minlength="3"
+            maxlength="30"
+            pattern="[a-zA-Z0-9_]+"
+            autocomplete="username"
+            class="w-full pl-10 pr-4 py-3.5 bg-dark-800/80 border border-dark-600 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-brand-violet focus:ring-1 focus:ring-brand-violet/50 transition-all"
+            placeholder="your_handle"
+          />
+        </div>
+        <p class="mt-1.5 text-xs text-gray-500">3–30 characters: letters, numbers, and underscores only. Shown as @username.</p>
+      </div>
+
       <!-- Email -->
       <div>
         <label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
@@ -256,7 +278,7 @@ function loginWithGithub() {
   window.location.href = `${backendUrl}/auth/github/redirect`
 }
 
-const form = ref({ name: '', email: '', password: '', password_confirmation: '' })
+const form = ref({ name: '', username: '', email: '', password: '', password_confirmation: '' })
 const error = ref('')
 const showPassword = ref(false)
 const showConfirm = ref(false)

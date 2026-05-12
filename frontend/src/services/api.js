@@ -113,6 +113,17 @@ export const authApi = {
 }
 
 export const publicApi = {
+  getUserProfile: (username) => api.get(`/users/${encodeURIComponent(username)}`),
+  /** Published blog posts for a public profile (scoped by URL username). */
+  getProfileBlogPosts: (username, params) =>
+    api.get(`/users/${encodeURIComponent(username)}/blog-posts`, { params }),
+  /** Projects for a public profile (scoped by URL username). */
+  getProfileProjects: (username, params) =>
+    api.get(`/users/${encodeURIComponent(username)}/projects`, { params }),
+  getPublicSeriesPage: (username, slug, params) =>
+    api.get(`/users/${encodeURIComponent(username)}/series/${encodeURIComponent(slug)}`, { params }),
+  getPublicCollectionPage: (username, slug, params) =>
+    api.get(`/users/${encodeURIComponent(username)}/collections/${encodeURIComponent(slug)}`, { params }),
   getProjects: (params) => api.get('/projects', { params }),
   getProject: (slug) => api.get(`/projects/${slug}`),
   getBlogPosts: (params) => api.get('/blog/posts', { params }),
@@ -262,6 +273,18 @@ export const adminApi = {
   updateDocMenu: (id, data) => api.put(`/admin/doc-menus/${id}`, data),
   deleteDocMenu: (id) => api.delete(`/admin/doc-menus/${id}`),
   reorderDocMenus: (data) => api.post('/admin/doc-menus/reorder', data),
+
+  getSeries: (params) => api.get('/admin/series', { params }),
+  getAssignableSeries: () => api.get('/admin/series/assignable'),
+  createSeries: (data) => api.post('/admin/series', data),
+  updateSeries: (id, data) => api.put(`/admin/series/${id}`, data),
+  deleteSeries: (id) => api.delete(`/admin/series/${id}`),
+
+  getCollections: (params) => api.get('/admin/collections', { params }),
+  getAssignableCollections: () => api.get('/admin/collections/assignable'),
+  createCollection: (data) => api.post('/admin/collections', data),
+  updateCollection: (id, data) => api.put(`/admin/collections/${id}`, data),
+  deleteCollection: (id) => api.delete(`/admin/collections/${id}`),
 }
 
 export default api

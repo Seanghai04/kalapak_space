@@ -11,7 +11,6 @@ class BlogPostSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = User::where('email', 'admin@kalapak.dev')->first();
         $tutorial = BlogCategory::where('slug', 'tutorial')->first();
         $development = BlogCategory::where('slug', 'development')->first();
         $announcement = BlogCategory::where('slug', 'announcement')->first();
@@ -115,8 +114,16 @@ class BlogPostSeeder extends Seeder
             ],
         ];
 
+        // Spread authors across active users so public profiles do not all show the same catalog.
+        $writers = User::query()->where('is_active', true)->orderBy('id')->pluck('id');
+        if ($writers->isEmpty()) {
+            return;
+        }
+        $writerIds = $writers->all();
+        $i = 0;
         foreach ($posts as $post) {
-            $post['author_id'] = $admin->id;
+            $post['author_id'] = $writerIds[$i % count($writerIds)];
+            $i++;
             BlogPost::updateOrCreate(['slug' => $post['slug']], $post);
         }
     }

@@ -4,8 +4,6 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Services\SupabaseStorage;
-use Cloudinary\Cloudinary;
 
 class UserResource extends JsonResource
 {
@@ -14,12 +12,9 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'username' => $this->username,
             'email' => $this->email,
-            'avatar' => $this->avatar
-                ? ($this->avatar_disk === 'cloudinary'
-                    ? (new Cloudinary(config('cloudinary.cloud_url')))->image($this->avatar)->toUrl()
-                    : app(SupabaseStorage::class)->url($this->avatar))
-                : null,
+            'avatar' => $this->publicAvatarUrl(),
             'bio' => $this->bio,
             'github_url' => $this->github_url,
             'linkedin_url' => $this->linkedin_url,

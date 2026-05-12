@@ -618,7 +618,29 @@
                 <div
                   class="flex items-center gap-3 mt-auto pt-4 border-t border-gray-100 dark:border-dark-600"
                 >
-                  <div v-if="post.author" class="flex items-center gap-2">
+                  <button
+                    v-if="post.author?.username"
+                    type="button"
+                    class="flex items-center gap-2 text-left rounded-lg -m-1 p-1 hover:bg-gray-50 dark:hover:bg-dark-700/50 transition-colors"
+                    @click.stop.prevent="goProfile(post.author.username)"
+                  >
+                    <div
+                      class="w-7 h-7 rounded-full bg-gradient-brand flex items-center justify-center overflow-hidden"
+                    >
+                      <img
+                        v-if="post.author.avatar"
+                        :src="post.author.avatar"
+                        class="w-full h-full object-cover"
+                      />
+                      <span v-else class="text-white text-[10px] font-bold">{{
+                        post.author.name?.charAt(0)
+                      }}</span>
+                    </div>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">{{
+                      post.author.name
+                    }}</span>
+                  </button>
+                  <div v-else-if="post.author" class="flex items-center gap-2">
                     <div
                       class="w-7 h-7 rounded-full bg-gradient-brand flex items-center justify-center overflow-hidden"
                     >
@@ -703,9 +725,16 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { publicApi } from "@/services/api";
 import dayjs from "dayjs";
 import MilkyWayGalaxy from "@/components/common/MilkyWayGalaxy.vue";
+
+const router = useRouter();
+
+function goProfile(username) {
+  router.push({ name: "user-profile", params: { username } });
+}
 
 const projects = ref([]);
 const posts = ref([]);
@@ -874,6 +903,14 @@ const techStack = [
   },
 ];
 
+/** Same values on server and client (SSR hydration) — not cryptographically random */
+function particleRand(i, salt) {
+  let h = (Math.imul(i, 0x9e3779b9) ^ Math.imul(salt, 0x85ebca6b)) | 0
+  h = Math.imul(h ^ (h >>> 16), 0x7feb352d)
+  h ^= h >>> 15
+  return (h >>> 0) / 4294967296
+}
+
 const particles = Array.from({ length: 20 }, (_, i) => ({
   text: [
     "<div>",
@@ -895,11 +932,11 @@ const particles = Array.from({ length: 20 }, (_, i) => ({
     "#!",
     "~/",
   ][i % 18],
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  opacity: 0.06 + Math.random() * 0.08,
-  delay: Math.random() * 8,
-  duration: 6 + Math.random() * 8,
+  x: particleRand(i, 1) * 100,
+  y: particleRand(i, 2) * 100,
+  opacity: 0.06 + particleRand(i, 3) * 0.08,
+  delay: particleRand(i, 4) * 8,
+  duration: 6 + particleRand(i, 5) * 8,
   color:
     i % 2 === 0
       ? "text-brand-violet/30 dark:text-brand-violet/20"

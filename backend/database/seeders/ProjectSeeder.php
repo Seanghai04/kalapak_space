@@ -11,7 +11,11 @@ class ProjectSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = User::where('email', 'admin@kalapak.dev')->first();
+        $creators = User::query()->where('is_active', true)->orderBy('id')->pluck('id');
+        if ($creators->isEmpty()) {
+            return;
+        }
+        $creatorIds = $creators->all();
 
         $projects = [
             [
@@ -123,11 +127,13 @@ class ProjectSeeder extends Seeder
             ],
         ];
 
+        $i = 0;
         foreach ($projects as $projectData) {
             $tagSlugs = $projectData['tags'] ?? [];
             unset($projectData['tags']);
 
-            $projectData['created_by'] = $admin->id;
+            $projectData['created_by'] = $creatorIds[$i % count($creatorIds)];
+            $i++;
             $project = Project::updateOrCreate(
                 ['slug' => $projectData['slug']],
                 $projectData

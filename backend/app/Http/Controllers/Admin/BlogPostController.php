@@ -17,7 +17,7 @@ class BlogPostController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = BlogPost::with(['author', 'category']);
+        $query = BlogPost::with(['author', 'category', 'series']);
 
         // Regular admins only see their own posts; superadmins see all
         $user = $request->user();
@@ -35,6 +35,10 @@ class BlogPostController extends Controller
 
         if ($category = $request->get('category_id')) {
             $query->where('category_id', $category);
+        }
+
+        if ($seriesId = $request->get('series_id')) {
+            $query->where('series_id', $seriesId);
         }
 
         $posts = $query->orderByDesc('created_at')->paginate(15);
@@ -72,14 +76,14 @@ class BlogPostController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => new BlogPostResource($post->load(['author', 'category'])),
+            'data' => new BlogPostResource($post->load(['author', 'category', 'series'])),
             'message' => 'Blog post created successfully.',
         ], 201);
     }
 
     public function show(int $id): JsonResponse
     {
-        $post = BlogPost::with(['author', 'category'])->findOrFail($id);
+        $post = BlogPost::with(['author', 'category', 'series'])->findOrFail($id);
 
         return response()->json([
             'success' => true,
@@ -116,7 +120,7 @@ class BlogPostController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => new BlogPostResource($post->fresh()->load(['author', 'category'])),
+            'data' => new BlogPostResource($post->fresh()->load(['author', 'category', 'series'])),
             'message' => 'Blog post updated successfully.',
         ]);
     }

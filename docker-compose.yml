@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_DB: kalapak_db
       POSTGRES_USER: kalapak_user
-      POSTGRES_PASSWORD: kalapak_secret
+      POSTGRES_PASSWORD: kalapak123
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -60,13 +60,14 @@ services:
     environment:
       APP_ENV: local
       RUN_DB_SEED: "0"
-      RUN_MIGRATIONS: "0"
+      # Run pending migrations on each backend start (idempotent). Disable with RUN_MIGRATIONS=0 if needed.
+      RUN_MIGRATIONS: "1"
       DB_CONNECTION: pgsql
       DB_HOST: postgres
       DB_PORT: "5432"
       DB_DATABASE: kalapak_db
       DB_USERNAME: kalapak_user
-      DB_PASSWORD: kalapak_secret
+      DB_PASSWORD: kalapak123
       DB_SSLMODE: prefer
       CACHE_DRIVER: file
       QUEUE_CONNECTION: sync
@@ -76,11 +77,11 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend/routes/api.php:/var/www/html/routes/api.php
-      - ./backend/app/Services/SupabaseStorage.php:/var/www/html/app/Services/SupabaseStorage.php
-      - ./backend/app/Http/Controllers/PublicApi/DocController.php:/var/www/html/app/Http/Controllers/PublicApi/DocController.php
-      - ./backend/app/Models/Doc.php:/var/www/html/app/Models/Doc.php
-      - ./backend/app/Models/DocMenu.php:/var/www/html/app/Models/DocMenu.php
+      - ./backend/.env:/var/www/html/.env
+      # Sync app + routes + database from host so new migrations apply without rebuilding the image.
+      - ./backend/app:/var/www/html/app
+      - ./backend/routes:/var/www/html/routes
+      - ./backend/database:/var/www/html/database
     depends_on:
       postgres:
         condition: service_healthy

@@ -13,9 +13,12 @@ class SupabaseStorage
 
     public function __construct()
     {
-        $this->url = rtrim(config('services.supabase.url'), '/');
-        $this->key = config('services.supabase.secret_key');
-        $this->bucket = config('services.supabase.bucket');
+        // Env may be unset in local/docker; never pass null into rtrim() or typed string props (PHP 8+ TypeError).
+        $rawUrl = config('services.supabase.url');
+        $this->url = rtrim(is_string($rawUrl) ? $rawUrl : '', '/');
+        $this->key = (string) (config('services.supabase.secret_key') ?? '');
+        $bucket = config('services.supabase.bucket');
+        $this->bucket = (is_string($bucket) && $bucket !== '') ? $bucket : 'kalapak-assets';
     }
 
     /**

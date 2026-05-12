@@ -13,6 +13,9 @@ const routes = [
       { path: 'projects/:slug', name: 'project-detail', component: () => import('@/views/public/ProjectDetailView.vue'), meta: { title: 'Project – Kalapak Code Team' } },
       { path: 'blog', name: 'blog', component: () => import('@/views/public/BlogView.vue'), meta: { title: 'Blog – Kalapak Code Team' } },
       { path: 'blog/:slug', name: 'blog-post', component: () => import('@/views/public/BlogPostView.vue'), meta: { title: 'Blog – Kalapak Code Team' } },
+      { path: 'u/:username', name: 'user-profile', component: () => import('@/views/public/PublicUserProfileView.vue'), meta: { title: 'Member profile – Kalapak Code Team' } },
+      { path: 'series/:username/:slug', name: 'public-series', component: () => import('@/views/public/PublicSeriesDetailView.vue'), meta: { title: 'Series – Kalapak Code Team' } },
+      { path: 'collections/:username/:slug', name: 'public-collection', component: () => import('@/views/public/PublicCollectionDetailView.vue'), meta: { title: 'Collection – Kalapak Code Team' } },
       { path: 'join', name: 'join', component: () => import('@/views/public/JoinUsView.vue'), meta: { title: 'Join Us – Kalapak Code Team' } },
       { path: 'contact', name: 'contact', component: () => import('@/views/public/ContactView.vue'), meta: { title: 'Contact – Kalapak Code Team' } },
       { path: 'privacy', name: 'privacy', component: () => import('@/views/public/PrivacyPolicyView.vue'), meta: { title: 'Privacy Policy – Kalapak Code Team' } },
@@ -59,9 +62,11 @@ const routes = [
       { path: 'users', name: 'admin-users', component: () => import('@/views/admin/UsersView.vue'), meta: { requiresSuperAdmin: true } },
       { path: 'users/:id', name: 'admin-user-edit', component: () => import('@/views/admin/UserEditView.vue'), meta: { requiresSuperAdmin: true } },
       { path: 'projects', name: 'admin-projects', component: () => import('@/views/admin/ProjectsView.vue') },
+      { path: 'collections', name: 'admin-collections', component: () => import('@/views/admin/CollectionsView.vue') },
       { path: 'projects/create', name: 'admin-project-create', component: () => import('@/views/admin/ProjectFormView.vue') },
       { path: 'projects/:id/edit', name: 'admin-project-edit', component: () => import('@/views/admin/ProjectFormView.vue') },
       { path: 'blog', name: 'admin-blog', component: () => import('@/views/admin/BlogPostsView.vue') },
+      { path: 'series', name: 'admin-series', component: () => import('@/views/admin/SeriesView.vue') },
       { path: 'blog/create', name: 'admin-blog-create', component: () => import('@/views/admin/BlogPostFormView.vue') },
       { path: 'blog/:id/edit', name: 'admin-blog-edit', component: () => import('@/views/admin/BlogPostFormView.vue') },
       { path: 'categories', name: 'admin-categories', component: () => import('@/views/admin/CategoriesView.vue') },
@@ -109,8 +114,11 @@ router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
   authStore.restoreFromStorage()
 
-  // Fetch user if token exists but user not loaded
-  if (authStore.token && !authStore.user) {
+  // Refresh profile from API when we have a token but no user, or the cached user
+  // predates new fields (e.g. username) saved in localStorage without that property.
+  const u = authStore.user
+  const userMissingUsername = u && typeof u === 'object' && !Object.prototype.hasOwnProperty.call(u, 'username')
+  if (authStore.token && (!u || userMissingUsername)) {
     try {
       await authStore.fetchMe()
     } catch {

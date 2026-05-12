@@ -86,8 +86,8 @@
 
           <ThemeToggle />
 
-          <!-- Auth Section -->
-          <template v-if="authStore.isAuthenticated">
+          <!-- Auth Section (defer branch until after mount so SSR guest HTML matches client hydration; router plugin restores session before hydrate) -->
+          <template v-if="authStore.isAuthenticated && authChromeReady">
             <!-- Notification bell -->
             <div class="relative" ref="notifDropdownRef">
               <button
@@ -340,7 +340,7 @@
         <!-- Panel -->
         <div class="relative mx-4 mt-3 rounded-2xl bg-white dark:bg-dark-800 shadow-2xl ring-1 ring-gray-200/80 dark:ring-white/[0.08] overflow-hidden max-h-[calc(100vh-100px)] overflow-y-auto">
           <!-- Mobile user profile header -->
-          <div v-if="authStore.isAuthenticated" class="flex items-center gap-3 p-5 border-b border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02]">
+          <div v-if="authStore.isAuthenticated && authChromeReady" class="flex items-center gap-3 p-5 border-b border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02]">
             <img
               v-if="authStore.user?.avatar"
               :src="authStore.user.avatar"
@@ -380,7 +380,7 @@
           </div>
 
           <!-- Mobile auth section -->
-          <div v-if="authStore.isAuthenticated" class="p-3 pt-0 space-y-0.5">
+          <div v-if="authStore.isAuthenticated && authChromeReady" class="p-3 pt-0 space-y-0.5">
             <div class="h-px bg-gray-100 dark:bg-white/[0.06] my-2" />
             <router-link to="/member/profile" class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100/80 dark:hover:bg-white/[0.05]" @click="mobileOpen = false">
               <svg class="w-[18px] h-[18px] flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
@@ -440,6 +440,8 @@ const profileDropdownRef = ref(null)
 const notifDropdownRef = ref(null)
 const notifOpen = ref(false)
 const scrolled = ref(false)
+/** Avoid SSR vs client hydration mismatch: session is restored from storage before hydrate, but SSR always rendered guest nav. */
+const authChromeReady = ref(false)
 
 // ── Docs page detection ──
 const isDocsPage = computed(() => route.name === 'docs')
@@ -561,6 +563,7 @@ function isActive(name) {
 }
 
 onMounted(() => {
+  authChromeReady.value = true
   document.addEventListener('click', handleClickOutside)
   document.addEventListener('keydown', handleSearchKeydown)
   window.addEventListener('scroll', handleScroll, { passive: true })

@@ -26,11 +26,8 @@ class BlogPostResource extends JsonResource
             'author' => $this->whenLoaded('author', fn() => [
                 'id' => $this->author->id,
                 'name' => $this->author->name,
-                'avatar' => $this->author->avatar
-                    ? ($this->author->avatar_disk === 'cloudinary'
-                        ? (new \Cloudinary\Cloudinary(config('cloudinary.cloud_url')))->image($this->author->avatar)->toUrl()
-                        : app(SupabaseStorage::class)->url($this->author->avatar))
-                    : null,
+                'username' => $this->author->username,
+                'avatar' => $this->author->publicAvatarUrl(),
                 'bio' => $this->author->bio,
             ]),
             'category' => $this->whenLoaded('category', fn() => [
@@ -39,6 +36,13 @@ class BlogPostResource extends JsonResource
                 'slug' => $this->category->slug,
                 'color' => $this->category->color,
             ]),
+            'series' => $this->whenLoaded('series', fn() => $this->series
+                ? [
+                    'id' => $this->series->id,
+                    'name' => $this->series->name,
+                    'slug' => $this->series->slug,
+                ]
+                : null),
             'comments_count' => $this->whenCounted('approvedComments'),
             'created_at' => $this->created_at?->toISOString(),
         ];

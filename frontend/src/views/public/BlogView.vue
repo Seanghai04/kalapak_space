@@ -100,7 +100,22 @@
               </h2>
               <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 line-clamp-3">{{ featuredPost.excerpt }}</p>
               <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
+                <button
+                  v-if="featuredPost.author?.username"
+                  type="button"
+                  class="flex items-center gap-3 text-left rounded-xl -m-1 p-1 hover:bg-gray-100/80 dark:hover:bg-dark-700/50 transition-colors"
+                  @click.stop.prevent="goProfile(featuredPost.author.username)"
+                >
+                  <div class="w-9 h-9 rounded-full overflow-hidden ring-2 ring-gray-100 dark:ring-dark-600">
+                    <img v-if="featuredPost.author?.avatar" :src="featuredPost.author.avatar" :alt="featuredPost.author.name" class="w-full h-full object-cover" />
+                    <div v-else class="w-full h-full bg-gradient-brand flex items-center justify-center text-white text-sm font-bold">{{ featuredPost.author?.name?.charAt(0) }}</div>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-900 dark:text-white">{{ featuredPost.author?.name }}</p>
+                    <p class="text-[10px] text-gray-400 uppercase tracking-wider">Author · @{{ featuredPost.author.username }}</p>
+                  </div>
+                </button>
+                <div v-else class="flex items-center gap-3">
                   <div class="w-9 h-9 rounded-full overflow-hidden ring-2 ring-gray-100 dark:ring-dark-600">
                     <img v-if="featuredPost.author?.avatar" :src="featuredPost.author.avatar" :alt="featuredPost.author.name" class="w-full h-full object-cover" />
                     <div v-else class="w-full h-full bg-gradient-brand flex items-center justify-center text-white text-sm font-bold">{{ featuredPost.author?.name?.charAt(0) }}</div>
@@ -180,7 +195,19 @@
 
               <!-- Footer -->
               <div class="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-dark-600">
-                <div class="flex items-center gap-2.5">
+                <button
+                  v-if="post.author?.username"
+                  type="button"
+                  class="flex items-center gap-2.5 text-left rounded-lg -m-1 p-1 hover:bg-gray-50 dark:hover:bg-dark-700/50 transition-colors"
+                  @click.stop.prevent="goProfile(post.author.username)"
+                >
+                  <div class="w-7 h-7 rounded-full overflow-hidden ring-1 ring-gray-100 dark:ring-dark-600">
+                    <img v-if="post.author?.avatar" :src="post.author.avatar" :alt="post.author.name" class="w-full h-full object-cover" />
+                    <div v-else class="w-full h-full bg-gradient-brand flex items-center justify-center text-white text-[10px] font-bold">{{ post.author?.name?.charAt(0) }}</div>
+                  </div>
+                  <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">{{ post.author?.name }}</span>
+                </button>
+                <div v-else class="flex items-center gap-2.5">
                   <div class="w-7 h-7 rounded-full overflow-hidden ring-1 ring-gray-100 dark:ring-dark-600">
                     <img v-if="post.author?.avatar" :src="post.author.avatar" :alt="post.author.name" class="w-full h-full object-cover" />
                     <div v-else class="w-full h-full bg-gradient-brand flex items-center justify-center text-white text-[10px] font-bold">{{ post.author?.name?.charAt(0) }}</div>
@@ -219,11 +246,18 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { publicApi } from '@/services/api'
 import dayjs from 'dayjs'
 import Pagination from '@/components/common/Pagination.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 import CustomSelect from '@/components/common/CustomSelect.vue'
+
+const router = useRouter()
+
+function goProfile(username) {
+  router.push({ name: 'user-profile', params: { username } })
+}
 
 const posts = ref([])
 const categories = ref([])

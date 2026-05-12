@@ -95,8 +95,9 @@
         </button>
       </div>
 
-      <!-- ── Navigation ── -->
+      <!-- ── Navigation (client-only tree: avoids SSR/localStorage Pinia mismatch) ── -->
       <nav
+        v-if="adminShellReady"
         class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-2 sidebar-scrollbar"
       >
         <!-- Main section -->
@@ -286,6 +287,17 @@
           </router-link>
         </div>
       </nav>
+      <div
+        v-else
+        class="flex-1 overflow-hidden px-3 py-3 space-y-2"
+        aria-hidden="true"
+      >
+        <div
+          v-for="n in 10"
+          :key="n"
+          class="h-9 rounded-lg bg-gray-100/90 dark:bg-white/[0.06]"
+        />
+      </div>
 
       <!-- ── Sidebar Footer ── -->
       <div
@@ -318,6 +330,7 @@
 
         <!-- User card -->
         <div
+          v-if="adminShellReady"
           class="px-3 py-3 flex items-center gap-2.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.03] transition-colors"
           :class="sidebarCollapsed ? 'justify-center' : ''"
           @click="profileOpen = !profileOpen"
@@ -367,6 +380,24 @@
               d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
             />
           </svg>
+        </div>
+        <div
+          v-else
+          class="px-3 py-3 flex items-center gap-2.5"
+          :class="sidebarCollapsed ? 'justify-center' : ''"
+          aria-hidden="true"
+        >
+          <div
+            class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-white/[0.08] animate-pulse flex-shrink-0"
+          />
+          <div v-if="!sidebarCollapsed" class="flex-1 space-y-1.5 min-w-0">
+            <div
+              class="h-3.5 rounded bg-gray-100 dark:bg-white/[0.08] w-24 animate-pulse"
+            />
+            <div
+              class="h-3 rounded bg-gray-100 dark:bg-white/[0.06] w-16 animate-pulse"
+            />
+          </div>
         </div>
       </div>
     </aside>
@@ -443,6 +474,7 @@
 
           <div class="hidden sm:block w-px h-5 bg-gray-200 dark:bg-white/10" />
 
+          <template v-if="adminShellReady">
           <ThemeToggle />
 
           <!-- Notification Bell -->
@@ -822,6 +854,22 @@
               </div>
             </transition>
           </div>
+          </template>
+          <div
+            v-else
+            class="flex items-center gap-2 shrink-0"
+            aria-hidden="true"
+          >
+            <div
+              class="h-9 w-9 rounded-lg bg-gray-100 dark:bg-white/[0.08] animate-pulse"
+            />
+            <div
+              class="h-9 w-9 rounded-lg bg-gray-100 dark:bg-white/[0.08] animate-pulse"
+            />
+            <div
+              class="hidden sm:block h-9 w-28 rounded-lg bg-gray-100 dark:bg-white/[0.08] animate-pulse"
+            />
+          </div>
         </div>
       </header>
 
@@ -862,6 +910,8 @@ import {
   RectangleStackIcon,
   BookOpenIcon,
   ListBulletIcon,
+  QueueListIcon,
+  RectangleGroupIcon,
 } from "@heroicons/vue/24/outline";
 
 const router = useRouter();
@@ -877,6 +927,8 @@ const notifOpen = ref(false);
 const sidebarCollapsed = ref(false);
 const searchOpen = ref(false);
 const pendingApprovalsCount = ref(0);
+/** After mount: Pinia has same localStorage user as client; avoids SSR hydration mismatches. */
+const adminShellReady = ref(false);
 
 async function fetchPendingApprovals() {
   if (!authStore.isSuperAdmin) return;
@@ -917,10 +969,22 @@ const contentNavItems = [
     icon: FolderIcon,
   },
   {
+    label: "Collections",
+    to: "/admin/collections",
+    routeName: "admin-collections",
+    icon: RectangleGroupIcon,
+  },
+  {
     label: "Blog Posts",
     to: "/admin/blog",
     routeName: "admin-blog",
     icon: DocumentTextIcon,
+  },
+  {
+    label: "Series",
+    to: "/admin/series",
+    routeName: "admin-series",
+    icon: QueueListIcon,
   },
   {
     label: "Categories",
@@ -1077,6 +1141,7 @@ function handleSearchKeydown(e) {
 }
 
 onMounted(() => {
+  adminShellReady.value = true;
   document.addEventListener("click", handleClickOutside);
   document.addEventListener("keydown", handleSearchKeydown);
   fetchPendingApprovals();

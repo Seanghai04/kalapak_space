@@ -75,6 +75,14 @@
           class="w-full md:w-44"
           @change="fetchPosts()"
         />
+        <CustomSelect
+          v-model="seriesFilter"
+          :options="[{ label: 'All Series', value: '' }, ...seriesOptions.map((s) => ({ label: s.name, value: String(s.id) }))]"
+          placeholder="All Series"
+          size="md"
+          class="w-full md:w-44"
+          @change="fetchPosts()"
+        />
         <div class="flex items-center border border-gray-200 dark:border-dark-600 rounded-lg overflow-hidden">
           <button @click="viewMode = 'table'" class="p-2 transition-colors" :class="viewMode === 'table' ? 'bg-brand-violet/10 text-brand-violet dark:bg-brand-cyan/10 dark:text-brand-cyan' : 'text-gray-400 hover:text-gray-600'">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
@@ -292,6 +300,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { adminApi } from '@/services/api'
 import { useUiStore } from '@/stores/ui'
 import { useAuthStore } from '@/stores/auth'
@@ -301,11 +310,14 @@ import CustomSelect from '@/components/common/CustomSelect.vue'
 
 const uiStore = useUiStore()
 const authStore = useAuthStore()
+const route = useRoute()
 const posts = ref([])
 const loading = ref(true)
 const search = ref('')
 const statusFilter = ref('')
 const categoryFilter = ref('')
+const seriesFilter = ref('')
+const seriesOptions = ref([])
 const viewMode = ref('table')
 const categories = ref([])
 const meta = ref({ current_page: 1, last_page: 1, per_page: 15, total: 0 })
@@ -353,7 +365,7 @@ async function fetchPosts(page = 1) {
   loading.value = true
   selectedIds.value = []
   try {
-    const params = { page, search: search.value || undefined, status: statusFilter.value || undefined, category_id: categoryFilter.value || undefined }
+    const params = { page, search: search.value || undefined, status: statusFilter.value || undefined, category_id: categoryFilter.value || undefined, series_id: seriesFilter.value || undefined }
     const { data } = await adminApi.getBlogPosts(params)
     posts.value = data.data || []
     meta.value = data.meta || { current_page: 1, last_page: 1, per_page: 15, total: 0 }
@@ -395,5 +407,21 @@ async function bulkDelete() {
   } catch { uiStore.showToast('Some deletions failed', 'error') }
 }
 
-onMounted(() => { loadCategories(); fetchPosts() })
+async function loadSeriesOptions() {
+  try {
+    const { data } = await adminApi.getSeries({ per_page: 100 })
+    seriesOptions.value = data.data || []
+  } catch {
+    seriesOptions.value = []
+  }
+}
+
+onMounted(async () => {
+  if (route.query.series_id) {
+    seriesFilter.value = String(route.query.series_id)
+  }
+  await loadCategories()
+  await loadSeriesOptions()
+  fetchPosts()
+})
 </script>

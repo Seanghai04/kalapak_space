@@ -47,8 +47,8 @@
       </div>
     </div>
 
-    <!-- Storage Usage (superadmin only) -->
-    <div v-if="authStore.isSuperAdmin" class="mt-8">
+    <!-- Storage Usage (superadmin only; defer until client mounted — matches SSR without user) -->
+    <div v-if="dashboardMounted && authStore.isSuperAdmin" class="mt-8">
       <StorageStats />
     </div>
   </div>
@@ -68,6 +68,9 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 dayjs.extend(relativeTime)
 
 const authStore = useAuthStore()
+
+/** Avoid SSR vs client mismatch for role-gated blocks (Pinia user from localStorage is client-only). */
+const dashboardMounted = ref(false)
 
 const statsCards = ref([
   { label: 'Total Users', value: 0, icon: '👥', bgClass: 'bg-blue-100 dark:bg-blue-900/30' },
@@ -94,6 +97,7 @@ function formatDate(date) {
 }
 
 onMounted(async () => {
+  dashboardMounted.value = true
   try {
     const [statsRes, activityRes] = await Promise.all([
       adminApi.getDashboardStats(),

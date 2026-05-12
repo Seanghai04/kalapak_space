@@ -17,7 +17,7 @@ class ProjectController extends Controller
     public function index(Request $request): JsonResponse
     {
         $user = $request->user();
-        $query = Project::with(['tags', 'creator']);
+        $query = Project::with(['tags', 'creator', 'collection']);
 
         if ($user && !$user->isSuperAdmin()) {
             $query->where('created_by', $user->id);
@@ -29,6 +29,10 @@ class ProjectController extends Controller
 
         if ($status = $request->get('status')) {
             $query->where('status', $status);
+        }
+
+        if ($collectionId = $request->get('collection_id')) {
+            $query->where('collection_id', $collectionId);
         }
 
         $projects = $query->orderByDesc('created_at')->paginate(15);
@@ -68,14 +72,14 @@ class ProjectController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => new ProjectResource($project->load(['tags', 'creator'])),
+            'data' => new ProjectResource($project->load(['tags', 'creator', 'collection'])),
             'message' => 'Project created successfully.',
         ], 201);
     }
 
     public function show(int $id): JsonResponse
     {
-        $project = Project::with(['tags', 'creator'])->findOrFail($id);
+        $project = Project::with(['tags', 'creator', 'collection'])->findOrFail($id);
 
         return response()->json([
             'success' => true,
@@ -107,7 +111,7 @@ class ProjectController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => new ProjectResource($project->fresh()->load(['tags', 'creator'])),
+            'data' => new ProjectResource($project->fresh()->load(['tags', 'creator', 'collection'])),
             'message' => 'Project updated successfully.',
         ]);
     }

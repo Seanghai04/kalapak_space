@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
@@ -39,12 +39,19 @@ class SocialAuthController extends Controller
             if (!$user->avatar && $googleUser->getAvatar()) {
                 $user->update(['avatar' => $googleUser->getAvatar()]);
             }
+            if (!$user->username) {
+                $base = Str::before((string) $user->email, '@') ?: Str::slug((string) $user->name, '_') ?: 'user';
+                $user->update(['username' => User::generateUniqueUsername($base)]);
+            }
         } else {
             // Create new user
             $memberRole = Role::where('name', 'member')->first();
+            $email = (string) $googleUser->getEmail();
+            $usernameBase = Str::before($email, '@') ?: Str::slug((string) $googleUser->getName(), '_') ?: 'user';
             $user = User::create([
                 'name' => $googleUser->getName(),
-                'email' => $googleUser->getEmail(),
+                'username' => User::generateUniqueUsername($usernameBase),
+                'email' => $email,
                 'google_id' => $googleUser->getId(),
                 'avatar' => $googleUser->getAvatar(),
                 'password' => null,
@@ -83,11 +90,23 @@ class SocialAuthController extends Controller
             if (!$user->avatar && $githubUser->getAvatar()) {
                 $user->update(['avatar' => $githubUser->getAvatar()]);
             }
+            if (!$user->username) {
+                $base = $githubUser->getNickname()
+                    ?: Str::before((string) $user->email, '@')
+                    ?: Str::slug((string) $user->name, '_')
+                    ?: 'user';
+                $user->update(['username' => User::generateUniqueUsername($base)]);
+            }
         } else {
             $memberRole = Role::where('name', 'member')->first();
+            $email = (string) $githubUser->getEmail();
+            $usernameBase = $githubUser->getNickname()
+                ?: Str::before($email, '@')
+                ?: Str::slug((string) ($githubUser->getName() ?? 'githubuser'), '_');
             $user = User::create([
                 'name' => $githubUser->getName() ?? $githubUser->getNickname(),
-                'email' => $githubUser->getEmail(),
+                'username' => User::generateUniqueUsername($usernameBase),
+                'email' => $email,
                 'github_id' => $githubUser->getId(),
                 'avatar' => $githubUser->getAvatar(),
                 'password' => null,
