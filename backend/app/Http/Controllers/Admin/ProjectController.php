@@ -32,7 +32,8 @@ class ProjectController extends Controller
             $query->where('status', $status);
         }
 
-        if ($ownerUsername = $request->get('owner_username')) {
+        $ownerUsername = ltrim(trim((string) $request->get('owner_username', '')), '@');
+        if ($ownerUsername !== '') {
             $query->whereHas('creator', function ($userQuery) use ($ownerUsername) {
                 $userQuery->where('username', 'ilike', "%{$ownerUsername}%");
             });
