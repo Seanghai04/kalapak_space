@@ -68,6 +68,15 @@
           @change="fetchPosts()"
         />
         <CustomSelect
+          v-if="authStore.isSuperAdmin"
+          v-model="ownershipFilter"
+          :options="[{ label: 'All Authors', value: '' }, { label: 'My Posts', value: 'mine' }]"
+          placeholder="All Authors"
+          size="md"
+          class="w-full md:w-40"
+          @change="fetchPosts()"
+        />
+        <CustomSelect
           v-model="categoryFilter"
           :options="[{ label: 'All Categories', value: '' }, ...categories.map(c => ({ label: c.name, value: c.id }))]"
           placeholder="All Categories"
@@ -315,6 +324,7 @@ const posts = ref([])
 const loading = ref(true)
 const search = ref('')
 const statusFilter = ref('')
+const ownershipFilter = ref('')
 const categoryFilter = ref('')
 const seriesFilter = ref('')
 const seriesOptions = ref([])
@@ -366,6 +376,7 @@ async function fetchPosts(page = 1) {
   selectedIds.value = []
   try {
     const params = { page, search: search.value || undefined, status: statusFilter.value || undefined, category_id: categoryFilter.value || undefined, series_id: seriesFilter.value || undefined }
+    if (ownershipFilter.value === 'mine') params.mine = true
     const { data } = await adminApi.getBlogPosts(params)
     posts.value = data.data || []
     meta.value = data.meta || { current_page: 1, last_page: 1, per_page: 15, total: 0 }

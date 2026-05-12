@@ -68,6 +68,15 @@
           @change="fetchProjects()"
         />
         <CustomSelect
+          v-if="authStore.isSuperAdmin"
+          v-model="ownershipFilter"
+          :options="[{ label: 'All Owners', value: '' }, { label: 'My Projects', value: 'mine' }]"
+          placeholder="All Owners"
+          size="md"
+          class="w-full md:w-44"
+          @change="fetchProjects()"
+        />
+        <CustomSelect
           v-model="featuredFilter"
           :options="[{ label: 'All Projects', value: '' }, { label: 'Featured Only', value: 'featured' }]"
           placeholder="All Projects"
@@ -293,6 +302,7 @@ const projects = ref([])
 const loading = ref(true)
 const search = ref('')
 const statusFilter = ref('')
+const ownershipFilter = ref('')
 const featuredFilter = ref('')
 const collectionFilter = ref('')
 const collectionOptions = ref([])
@@ -340,6 +350,7 @@ async function fetchProjects(page = 1) {
   selectedIds.value = []
   try {
     const params = { page, search: search.value || undefined, status: statusFilter.value || undefined }
+    if (ownershipFilter.value === 'mine') params.mine = true
     if (featuredFilter.value === 'featured') params.is_featured = true
     if (collectionFilter.value) params.collection_id = collectionFilter.value
     const { data } = await adminApi.getProjects(params)

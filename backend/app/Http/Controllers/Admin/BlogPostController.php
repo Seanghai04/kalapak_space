@@ -18,10 +18,11 @@ class BlogPostController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = BlogPost::with(['author', 'category', 'series']);
+        $mineOnly = $request->boolean('mine');
 
         // Regular admins only see their own posts; superadmins see all
         $user = $request->user();
-        if ($user && $user->isAdmin() && !$user->isSuperAdmin()) {
+        if ($user && $user->isAdmin() && (!$user->isSuperAdmin() || $mineOnly)) {
             $query->where('author_id', $user->id);
         }
 

@@ -18,8 +18,9 @@ class ProjectController extends Controller
     {
         $user = $request->user();
         $query = Project::with(['tags', 'creator', 'collection']);
+        $mineOnly = $request->boolean('mine');
 
-        if ($user && !$user->isSuperAdmin()) {
+        if ($user && (!$user->isSuperAdmin() || $mineOnly)) {
             $query->where('created_by', $user->id);
         }
 
