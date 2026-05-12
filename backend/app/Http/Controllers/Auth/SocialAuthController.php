@@ -6,12 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\Role;
 use App\Models\User;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
 {
+    /**
+     * Ensure default roles exist (production may run migrations without seeders).
+     */
+    private function resolveMemberRole(): ?Role
+    {
+        $member = Role::where('name', 'member')->first();
+        if (!$member) {
+            (new RoleSeeder)->run();
+            $member = Role::where('name', 'member')->first();
+        }
+
+        return $member;
+    }
+
     public function redirectToGoogle(): RedirectResponse
     {
         return Socialite::driver('google')->stateless()->redirect();
@@ -44,8 +59,13 @@ class SocialAuthController extends Controller
                 $user->update(['username' => User::generateUniqueUsername($base)]);
             }
         } else {
+            $memberRole = $this->resolveMemberRole();
+            if (!$memberRole) {
+                $frontendUrl = env('FRONTEND_URL', 'https://kalapak-team.space');
+
+                return redirect($frontendUrl . '/auth/login?error=oauth_setup');
+            }
             // Create new user
-            $memberRole = Role::where('name', 'member')->first();
             $email = (string) $googleUser->getEmail();
             $usernameBase = Str::before($email, '@') ?: Str::slug((string) $googleUser->getName(), '_') ?: 'user';
             $user = User::create([
@@ -98,7 +118,12 @@ class SocialAuthController extends Controller
                 $user->update(['username' => User::generateUniqueUsername($base)]);
             }
         } else {
-            $memberRole = Role::where('name', 'member')->first();
+            $memberRole = $this->resolveMemberRole();
+            if (!$memberRole) {
+                $frontendUrl = env('FRONTEND_URL', 'https://kalapak-team.space');
+
+                return redirect($frontendUrl . '/auth/login?error=oauth_setup');
+            }
             $email = (string) $githubUser->getEmail();
             $usernameBase = $githubUser->getNickname()
                 ?: Str::before($email, '@')
