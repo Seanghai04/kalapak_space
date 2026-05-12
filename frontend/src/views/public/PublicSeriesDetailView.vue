@@ -7,7 +7,7 @@
     <template v-else>
       <section class="relative overflow-hidden pt-20 pb-12 sm:pt-24 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900">
         <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
-          <router-link :to="`/u/${author.username}`" class="text-sm text-brand-cyan/90 hover:underline mb-4 inline-block">← @{{ author.username }}</router-link>
+          <router-link :to="{ name: 'user-profile', params: { username: author.username } }" class="text-sm text-brand-cyan/90 hover:underline mb-4 inline-block">← @{{ author.username }}</router-link>
           <div class="flex flex-wrap items-center gap-3 mb-2">
             <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-brand-cyan border border-white/20">Series</span>
             <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ series.name }}</h1>

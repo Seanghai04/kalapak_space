@@ -18,10 +18,17 @@ export default <RouterConfig>{
         { path: "blog", name: "blog", component: () => import("@/views/public/BlogView.vue"), meta: { title: "Blog – Kalapak Code Team" } },
         { path: "blog/:slug", name: "blog-post", component: () => import("@/views/public/BlogPostView.vue"), meta: { title: "Blog – Kalapak Code Team" } },
         {
-          path: "u/:username",
+          path: "author/:username",
           name: "user-profile",
           component: () => import("@/views/public/PublicUserProfileView.vue"),
           meta: { title: "Member profile – Kalapak Code Team" },
+        },
+        {
+          path: "u/:username",
+          redirect: (to) => ({
+            name: "user-profile",
+            params: { username: String(to.params.username || "") },
+          }),
         },
         {
           path: "series/:username/:slug",
