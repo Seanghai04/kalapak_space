@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Role;
 use App\Models\User;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Http\JsonResponse;
 
 class RegisterController extends Controller
@@ -14,6 +15,10 @@ class RegisterController extends Controller
     public function register(RegisterRequest $request): JsonResponse
     {
         $memberRole = Role::where('name', 'member')->first();
+        if (!$memberRole) {
+            (new RoleSeeder)->run();
+            $memberRole = Role::where('name', 'member')->first();
+        }
         if (!$memberRole) {
             return response()->json([
                 'success' => false,

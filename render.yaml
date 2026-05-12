@@ -141,6 +141,19 @@ services:
         value: https://kalapak-backend.onrender.com/api
       - key: NUXT_PUBLIC_SITE_URL
         value: https://kalapak-frontend.onrender.com
+      # Baked into the client bundle at Docker build time (must match Dockerfile ARG/ENV).
+      - key: VITE_APP_NAME
+        value: "Kalapak Team"
+      - key: VITE_APP_ENV
+        value: production
+      - key: VITE_API_URL
+        value: https://kalapak-backend.onrender.com/api
+      - key: VITE_BASE_URL
+        value: https://kalapak-backend.onrender.com
+      - key: VITE_WITH_CREDENTIALS
+        value: "true"
+      - key: VITE_TURNSTILE_SITE_KEY
+        value: 0x4AAAAAAAC4BOzhJInXTTfSR
 
 # -------------------------------------------------
 # PostgreSQL Database

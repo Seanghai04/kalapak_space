@@ -180,12 +180,12 @@ onMounted(() => {
 })
 
 function loginWithGoogle() {
-  const backendUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://kalapakspace-backends.onrender.com'
+  const backendUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://kalapak-backend.onrender.com'
   window.location.href = `${backendUrl}/auth/google/redirect`
 }
 
 function loginWithGithub() {
-  const backendUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://kalapakspace-backends.onrender.com'
+  const backendUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://kalapak-backend.onrender.com'
   window.location.href = `${backendUrl}/auth/github/redirect`
 }
 
