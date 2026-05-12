@@ -59,6 +59,10 @@
           <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <input v-model="search" type="text" placeholder="Search by title..." class="input-field !pl-10 w-full" @input="debouncedFetch" />
         </div>
+        <div v-if="authStore.isSuperAdmin" class="relative w-full md:w-52">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118.88 17.8M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <input v-model="ownerUsernameFilter" type="text" placeholder="Owner username..." class="input-field !pl-10 w-full" @input="debouncedFetch" />
+        </div>
         <CustomSelect
           v-model="statusFilter"
           :options="[{ label: 'All Status', value: '' }, { label: 'Active', value: 'active' }, { label: 'Work in Progress', value: 'wip' }, { label: 'Archived', value: 'archived' }]"
@@ -301,6 +305,7 @@ const route = useRoute()
 const projects = ref([])
 const loading = ref(true)
 const search = ref('')
+const ownerUsernameFilter = ref('')
 const statusFilter = ref('')
 const ownershipFilter = ref('')
 const featuredFilter = ref('')
@@ -350,6 +355,7 @@ async function fetchProjects(page = 1) {
   selectedIds.value = []
   try {
     const params = { page, search: search.value || undefined, status: statusFilter.value || undefined }
+    if (ownerUsernameFilter.value) params.owner_username = ownerUsernameFilter.value
     if (ownershipFilter.value === 'mine') params.mine = true
     if (featuredFilter.value === 'featured') params.is_featured = true
     if (collectionFilter.value) params.collection_id = collectionFilter.value

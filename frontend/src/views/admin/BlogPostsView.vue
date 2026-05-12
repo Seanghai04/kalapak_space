@@ -59,6 +59,10 @@
           <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <input v-model="search" type="text" placeholder="Search by title..." class="input-field !pl-10 w-full" @input="debouncedFetch" />
         </div>
+        <div v-if="authStore.isSuperAdmin" class="relative w-full md:w-52">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118.88 17.8M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <input v-model="authorUsernameFilter" type="text" placeholder="Author username..." class="input-field !pl-10 w-full" @input="debouncedFetch" />
+        </div>
         <CustomSelect
           v-model="statusFilter"
           :options="[{ label: 'All Status', value: '' }, { label: 'Published', value: 'published' }, { label: 'Draft', value: 'draft' }]"
@@ -323,6 +327,7 @@ const route = useRoute()
 const posts = ref([])
 const loading = ref(true)
 const search = ref('')
+const authorUsernameFilter = ref('')
 const statusFilter = ref('')
 const ownershipFilter = ref('')
 const categoryFilter = ref('')
@@ -376,6 +381,7 @@ async function fetchPosts(page = 1) {
   selectedIds.value = []
   try {
     const params = { page, search: search.value || undefined, status: statusFilter.value || undefined, category_id: categoryFilter.value || undefined, series_id: seriesFilter.value || undefined }
+    if (authorUsernameFilter.value) params.author_username = authorUsernameFilter.value
     if (ownershipFilter.value === 'mine') params.mine = true
     const { data } = await adminApi.getBlogPosts(params)
     posts.value = data.data || []

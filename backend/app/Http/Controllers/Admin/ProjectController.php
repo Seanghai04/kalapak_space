@@ -32,6 +32,12 @@ class ProjectController extends Controller
             $query->where('status', $status);
         }
 
+        if ($ownerUsername = $request->get('owner_username')) {
+            $query->whereHas('creator', function ($userQuery) use ($ownerUsername) {
+                $userQuery->where('username', 'ilike', "%{$ownerUsername}%");
+            });
+        }
+
         if ($collectionId = $request->get('collection_id')) {
             $query->where('collection_id', $collectionId);
         }

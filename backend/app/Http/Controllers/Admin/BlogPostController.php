@@ -34,6 +34,12 @@ class BlogPostController extends Controller
             $query->where('status', $status);
         }
 
+        if ($authorUsername = $request->get('author_username')) {
+            $query->whereHas('author', function ($userQuery) use ($authorUsername) {
+                $userQuery->where('username', 'ilike', "%{$authorUsername}%");
+            });
+        }
+
         if ($category = $request->get('category_id')) {
             $query->where('category_id', $category);
         }
