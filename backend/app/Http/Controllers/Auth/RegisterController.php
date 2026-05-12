@@ -14,6 +14,12 @@ class RegisterController extends Controller
     public function register(RegisterRequest $request): JsonResponse
     {
         $memberRole = Role::where('name', 'member')->first();
+        if (!$memberRole) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Registration is temporarily unavailable. Member role is not configured.',
+            ], 503);
+        }
 
         $user = User::create([
             'name' => $request->name,
